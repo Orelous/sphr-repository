@@ -2402,21 +2402,56 @@
                 filteredEntries = entries.filter(e => getTier(e.dateAdded, e.lastPracticed) === parseInt(activeTierFilter));
             }
 
+            // Filter flashcards by tier (same logic as entries)
+            let filteredFlashcards = flashcards;
+            if (activeTierFilter !== 'all') {
+                filteredFlashcards = flashcards.filter(f => getTier(f.dateAdded, f.lastPracticed) === parseInt(activeTierFilter));
+            }
+
+            // Check if anything matches the filter
+            if (filteredEntries.length === 0 && filteredFlashcards.length === 0) {
+                const tierNames = { '1': 'Tier 1 (New - ≤7 days)', '2': 'Tier 2 (Reinforcement - 8-21 days)', '3': 'Tier 3 (Integration - 22+ days)' };
+                document.getElementById('practiceSession').innerHTML = `
+                    <div style="text-align: center; padding: 40px; background: #F8FAFC; border-radius: 12px; border: 2px dashed #E2E8F0;">
+                        <div style="font-size: 3em; margin-bottom: 15px;">📭</div>
+                        <h4 style="color: #1E1B4B; margin-bottom: 10px;">No items in ${tierNames[activeTierFilter] || 'this tier'}</h4>
+                        <p style="color: #64748B; margin-bottom: 15px;">
+                            ${activeTierFilter === '1' ? 'All your content has aged past 7 days. Great progress!' : ''}
+                            ${activeTierFilter === '2' ? 'Items move to Tier 2 after 8 days. Keep adding content!' : ''}
+                            ${activeTierFilter === '3' ? 'Items move to Tier 3 after 22 days. Your content is still new!' : ''}
+                        </p>
+                        <p style="color: #64748B;">Try selecting <strong>"All Tiers"</strong> or add more content.</p>
+                    </div>
+                `;
+                return;
+            }
+
             // Shuffle and select items
             const shuffledEntries = [...filteredEntries].sort(() => Math.random() - 0.5).slice(0, 3);
-            const shuffledFlashcards = [...flashcards].sort(() => Math.random() - 0.5).slice(0, 5);
+            const shuffledFlashcards = [...filteredFlashcards].sort(() => Math.random() - 0.5).slice(0, 5);
 
-            let html = '<div style="background: #FEF3C7; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #F59E0B;">';
+            // Build header with tier info
+            const tierLabel = activeTierFilter === 'all' ? 'All Tiers' : `Tier ${activeTierFilter} Only`;
+            let html = `<div style="background: #E0E7FF; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; display: inline-block;">
+                <strong style="color: #3730A3;">🎯 Practicing: ${tierLabel}</strong> 
+                <span style="color: #5B21B6;">(${filteredEntries.length} entries, ${filteredFlashcards.length} flashcards available)</span>
+            </div>`;
+            
+            html += '<div style="background: #FEF3C7; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #F59E0B;">';
             html += '<strong style="color: #92400E;">Instructions:</strong> <span style="color: #92400E;">For each item below, try to recall the answer OUT LOUD before revealing. Struggle for 2-3 minutes before checking.</span>';
             html += '</div>';
 
             // Practice entries
             if (shuffledEntries.length > 0) {
-                html += '<h4 style="color: #1E1B4B; margin-bottom: 15px;">📖 Entry Retrieval (3 items)</h4>';
+                html += `<h4 style="color: #1E1B4B; margin-bottom: 15px;">📖 Entry Retrieval (${shuffledEntries.length} items)</h4>`;
                 shuffledEntries.forEach((entry, i) => {
+                    const entryTier = getTier(entry.dateAdded, entry.lastPracticed);
                     html += `
                         <div class="entry-card" style="margin-bottom: 15px;">
-                            <div class="entry-title">${i + 1}. ${escapeHtml(entry.title)}</div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div class="entry-title">${i + 1}. ${escapeHtml(entry.title)}</div>
+                                <span style="background: ${entryTier === 1 ? '#DBEAFE' : entryTier === 2 ? '#FEF3C7' : '#E9D5FF'}; color: ${entryTier === 1 ? '#1E40AF' : entryTier === 2 ? '#92400E' : '#6B21A8'}; padding: 4px 10px; border-radius: 6px; font-size: 0.8em; font-weight: 600;">Tier ${entryTier}</span>
+                            </div>
                             <div style="color: #64748B; margin: 10px 0;">
                                 <strong>Recall prompts:</strong>
                                 <ul style="margin: 8px 0 0 20px;">
@@ -2434,15 +2469,21 @@
                         </div>
                     `;
                 });
+            } else if (activeTierFilter === 'all') {
+                html += '<p style="color: #64748B; margin-bottom: 20px;">No entries available. Add some in the "Add Content" tab!</p>';
             }
 
             // Practice flashcards
             if (shuffledFlashcards.length > 0) {
-                html += '<h4 style="color: #1E1B4B; margin: 25px 0 15px;">🃏 Flashcard Drill (5 cards)</h4>';
+                html += `<h4 style="color: #1E1B4B; margin: 25px 0 15px;">🃏 Flashcard Drill (${shuffledFlashcards.length} cards)</h4>`;
                 shuffledFlashcards.forEach((card, i) => {
+                    const cardTier = getTier(card.dateAdded, card.lastPracticed);
                     html += `
                         <div class="flashcard" style="margin-bottom: 15px;">
-                            <div class="flashcard-question">${i + 1}. ${escapeHtml(card.question)}</div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <div class="flashcard-question">${i + 1}. ${escapeHtml(card.question)}</div>
+                                <span style="background: ${cardTier === 1 ? '#DBEAFE' : cardTier === 2 ? '#FEF3C7' : '#E9D5FF'}; color: ${cardTier === 1 ? '#1E40AF' : cardTier === 2 ? '#92400E' : '#6B21A8'}; padding: 4px 10px; border-radius: 6px; font-size: 0.8em; font-weight: 600;">Tier ${cardTier}</span>
+                            </div>
                             <button class="btn btn-small btn-secondary" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Reveal Answer</button>
                             <div style="display: none; margin-top: 15px; padding: 15px; background: #F0FDF4; border-left: 4px solid #10B981; border-radius: 4px;">
                                 <strong>A:</strong> ${escapeHtml(card.answer)}
@@ -2451,6 +2492,8 @@
                         </div>
                     `;
                 });
+            } else if (activeTierFilter === 'all') {
+                html += '<p style="color: #64748B;">No flashcards available. Add some in the "Add Content" tab!</p>';
             }
 
             document.getElementById('practiceSession').innerHTML = html;
