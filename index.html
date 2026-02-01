@@ -3001,6 +3001,7 @@
             const entries = getEntries();
             const flashcards = getFlashcards();
             const questions = getQuestions();
+            const practiceLog = getPracticeLog();
 
             let data, filename, type;
 
@@ -3008,10 +3009,11 @@
                 case 'json':
                     data = JSON.stringify({
                         exportDate: new Date().toISOString(),
-                        version: '2.0',
+                        version: '3.0',
                         entries: entries,
                         flashcards: flashcards,
-                        questions: questions
+                        questions: questions,
+                        practiceLog: practiceLog
                     }, null, 2);
                     filename = `sphr-backup-${new Date().toISOString().split('T')[0]}.json`;
                     type = 'application/json';
@@ -3111,7 +3113,9 @@
                         if (data.entries) saveEntries(data.entries);
                         if (data.flashcards) saveFlashcards(data.flashcards);
                         if (data.questions) saveQuestions(data.questions);
-                        showStatus('importStatusMessage', `Imported ${data.entries?.length || 0} entries, ${data.flashcards?.length || 0} flashcards, ${data.questions?.length || 0} questions.`, 'success');
+                        if (data.practiceLog) savePracticeLog(data.practiceLog);
+                        const logCount = data.practiceLog?.length || 0;
+                        showStatus('importStatusMessage', `Imported ${data.entries?.length || 0} entries, ${data.flashcards?.length || 0} flashcards, ${data.questions?.length || 0} questions${logCount > 0 ? `, ${logCount} practice sessions` : ''}.`, 'success');
                         break;
 
                     case 'entries':
