@@ -1547,24 +1547,654 @@
         </div>
     </div>
 
-    <!-- JavaScript placeholder for Phase 2 -->
+    <!-- Phase 2: Full JavaScript Functionality -->
     <script>
         // ============================================
         // SPHR REPOSITORY - PKA LEARNING SYSTEM
-        // Phase 1: Foundation JavaScript (Minimal)
-        // Full functionality in Phase 2
+        // Phase 2: Complete JavaScript Implementation
         // ============================================
 
-        // Tab Navigation
+        // ==================== DATA MANAGEMENT ====================
+        
+        // LocalStorage Keys
+        const STORAGE_KEYS = {
+            entries: 'sphr_entries',
+            flashcards: 'sphr_flashcards',
+            questions: 'sphr_questions',
+            practiceLog: 'sphr_practice_log'
+        };
+
+        // Functional Area Configuration
+        const FA_CONFIG = {
+            FA1: { name: 'Leadership and Strategy', weight: 33, color: '#1E40AF', bgColor: '#DBEAFE' },
+            FA2: { name: 'Workforce Planning and Talent Acquisition', weight: 17, color: '#065F46', bgColor: '#D1FAE5' },
+            FA3: { name: 'Talent Management', weight: 23, color: '#92400E', bgColor: '#FEF3C7' },
+            FA4: { name: 'Total Rewards', weight: 17, color: '#9D174D', bgColor: '#FCE7F3' },
+            FA5: { name: 'HR Information Management, Safety & Security', weight: 10, color: '#3730A3', bgColor: '#E0E7FF' }
+        };
+
+        // Data Access Functions
+        function getEntries() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEYS.entries) || '[]');
+        }
+
+        function saveEntries(entries) {
+            localStorage.setItem(STORAGE_KEYS.entries, JSON.stringify(entries));
+        }
+
+        function getFlashcards() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEYS.flashcards) || '[]');
+        }
+
+        function saveFlashcards(flashcards) {
+            localStorage.setItem(STORAGE_KEYS.flashcards, JSON.stringify(flashcards));
+        }
+
+        function getQuestions() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEYS.questions) || '[]');
+        }
+
+        function saveQuestions(questions) {
+            localStorage.setItem(STORAGE_KEYS.questions, JSON.stringify(questions));
+        }
+
+        function getPracticeLog() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEYS.practiceLog) || '[]');
+        }
+
+        function savePracticeLog(log) {
+            localStorage.setItem(STORAGE_KEYS.practiceLog, JSON.stringify(log));
+        }
+
+        // ==================== UTILITY FUNCTIONS ====================
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function generateId(prefix) {
+            return prefix + Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'Never';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+        }
+
+        function getDaysSince(dateString) {
+            if (!dateString) return null;
+            const date = new Date(dateString);
+            const now = new Date();
+            return Math.floor((now - date) / (1000 * 60 * 60 * 24));
+        }
+
+        function getTier(dateAdded, lastPracticed) {
+            const daysSinceAdded = getDaysSince(dateAdded);
+            const daysSincePracticed = lastPracticed ? getDaysSince(lastPracticed) : daysSinceAdded;
+            
+            if (daysSinceAdded <= 7) return 1;
+            if (daysSinceAdded <= 21) return 2;
+            return 3;
+        }
+
+        function getRelevanceStars(rating) {
+            return '⭐'.repeat(rating) + '☆'.repeat(5 - rating);
+        }
+
+        function showStatus(elementId, message, type) {
+            const el = document.getElementById(elementId);
+            if (el) {
+                el.textContent = message;
+                el.className = `status-message status-${type}`;
+                el.style.display = 'block';
+                if (type === 'success') {
+                    setTimeout(() => { el.style.display = 'none'; }, 3000);
+                }
+            }
+        }
+
+        // ==================== TAB NAVIGATION ====================
+
         document.querySelectorAll('.nav-tab').forEach(tab => {
             tab.addEventListener('click', function() {
                 document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
                 document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                 
                 this.classList.add('active');
-                document.getElementById(this.dataset.tab).classList.add('active');
+                const tabId = this.dataset.tab;
+                document.getElementById(tabId).classList.add('active');
+                
+                // Refresh content when switching tabs
+                switch(tabId) {
+                    case 'dashboard': updateDashboard(); break;
+                    case 'entries': renderEntries(); break;
+                    case 'flashcards': renderFlashcards(); break;
+                    case 'questions': renderQuestions(); break;
+                    case 'practice': updatePracticeDashboard(); break;
+                }
             });
         });
+
+        // ==================== DEADLINE COUNTDOWN ====================
+
+        function updateCountdowns() {
+            const now = new Date();
+            
+            // Platform expiry: March 14, 2026
+            const platformExpiry = new Date('2026-03-14');
+            const platformDays = Math.ceil((platformExpiry - now) / (1000 * 60 * 60 * 24));
+            const platformEl = document.getElementById('platformCountdown');
+            platformEl.textContent = `${platformDays} days remaining`;
+            if (platformDays < 30) {
+                platformEl.classList.add('deadline-warning');
+            }
+            
+            // Exam date: May 10, 2026
+            const examDate = new Date('2026-05-10');
+            const examDays = Math.ceil((examDate - now) / (1000 * 60 * 60 * 24));
+            document.getElementById('examCountdown').textContent = `${examDays} days to exam`;
+        }
+
+        // ==================== DASHBOARD ====================
+
+        function updateDashboard() {
+            const entries = getEntries();
+            const flashcards = getFlashcards();
+            const questions = getQuestions();
+
+            // Overall Stats
+            document.getElementById('totalEntries').textContent = entries.length;
+            document.getElementById('totalFlashcards').textContent = flashcards.length;
+            document.getElementById('totalQuestions').textContent = questions.length;
+            
+            const avgRelevance = entries.length > 0 
+                ? (entries.reduce((sum, e) => sum + (e.examRelevance || 0), 0) / entries.length).toFixed(1)
+                : '0';
+            document.getElementById('avgRelevance').textContent = avgRelevance;
+
+            // FA Progress
+            Object.keys(FA_CONFIG).forEach(fa => {
+                const faEntries = entries.filter(e => e.functionalArea === fa);
+                const target = FA_CONFIG[fa].weight;
+                const count = faEntries.length;
+                const percentage = Math.min((count / target) * 100, 100);
+                
+                const progressEl = document.getElementById(fa.toLowerCase() + 'Progress');
+                const countEl = document.getElementById(fa.toLowerCase() + 'Count');
+                
+                if (progressEl) progressEl.style.width = percentage + '%';
+                if (countEl) countEl.textContent = count + ' entries';
+            });
+
+            // Tier Dashboard
+            let tier1 = 0, tier2 = 0, tier3 = 0;
+            entries.forEach(entry => {
+                const tier = getTier(entry.dateAdded, entry.lastPracticed);
+                if (tier === 1) tier1++;
+                else if (tier === 2) tier2++;
+                else tier3++;
+            });
+
+            document.getElementById('tier1Count').textContent = tier1;
+            document.getElementById('tier2Count').textContent = tier2;
+            document.getElementById('tier3Count').textContent = tier3;
+
+            // Daily Suggestion
+            let suggestion = 'Add your first entries to begin spacing practice!';
+            if (entries.length > 0) {
+                if (tier1 > 0) {
+                    suggestion = `Focus on ${tier1} Tier 1 items today (daily review needed)`;
+                } else if (tier2 > 0) {
+                    suggestion = `Review ${tier2} Tier 2 items (every 2-3 days)`;
+                } else {
+                    suggestion = `${tier3} items in Tier 3 - schedule weekly integration practice`;
+                }
+            }
+            document.getElementById('dailySuggestion').textContent = suggestion;
+
+            // Recent Activity
+            const recentEntries = [...entries].sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded)).slice(0, 5);
+            const activityList = document.getElementById('recentActivityList');
+            
+            if (recentEntries.length === 0) {
+                activityList.innerHTML = '<p style="text-align: center; color: #64748B; padding: 20px;">No recent activity. Start adding entries!</p>';
+            } else {
+                activityList.innerHTML = recentEntries.map(entry => `
+                    <div class="activity-item">
+                        <div class="activity-title">${escapeHtml(entry.title)}</div>
+                        <div class="activity-meta">${entry.functionalArea} • ${getRelevanceStars(entry.examRelevance)} • ${formatDate(entry.dateAdded)}</div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // ==================== ENTRIES CRUD ====================
+
+        let currentEntryId = null;
+
+        function renderEntries(filtered = null) {
+            const entries = filtered || getEntries();
+            const container = document.getElementById('entriesResults');
+
+            if (entries.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #64748B; padding: 40px;">No entries found. Go to "Add Content" to create your first entry!</p>';
+                return;
+            }
+
+            container.innerHTML = entries.map(entry => {
+                const tier = getTier(entry.dateAdded, entry.lastPracticed);
+                const faConfig = FA_CONFIG[entry.functionalArea] || {};
+                
+                return `
+                    <div class="entry-card">
+                        <div class="entry-header">
+                            <div>
+                                <div class="entry-title">${escapeHtml(entry.title)}</div>
+                                <div class="entry-meta">${entry.course || 'No course'} • Tier ${tier} • Added ${formatDate(entry.dateAdded)}</div>
+                            </div>
+                            <span class="entry-fa-badge fa-${entry.functionalArea.slice(-1)}">${entry.functionalArea}</span>
+                        </div>
+                        <div class="entry-summary">${escapeHtml(entry.summary)}</div>
+                        <div class="entry-tags">
+                            <span class="entry-tag">${getRelevanceStars(entry.examRelevance)} Relevance</span>
+                            ${entry.lastPracticed ? `<span class="entry-tag">Last practiced: ${formatDate(entry.lastPracticed)}</span>` : ''}
+                        </div>
+                        <div class="entry-actions">
+                            <button class="btn btn-small btn-view" onclick="viewEntry('${entry.id}')">👁️ View</button>
+                            <button class="btn btn-small btn-edit" onclick="editEntryForm('${entry.id}')">✏️ Edit</button>
+                            <button class="btn btn-small btn-delete" onclick="confirmDeleteEntry('${entry.id}')">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function filterEntries() {
+            const searchTerm = document.getElementById('entrySearchInput').value.toLowerCase();
+            const faFilter = document.getElementById('faFilter').value;
+            const relevanceFilter = document.getElementById('relevanceFilter').value;
+
+            let entries = getEntries();
+
+            if (searchTerm) {
+                entries = entries.filter(e => 
+                    e.title.toLowerCase().includes(searchTerm) ||
+                    (e.summary && e.summary.toLowerCase().includes(searchTerm)) ||
+                    (e.examPoints && e.examPoints.toLowerCase().includes(searchTerm))
+                );
+            }
+
+            if (faFilter) {
+                entries = entries.filter(e => e.functionalArea === faFilter);
+            }
+
+            if (relevanceFilter) {
+                entries = entries.filter(e => e.examRelevance === parseInt(relevanceFilter));
+            }
+
+            renderEntries(entries);
+        }
+
+        // Add event listeners for filters
+        document.getElementById('entrySearchInput')?.addEventListener('input', filterEntries);
+        document.getElementById('faFilter')?.addEventListener('change', filterEntries);
+        document.getElementById('relevanceFilter')?.addEventListener('change', filterEntries);
+
+        function viewEntry(entryId) {
+            const entries = getEntries();
+            const entry = entries.find(e => e.id === entryId);
+            if (!entry) return;
+
+            currentEntryId = entryId;
+            const modal = document.getElementById('entryModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+
+            modalTitle.textContent = entry.title;
+            
+            const faConfig = FA_CONFIG[entry.functionalArea] || {};
+            const tier = getTier(entry.dateAdded, entry.lastPracticed);
+
+            modalBody.innerHTML = `
+                <div class="detail-section">
+                    <div class="detail-label">Functional Area & Classification</div>
+                    <div class="detail-content">
+                        <span class="entry-fa-badge fa-${entry.functionalArea.slice(-1)}">${entry.functionalArea}: ${faConfig.name || ''}</span>
+                        <span style="margin-left: 15px;">Tier ${tier} • ${getRelevanceStars(entry.examRelevance)}</span>
+                    </div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-label">SPHR Summary</div>
+                    <div class="detail-content">${escapeHtml(entry.summary)}</div>
+                </div>
+
+                <div class="detail-section">
+                    <div class="detail-label">Key Exam Points</div>
+                    <div class="detail-content">${escapeHtml(entry.examPoints)}</div>
+                </div>
+
+                ${entry.quickRef ? `
+                <div class="detail-section">
+                    <div class="detail-label">Quick Reference</div>
+                    <div class="detail-content">${escapeHtml(entry.quickRef)}</div>
+                </div>` : ''}
+
+                ${(entry.decisionCriteria || entry.failurePatterns || entry.applicationScenario) ? `
+                <div class="pka-section">
+                    <div class="pka-section-title">🎯 PKA Decision Support</div>
+                    ${entry.decisionCriteria ? `
+                    <div class="pka-field">
+                        <div class="pka-field-label">Decision Criteria</div>
+                        <div class="pka-field-content">${escapeHtml(entry.decisionCriteria)}</div>
+                    </div>` : ''}
+                    ${entry.failurePatterns ? `
+                    <div class="pka-field">
+                        <div class="pka-field-label">Failure Patterns</div>
+                        <div class="pka-field-content">${escapeHtml(entry.failurePatterns)}</div>
+                    </div>` : ''}
+                    ${entry.applicationScenario ? `
+                    <div class="pka-field">
+                        <div class="pka-field-label">Application Scenarios</div>
+                        <div class="pka-field-content">${escapeHtml(entry.applicationScenario)}</div>
+                    </div>` : ''}
+                </div>` : ''}
+
+                ${entry.crossRef ? `
+                <div class="detail-section">
+                    <div class="detail-label">Cross-Reference</div>
+                    <div class="detail-content">${escapeHtml(entry.crossRef)}</div>
+                </div>` : ''}
+
+                <div class="detail-section">
+                    <div class="detail-label">Practice Stats</div>
+                    <div class="detail-content">
+                        Added: ${formatDate(entry.dateAdded)} • 
+                        Last Practiced: ${formatDate(entry.lastPracticed)} • 
+                        Times Reviewed: ${entry.timesReviewed || 0}
+                    </div>
+                </div>
+            `;
+
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('entryModal').style.display = 'none';
+            currentEntryId = null;
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('entryModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        function confirmDeleteEntry(entryId) {
+            if (confirm('Are you sure you want to delete this entry? This cannot be undone.')) {
+                const entries = getEntries();
+                const filtered = entries.filter(e => e.id !== entryId);
+                saveEntries(filtered);
+                closeModal();
+                renderEntries();
+                updateDashboard();
+                showStatus('entryStatusMessage', 'Entry deleted successfully!', 'success');
+            }
+        }
+
+        function deleteEntry() {
+            if (currentEntryId) {
+                confirmDeleteEntry(currentEntryId);
+            }
+        }
+
+        function editEntry() {
+            if (!currentEntryId) return;
+            
+            const entries = getEntries();
+            const entry = entries.find(e => e.id === currentEntryId);
+            if (!entry) return;
+
+            closeModal();
+            
+            // Switch to Add tab
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector('[data-tab="add"]').classList.add('active');
+            document.getElementById('add').classList.add('active');
+            
+            showAddForm('entry');
+            
+            // Populate form
+            document.getElementById('entryFA').value = entry.functionalArea;
+            document.getElementById('entryCourse').value = entry.course || '';
+            document.getElementById('entryTitle').value = entry.title;
+            document.getElementById('entrySummary').value = entry.summary;
+            document.getElementById('entryExamPoints').value = entry.examPoints;
+            document.getElementById('entryQuickRef').value = entry.quickRef || '';
+            document.getElementById('entryDecisionCriteria').value = entry.decisionCriteria || '';
+            document.getElementById('entryFailurePatterns').value = entry.failurePatterns || '';
+            document.getElementById('entryApplicationScenario').value = entry.applicationScenario || '';
+            document.getElementById('entryCrossRef').value = entry.crossRef || '';
+            
+            // Set rating
+            const ratingOptions = document.querySelectorAll('#relevanceRating .rating-option');
+            ratingOptions.forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.querySelector('input').value === String(entry.examRelevance)) {
+                    opt.classList.add('selected');
+                    opt.querySelector('input').checked = true;
+                }
+            });
+
+            // Mark as editing
+            document.getElementById('newEntryForm').dataset.editId = entry.id;
+        }
+
+        function editEntryForm(entryId) {
+            currentEntryId = entryId;
+            editEntry();
+        }
+
+        // ==================== FLASHCARDS CRUD ====================
+
+        function renderFlashcards(filtered = null) {
+            const flashcards = filtered || getFlashcards();
+            const container = document.getElementById('flashcardsResults');
+
+            if (flashcards.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #64748B; padding: 40px;">No flashcards yet. Go to "Add Content" to create flashcards!</p>';
+                return;
+            }
+
+            container.innerHTML = flashcards.map(card => `
+                <div class="flashcard" id="flashcard-${card.id}">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                        <span class="content-type-badge type-flashcard">Flashcard</span>
+                        <span class="entry-fa-badge fa-${card.functionalArea.slice(-1)}">${card.functionalArea}</span>
+                    </div>
+                    <div class="flashcard-question">Q: ${escapeHtml(card.question)}</div>
+                    <button class="btn btn-small btn-secondary" onclick="toggleFlashcardAnswer('${card.id}')">Show Answer</button>
+                    <div class="flashcard-answer" id="answer-${card.id}">
+                        <strong>A:</strong> ${escapeHtml(card.answer)}
+                    </div>
+                    <div class="entry-actions" style="margin-top: 15px;">
+                        <button class="btn btn-small btn-view" onclick="markFlashcardPracticed('${card.id}')">✓ Practiced</button>
+                        <button class="btn btn-small btn-delete" onclick="deleteFlashcard('${card.id}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleFlashcardAnswer(cardId) {
+            const answerEl = document.getElementById('answer-' + cardId);
+            answerEl.classList.toggle('revealed');
+        }
+
+        function markFlashcardPracticed(cardId) {
+            const flashcards = getFlashcards();
+            const card = flashcards.find(c => c.id === cardId);
+            if (card) {
+                card.lastPracticed = new Date().toISOString();
+                card.timesPracticed = (card.timesPracticed || 0) + 1;
+                saveFlashcards(flashcards);
+                showStatus('flashcardStatusMessage', 'Marked as practiced!', 'success');
+            }
+        }
+
+        function deleteFlashcard(cardId) {
+            if (confirm('Delete this flashcard?')) {
+                const flashcards = getFlashcards();
+                const filtered = flashcards.filter(c => c.id !== cardId);
+                saveFlashcards(filtered);
+                renderFlashcards();
+                updateDashboard();
+            }
+        }
+
+        function filterFlashcards() {
+            const searchTerm = document.getElementById('flashcardSearchInput').value.toLowerCase();
+            const faFilter = document.getElementById('flashcardFaFilter').value;
+
+            let flashcards = getFlashcards();
+
+            if (searchTerm) {
+                flashcards = flashcards.filter(c => 
+                    c.question.toLowerCase().includes(searchTerm) ||
+                    c.answer.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            if (faFilter) {
+                flashcards = flashcards.filter(c => c.functionalArea === faFilter);
+            }
+
+            renderFlashcards(flashcards);
+        }
+
+        document.getElementById('flashcardSearchInput')?.addEventListener('input', filterFlashcards);
+        document.getElementById('flashcardFaFilter')?.addEventListener('change', filterFlashcards);
+
+        // ==================== QUESTIONS CRUD ====================
+
+        function renderQuestions(filtered = null) {
+            const questions = filtered || getQuestions();
+            const container = document.getElementById('questionsResults');
+
+            if (questions.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #64748B; padding: 40px;">No review questions yet. Go to "Add Content" to create questions!</p>';
+                return;
+            }
+
+            container.innerHTML = questions.map(q => `
+                <div class="review-question" id="question-${q.id}">
+                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
+                        <span class="content-type-badge type-question">Review Question</span>
+                        <span class="entry-fa-badge fa-${q.functionalArea.slice(-1)}">${q.functionalArea}</span>
+                    </div>
+                    <div class="question-stem">${escapeHtml(q.stem)}</div>
+                    <ul class="answer-options">
+                        <li class="answer-option" data-option="A" onclick="checkAnswer('${q.id}', 'A', '${q.correctAnswer}')">A. ${escapeHtml(q.optionA)}</li>
+                        <li class="answer-option" data-option="B" onclick="checkAnswer('${q.id}', 'B', '${q.correctAnswer}')">B. ${escapeHtml(q.optionB)}</li>
+                        <li class="answer-option" data-option="C" onclick="checkAnswer('${q.id}', 'C', '${q.correctAnswer}')">C. ${escapeHtml(q.optionC)}</li>
+                        <li class="answer-option" data-option="D" onclick="checkAnswer('${q.id}', 'D', '${q.correctAnswer}')">D. ${escapeHtml(q.optionD)}</li>
+                    </ul>
+                    <div id="explanation-${q.id}" style="display: none; margin-top: 15px; padding: 15px; background: #F0FDF4; border-left: 4px solid #10B981; border-radius: 4px;">
+                        <strong>Explanation:</strong> ${escapeHtml(q.explanation || 'No explanation provided.')}
+                    </div>
+                    <div class="entry-actions" style="margin-top: 15px;">
+                        <button class="btn btn-small btn-secondary" onclick="resetQuestion('${q.id}')">Reset</button>
+                        <button class="btn btn-small btn-delete" onclick="deleteQuestion('${q.id}')">🗑️</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function checkAnswer(questionId, selected, correct) {
+            const questionEl = document.getElementById('question-' + questionId);
+            const options = questionEl.querySelectorAll('.answer-option');
+            
+            options.forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+                const optLetter = opt.dataset.option;
+                if (optLetter === correct) {
+                    opt.classList.add('correct');
+                } else if (optLetter === selected && selected !== correct) {
+                    opt.classList.add('incorrect');
+                }
+            });
+
+            document.getElementById('explanation-' + questionId).style.display = 'block';
+
+            // Log practice
+            const questions = getQuestions();
+            const q = questions.find(x => x.id === questionId);
+            if (q) {
+                q.lastPracticed = new Date().toISOString();
+                q.timesPracticed = (q.timesPracticed || 0) + 1;
+                if (selected === correct) {
+                    q.timesCorrect = (q.timesCorrect || 0) + 1;
+                }
+                saveQuestions(questions);
+            }
+        }
+
+        function resetQuestion(questionId) {
+            const questionEl = document.getElementById('question-' + questionId);
+            questionEl.querySelectorAll('.answer-option').forEach(opt => {
+                opt.classList.remove('correct', 'incorrect');
+            });
+            document.getElementById('explanation-' + questionId).style.display = 'none';
+        }
+
+        function deleteQuestion(questionId) {
+            if (confirm('Delete this question?')) {
+                const questions = getQuestions();
+                const filtered = questions.filter(q => q.id !== questionId);
+                saveQuestions(filtered);
+                renderQuestions();
+                updateDashboard();
+            }
+        }
+
+        function filterQuestions() {
+            const searchTerm = document.getElementById('questionSearchInput').value.toLowerCase();
+            const faFilter = document.getElementById('questionFaFilter').value;
+
+            let questions = getQuestions();
+
+            if (searchTerm) {
+                questions = questions.filter(q => 
+                    q.stem.toLowerCase().includes(searchTerm)
+                );
+            }
+
+            if (faFilter) {
+                questions = questions.filter(q => q.functionalArea === faFilter);
+            }
+
+            renderQuestions(questions);
+        }
+
+        document.getElementById('questionSearchInput')?.addEventListener('input', filterQuestions);
+        document.getElementById('questionFaFilter')?.addEventListener('change', filterQuestions);
+
+        // ==================== ADD CONTENT FORMS ====================
+
+        function showAddForm(type) {
+            document.getElementById('entryForm').style.display = type === 'entry' ? 'block' : 'none';
+            document.getElementById('flashcardForm').style.display = type === 'flashcard' ? 'block' : 'none';
+            document.getElementById('questionForm').style.display = type === 'question' ? 'block' : 'none';
+            
+            document.querySelectorAll('#add .export-card').forEach(card => card.style.borderColor = '#E2E8F0');
+            const cardId = 'add' + type.charAt(0).toUpperCase() + type.slice(1) + 'Card';
+            document.getElementById(cardId).style.borderColor = '#7C3AED';
+        }
 
         // Rating option selection
         document.querySelectorAll('.rating-option').forEach(option => {
@@ -1575,98 +2205,113 @@
             });
         });
 
-        // Show/Hide Add Forms
-        function showAddForm(type) {
-            document.getElementById('entryForm').style.display = type === 'entry' ? 'block' : 'none';
-            document.getElementById('flashcardForm').style.display = type === 'flashcard' ? 'block' : 'none';
-            document.getElementById('questionForm').style.display = type === 'question' ? 'block' : 'none';
+        // Entry Form Submit
+        document.getElementById('newEntryForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            // Update card selection
-            document.querySelectorAll('#add .export-card').forEach(card => card.style.borderColor = '#E2E8F0');
-            document.getElementById('add' + type.charAt(0).toUpperCase() + type.slice(1) + 'Card').style.borderColor = '#7C3AED';
-        }
+            const editId = this.dataset.editId;
+            const entries = getEntries();
+            
+            const selectedRating = document.querySelector('#relevanceRating input:checked');
+            if (!selectedRating) {
+                showStatus('entryStatusMessage', 'Please select an exam relevance rating.', 'error');
+                return;
+            }
 
-        // Tier filter selection
-        document.querySelectorAll('.tier-filter').forEach(filter => {
-            filter.addEventListener('click', function() {
-                this.closest('.tier-filter-tags').querySelectorAll('.tier-filter').forEach(f => f.classList.remove('active'));
-                this.classList.add('active');
-            });
+            const entryData = {
+                id: editId || generateId('E'),
+                functionalArea: document.getElementById('entryFA').value,
+                course: document.getElementById('entryCourse').value,
+                title: document.getElementById('entryTitle').value,
+                summary: document.getElementById('entrySummary').value,
+                examPoints: document.getElementById('entryExamPoints').value,
+                quickRef: document.getElementById('entryQuickRef').value,
+                decisionCriteria: document.getElementById('entryDecisionCriteria').value,
+                failurePatterns: document.getElementById('entryFailurePatterns').value,
+                applicationScenario: document.getElementById('entryApplicationScenario').value,
+                crossRef: document.getElementById('entryCrossRef').value,
+                examRelevance: parseInt(selectedRating.value),
+                dateAdded: editId ? entries.find(e => e.id === editId)?.dateAdded : new Date().toISOString(),
+                lastPracticed: editId ? entries.find(e => e.id === editId)?.lastPracticed : null,
+                timesReviewed: editId ? entries.find(e => e.id === editId)?.timesReviewed : 0
+            };
+
+            if (editId) {
+                const index = entries.findIndex(e => e.id === editId);
+                if (index !== -1) {
+                    entries[index] = entryData;
+                }
+                delete this.dataset.editId;
+                showStatus('entryStatusMessage', 'Entry updated successfully!', 'success');
+            } else {
+                entries.push(entryData);
+                showStatus('entryStatusMessage', 'Entry saved successfully!', 'success');
+            }
+
+            saveEntries(entries);
+            resetEntryForm();
+            updateDashboard();
         });
 
-        // Deadline countdown calculator
-        function updateCountdowns() {
-            const now = new Date();
+        // Flashcard Form Submit
+        document.getElementById('newFlashcardForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            // Platform expiry: March 14, 2026
-            const platformExpiry = new Date('2026-03-14');
-            const platformDays = Math.ceil((platformExpiry - now) / (1000 * 60 * 60 * 24));
-            document.getElementById('platformCountdown').textContent = `${platformDays} days remaining`;
-            if (platformDays < 30) {
-                document.getElementById('platformCountdown').classList.add('deadline-warning');
-            }
+            const flashcards = getFlashcards();
             
-            // Exam date: May 10, 2026
-            const examDate = new Date('2026-05-10');
-            const examDays = Math.ceil((examDate - now) / (1000 * 60 * 60 * 24));
-            document.getElementById('examCountdown').textContent = `${examDays} days to exam`;
-        }
+            const cardData = {
+                id: generateId('F'),
+                functionalArea: document.getElementById('flashcardFA').value,
+                question: document.getElementById('flashcardQuestion').value,
+                answer: document.getElementById('flashcardAnswer').value,
+                sourceEntryId: document.getElementById('flashcardSource').value,
+                dateAdded: new Date().toISOString(),
+                lastPracticed: null,
+                timesPracticed: 0
+            };
 
-        // Modal functions
-        function closeModal() {
-            document.getElementById('entryModal').style.display = 'none';
-        }
+            flashcards.push(cardData);
+            saveFlashcards(flashcards);
+            
+            showStatus('flashcardStatusMessage', 'Flashcard saved successfully!', 'success');
+            resetFlashcardForm();
+            updateDashboard();
+        });
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const modal = document.getElementById('entryModal');
-            if (event.target === modal) {
-                closeModal();
-            }
-        }
+        // Question Form Submit
+        document.getElementById('newQuestionForm')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const questions = getQuestions();
+            
+            const questionData = {
+                id: generateId('Q'),
+                functionalArea: document.getElementById('questionFA').value,
+                stem: document.getElementById('questionStem').value,
+                optionA: document.getElementById('questionOptionA').value,
+                optionB: document.getElementById('questionOptionB').value,
+                optionC: document.getElementById('questionOptionC').value,
+                optionD: document.getElementById('questionOptionD').value,
+                correctAnswer: document.getElementById('questionCorrect').value,
+                explanation: document.getElementById('questionExplanation').value,
+                dateAdded: new Date().toISOString(),
+                lastPracticed: null,
+                timesPracticed: 0,
+                timesCorrect: 0
+            };
 
-        // Placeholder functions (to be implemented in Phase 2)
-        function generatePracticeSession() {
-            alert('Practice session generation coming in Phase 2!');
-        }
-
-        function startPracticeTimer() {
-            alert('Timer functionality coming in Phase 2!');
-        }
-
-        function resetPracticeTimer() {
-            document.getElementById('practiceTimer').textContent = '30:00';
-        }
-
-        function exportData(format) {
-            alert(`Export ${format} functionality coming in Phase 2!`);
-        }
-
-        function importData() {
-            alert('Import functionality coming in Phase 2!');
-        }
-
-        function clearAllData() {
-            if (confirm('Are you sure you want to clear ALL data? This cannot be undone!')) {
-                localStorage.removeItem('sphr_entries');
-                localStorage.removeItem('sphr_flashcards');
-                localStorage.removeItem('sphr_questions');
-                alert('All data cleared!');
-                location.reload();
-            }
-        }
-
-        function editEntry() {
-            alert('Edit functionality coming in Phase 2!');
-        }
-
-        function deleteEntry() {
-            alert('Delete functionality coming in Phase 2!');
-        }
+            questions.push(questionData);
+            saveQuestions(questions);
+            
+            showStatus('questionStatusMessage', 'Question saved successfully!', 'success');
+            resetQuestionForm();
+            updateDashboard();
+        });
 
         function resetEntryForm() {
             document.getElementById('newEntryForm').reset();
             document.querySelectorAll('#relevanceRating .rating-option').forEach(opt => opt.classList.remove('selected'));
+            delete document.getElementById('newEntryForm').dataset.editId;
         }
 
         function resetFlashcardForm() {
@@ -1677,18 +2322,349 @@
             document.getElementById('newQuestionForm').reset();
         }
 
-        // Escape HTML helper
-        function escapeHtml(text) {
-            if (!text) return '';
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+        // ==================== PRACTICE MODE ====================
+
+        let practiceTimer = null;
+        let practiceSeconds = 1800; // 30 minutes
+
+        function updatePracticeDashboard() {
+            const entries = getEntries();
+            
+            let tier1 = [], tier2 = [], tier3 = [];
+            entries.forEach(entry => {
+                const tier = getTier(entry.dateAdded, entry.lastPracticed);
+                if (tier === 1) tier1.push(entry);
+                else if (tier === 2) tier2.push(entry);
+                else tier3.push(entry);
+            });
+
+            // Update tier counts in practice tab
+            const dashboard = document.getElementById('practiceTierDashboard');
+            if (dashboard) {
+                dashboard.innerHTML = `
+                    <div class="tier-stats-grid">
+                        <div class="tier-stat-card tier-1">
+                            <div class="tier-stat-number">${tier1.length}</div>
+                            <div class="tier-stat-label">Tier 1: New<br><small>(daily review)</small></div>
+                        </div>
+                        <div class="tier-stat-card tier-2">
+                            <div class="tier-stat-number">${tier2.length}</div>
+                            <div class="tier-stat-label">Tier 2: Reinforcement<br><small>(every 2-3 days)</small></div>
+                        </div>
+                        <div class="tier-stat-card tier-3">
+                            <div class="tier-stat-number">${tier3.length}</div>
+                            <div class="tier-stat-label">Tier 3: Integration<br><small>(weekly)</small></div>
+                        </div>
+                    </div>
+                `;
+            }
         }
 
-        // Initialize on page load
+        // Tier filter selection
+        document.querySelectorAll('.tier-filter').forEach(filter => {
+            filter.addEventListener('click', function() {
+                this.closest('.tier-filter-tags').querySelectorAll('.tier-filter').forEach(f => f.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        function generatePracticeSession() {
+            const entries = getEntries();
+            const flashcards = getFlashcards();
+            
+            if (entries.length === 0 && flashcards.length === 0) {
+                document.getElementById('practiceSession').innerHTML = '<p style="color: #64748B; text-align: center;">Add some entries or flashcards first!</p>';
+                return;
+            }
+
+            const activeTierFilter = document.querySelector('.tier-filter.active')?.dataset.tier || 'all';
+            
+            // Filter entries by tier
+            let filteredEntries = entries;
+            if (activeTierFilter !== 'all') {
+                filteredEntries = entries.filter(e => getTier(e.dateAdded, e.lastPracticed) === parseInt(activeTierFilter));
+            }
+
+            // Shuffle and select items
+            const shuffledEntries = [...filteredEntries].sort(() => Math.random() - 0.5).slice(0, 3);
+            const shuffledFlashcards = [...flashcards].sort(() => Math.random() - 0.5).slice(0, 5);
+
+            let html = '<div style="background: #FEF3C7; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #F59E0B;">';
+            html += '<strong style="color: #92400E;">Instructions:</strong> <span style="color: #92400E;">For each item below, try to recall the answer OUT LOUD before revealing. Struggle for 2-3 minutes before checking.</span>';
+            html += '</div>';
+
+            // Practice entries
+            if (shuffledEntries.length > 0) {
+                html += '<h4 style="color: #1E1B4B; margin-bottom: 15px;">📖 Entry Retrieval (3 items)</h4>';
+                shuffledEntries.forEach((entry, i) => {
+                    html += `
+                        <div class="entry-card" style="margin-bottom: 15px;">
+                            <div class="entry-title">${i + 1}. ${escapeHtml(entry.title)}</div>
+                            <div style="color: #64748B; margin: 10px 0;">
+                                <strong>Recall prompts:</strong>
+                                <ul style="margin: 8px 0 0 20px;">
+                                    <li>What is this concept?</li>
+                                    <li>When would it appear on the exam?</li>
+                                    <li>What are the failure patterns?</li>
+                                </ul>
+                            </div>
+                            <button class="btn btn-small btn-secondary" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Reveal Answer</button>
+                            <div style="display: none; margin-top: 15px; padding: 15px; background: #F0FDF4; border-left: 4px solid #10B981; border-radius: 4px;">
+                                <strong>Summary:</strong> ${escapeHtml(entry.summary)}<br><br>
+                                ${entry.examPoints ? `<strong>Exam Points:</strong> ${escapeHtml(entry.examPoints)}` : ''}
+                            </div>
+                            <button class="btn btn-small btn-primary" onclick="markEntryPracticed('${entry.id}')" style="margin-top: 10px;">✓ Mark Practiced</button>
+                        </div>
+                    `;
+                });
+            }
+
+            // Practice flashcards
+            if (shuffledFlashcards.length > 0) {
+                html += '<h4 style="color: #1E1B4B; margin: 25px 0 15px;">🃏 Flashcard Drill (5 cards)</h4>';
+                shuffledFlashcards.forEach((card, i) => {
+                    html += `
+                        <div class="flashcard" style="margin-bottom: 15px;">
+                            <div class="flashcard-question">${i + 1}. ${escapeHtml(card.question)}</div>
+                            <button class="btn btn-small btn-secondary" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Reveal Answer</button>
+                            <div style="display: none; margin-top: 15px; padding: 15px; background: #F0FDF4; border-left: 4px solid #10B981; border-radius: 4px;">
+                                <strong>A:</strong> ${escapeHtml(card.answer)}
+                            </div>
+                            <button class="btn btn-small btn-primary" onclick="markFlashcardPracticed('${card.id}')" style="margin-top: 10px;">✓ Mark Practiced</button>
+                        </div>
+                    `;
+                });
+            }
+
+            document.getElementById('practiceSession').innerHTML = html;
+        }
+
+        function markEntryPracticed(entryId) {
+            const entries = getEntries();
+            const entry = entries.find(e => e.id === entryId);
+            if (entry) {
+                entry.lastPracticed = new Date().toISOString();
+                entry.timesReviewed = (entry.timesReviewed || 0) + 1;
+                saveEntries(entries);
+                updateDashboard();
+                updatePracticeDashboard();
+            }
+        }
+
+        function startPracticeTimer() {
+            if (practiceTimer) {
+                clearInterval(practiceTimer);
+            }
+            
+            practiceSeconds = 1800;
+            updateTimerDisplay();
+            
+            practiceTimer = setInterval(() => {
+                practiceSeconds--;
+                updateTimerDisplay();
+                
+                if (practiceSeconds <= 0) {
+                    clearInterval(practiceTimer);
+                    practiceTimer = null;
+                    alert('⏰ 30-minute practice session complete! Great work!');
+                    
+                    // Log practice session
+                    const log = getPracticeLog();
+                    log.push({
+                        date: new Date().toISOString(),
+                        duration: 30,
+                        type: 'full_session'
+                    });
+                    savePracticeLog(log);
+                }
+            }, 1000);
+        }
+
+        function resetPracticeTimer() {
+            if (practiceTimer) {
+                clearInterval(practiceTimer);
+                practiceTimer = null;
+            }
+            practiceSeconds = 1800;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(practiceSeconds / 60);
+            const seconds = practiceSeconds % 60;
+            document.getElementById('practiceTimer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // ==================== IMPORT/EXPORT ====================
+
+        function exportData(format) {
+            const entries = getEntries();
+            const flashcards = getFlashcards();
+            const questions = getQuestions();
+
+            let data, filename, type;
+
+            switch(format) {
+                case 'json':
+                    data = JSON.stringify({
+                        exportDate: new Date().toISOString(),
+                        version: '2.0',
+                        entries: entries,
+                        flashcards: flashcards,
+                        questions: questions
+                    }, null, 2);
+                    filename = `sphr-backup-${new Date().toISOString().split('T')[0]}.json`;
+                    type = 'application/json';
+                    break;
+
+                case 'entries':
+                    data = JSON.stringify(entries, null, 2);
+                    filename = `sphr-entries-${new Date().toISOString().split('T')[0]}.json`;
+                    type = 'application/json';
+                    break;
+
+                case 'flashcards':
+                    data = JSON.stringify(flashcards, null, 2);
+                    filename = `sphr-flashcards-${new Date().toISOString().split('T')[0]}.json`;
+                    type = 'application/json';
+                    break;
+
+                case 'studyguide':
+                    data = generateStudyGuide(entries, flashcards);
+                    filename = `sphr-study-guide-${new Date().toISOString().split('T')[0]}.txt`;
+                    type = 'text/plain';
+                    break;
+            }
+
+            downloadFile(data, filename, type);
+        }
+
+        function generateStudyGuide(entries, flashcards) {
+            let guide = `SPHR Knowledge Repository - Study Guide\n`;
+            guide += `Generated: ${new Date().toLocaleDateString()}\n`;
+            guide += `Total Entries: ${entries.length} | Flashcards: ${flashcards.length}\n`;
+            guide += `${'='.repeat(80)}\n\n`;
+
+            // Group by Functional Area
+            Object.keys(FA_CONFIG).forEach(fa => {
+                const faEntries = entries.filter(e => e.functionalArea === fa);
+                if (faEntries.length === 0) return;
+
+                guide += `\n${'#'.repeat(80)}\n`;
+                guide += `${fa}: ${FA_CONFIG[fa].name} (${FA_CONFIG[fa].weight}% of exam)\n`;
+                guide += `${'#'.repeat(80)}\n\n`;
+
+                faEntries.forEach(entry => {
+                    guide += `${'─'.repeat(60)}\n`;
+                    guide += `${entry.title}\n`;
+                    guide += `${'─'.repeat(60)}\n\n`;
+                    guide += `SUMMARY:\n${entry.summary}\n\n`;
+                    guide += `KEY EXAM POINTS:\n${entry.examPoints}\n\n`;
+                    if (entry.quickRef) guide += `QUICK REFERENCE:\n${entry.quickRef}\n\n`;
+                    if (entry.decisionCriteria) guide += `DECISION CRITERIA:\n${entry.decisionCriteria}\n\n`;
+                    if (entry.failurePatterns) guide += `FAILURE PATTERNS:\n${entry.failurePatterns}\n\n`;
+                    guide += `Exam Relevance: ${'★'.repeat(entry.examRelevance)}${'☆'.repeat(5 - entry.examRelevance)}\n\n`;
+                });
+            });
+
+            // Flashcards section
+            if (flashcards.length > 0) {
+                guide += `\n${'#'.repeat(80)}\n`;
+                guide += `FLASHCARDS (${flashcards.length} total)\n`;
+                guide += `${'#'.repeat(80)}\n\n`;
+
+                flashcards.forEach((card, i) => {
+                    guide += `${i + 1}. Q: ${card.question}\n`;
+                    guide += `   A: ${card.answer}\n\n`;
+                });
+            }
+
+            return guide;
+        }
+
+        function downloadFile(content, filename, type) {
+            const blob = new Blob([content], { type: type });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function importData() {
+            const importType = document.getElementById('importType').value;
+            const importText = document.getElementById('importData').value.trim();
+
+            if (!importText) {
+                showStatus('importStatusMessage', 'Please paste JSON data to import.', 'error');
+                return;
+            }
+
+            try {
+                const data = JSON.parse(importText);
+
+                switch(importType) {
+                    case 'full':
+                        if (data.entries) saveEntries(data.entries);
+                        if (data.flashcards) saveFlashcards(data.flashcards);
+                        if (data.questions) saveQuestions(data.questions);
+                        showStatus('importStatusMessage', `Imported ${data.entries?.length || 0} entries, ${data.flashcards?.length || 0} flashcards, ${data.questions?.length || 0} questions.`, 'success');
+                        break;
+
+                    case 'entries':
+                        if (Array.isArray(data)) {
+                            const existing = getEntries();
+                            saveEntries([...existing, ...data]);
+                            showStatus('importStatusMessage', `Imported ${data.length} entries.`, 'success');
+                        }
+                        break;
+
+                    case 'flashcards':
+                        if (Array.isArray(data)) {
+                            const existing = getFlashcards();
+                            saveFlashcards([...existing, ...data]);
+                            showStatus('importStatusMessage', `Imported ${data.length} flashcards.`, 'success');
+                        }
+                        break;
+
+                    case 'questions':
+                        if (Array.isArray(data)) {
+                            const existing = getQuestions();
+                            saveQuestions([...existing, ...data]);
+                            showStatus('importStatusMessage', `Imported ${data.length} questions.`, 'success');
+                        }
+                        break;
+                }
+
+                document.getElementById('importData').value = '';
+                updateDashboard();
+
+            } catch (e) {
+                showStatus('importStatusMessage', 'Invalid JSON format. Please check your data.', 'error');
+            }
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ Are you sure you want to clear ALL data?\n\nThis will delete:\n• All entries\n• All flashcards\n• All questions\n• All practice logs\n\nThis action cannot be undone!')) {
+                localStorage.removeItem(STORAGE_KEYS.entries);
+                localStorage.removeItem(STORAGE_KEYS.flashcards);
+                localStorage.removeItem(STORAGE_KEYS.questions);
+                localStorage.removeItem(STORAGE_KEYS.practiceLog);
+                alert('All data cleared!');
+                location.reload();
+            }
+        }
+
+        // ==================== INITIALIZATION ====================
+
         document.addEventListener('DOMContentLoaded', function() {
             updateCountdowns();
-            showAddForm('entry'); // Default to entry form
+            updateDashboard();
+            showAddForm('entry');
             
             // Update countdown every hour
             setInterval(updateCountdowns, 3600000);
@@ -1696,8 +2672,8 @@
 
         // Console welcome message
         console.log('%c🎯 SPHR Knowledge Repository', 'font-size: 20px; font-weight: bold; color: #7C3AED;');
-        console.log('%cPKA Learning System v1.0 | Phase 1: Foundation', 'font-size: 12px; color: #64748B;');
-        console.log('%cFull functionality coming in Phase 2!', 'font-size: 12px; color: #F59E0B;');
+        console.log('%cPKA Learning System v2.0 | Phase 2: Full Functionality', 'font-size: 12px; color: #64748B;');
+        console.log('%cReady for exam preparation!', 'font-size: 12px; color: #10B981;');
     </script>
 </body>
 </html>
