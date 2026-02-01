@@ -956,6 +956,7 @@
         <!-- Navigation Tabs -->
         <nav class="nav-tabs">
             <button class="nav-tab active" data-tab="dashboard">📊 Dashboard</button>
+            <button class="nav-tab" data-tab="staging">📥 Staging</button>
             <button class="nav-tab" data-tab="entries">📖 Entries</button>
             <button class="nav-tab" data-tab="flashcards">🃏 Flashcards</button>
             <button class="nav-tab" data-tab="questions">❓ Questions</button>
@@ -1207,6 +1208,109 @@
                 <h3 style="color: #1E1B4B; margin-bottom: 20px;">📋 Recent Activity</h3>
                 <div id="recentActivityList">
                     <p style="text-align: center; color: #64748B; padding: 20px;">No recent activity. Start adding entries!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Staging Tab -->
+        <div class="tab-content" id="staging">
+            <div style="max-width: 1000px; margin: 0 auto;">
+                <!-- Staging Overview -->
+                <div style="background: linear-gradient(135deg, #FEF3C7 0%, #FDE68A 100%); border-radius: 12px; padding: 25px; margin-bottom: 30px; border-left: 4px solid #F59E0B;">
+                    <h3 style="color: #92400E; margin-bottom: 15px;">📥 Staging Area - Controlled Release System</h3>
+                    <p style="color: #78350F; margin-bottom: 15px;">
+                        Items in staging are <strong>waiting to enter your practice rotation</strong>. Activate 3-5 items daily to maintain proper spacing. 
+                        Only activated items appear in Practice Mode and count toward your tiers.
+                    </p>
+                    <div style="display: flex; gap: 30px; flex-wrap: wrap;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 2em; font-weight: bold; color: #92400E;" id="stagingEntryCount">0</div>
+                            <div style="color: #78350F; font-size: 0.9em;">Entries Staged</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2em; font-weight: bold; color: #92400E;" id="stagingFlashcardCount">0</div>
+                            <div style="color: #78350F; font-size: 0.9em;">Flashcards Staged</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2em; font-weight: bold; color: #065F46; background: #D1FAE5; padding: 5px 15px; border-radius: 8px;" id="activeTodayCount">0</div>
+                            <div style="color: #78350F; font-size: 0.9em;">Activated Today</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 2em; font-weight: bold; color: #1E40AF; background: #DBEAFE; padding: 5px 15px; border-radius: 8px;" id="dailyActivationTarget">3-5</div>
+                            <div style="color: #78350F; font-size: 0.9em;">Daily Target</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Activate Section -->
+                <div style="background: white; border: 2px solid #E2E8F0; border-radius: 12px; padding: 20px; margin-bottom: 30px;">
+                    <h4 style="color: #1E1B4B; margin-bottom: 15px;">⚡ Quick Activate</h4>
+                    <p style="color: #64748B; margin-bottom: 15px; font-size: 0.9em;">
+                        Activate multiple items at once. Recommended: Mix different FAs for interleaving benefit.
+                    </p>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+                        <select id="quickActivateFA" class="btn btn-secondary">
+                            <option value="">Any FA</option>
+                            <option value="FA1">FA1 Only</option>
+                            <option value="FA2">FA2 Only</option>
+                            <option value="FA3">FA3 Only</option>
+                            <option value="FA4">FA4 Only</option>
+                            <option value="FA5">FA5 Only</option>
+                        </select>
+                        <select id="quickActivateType" class="btn btn-secondary">
+                            <option value="both">Entries & Flashcards</option>
+                            <option value="entries">Entries Only</option>
+                            <option value="flashcards">Flashcards Only</option>
+                        </select>
+                        <select id="quickActivateCount" class="btn btn-secondary">
+                            <option value="3">Activate 3</option>
+                            <option value="5">Activate 5</option>
+                            <option value="10">Activate 10</option>
+                        </select>
+                        <button class="btn btn-primary" onclick="quickActivate()">🚀 Activate Now</button>
+                    </div>
+                </div>
+
+                <!-- Staged Entries Section -->
+                <div style="background: white; border: 2px solid #E2E8F0; border-radius: 12px; padding: 20px; margin-bottom: 30px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h4 style="color: #1E1B4B; margin: 0;">📖 Staged Entries</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <select id="stagingEntryFaFilter" class="btn btn-secondary" style="font-size: 0.85em;" onchange="renderStagedEntries()">
+                                <option value="">All FAs</option>
+                                <option value="FA1">FA1</option>
+                                <option value="FA2">FA2</option>
+                                <option value="FA3">FA3</option>
+                                <option value="FA4">FA4</option>
+                                <option value="FA5">FA5</option>
+                            </select>
+                            <button class="btn btn-secondary" style="font-size: 0.85em;" onclick="activateAllEntries()">Activate All Visible</button>
+                        </div>
+                    </div>
+                    <div id="stagedEntriesList" style="max-height: 400px; overflow-y: auto;">
+                        <p style="text-align: center; color: #64748B; padding: 30px;">No staged entries. Import content to get started!</p>
+                    </div>
+                </div>
+
+                <!-- Staged Flashcards Section -->
+                <div style="background: white; border: 2px solid #E2E8F0; border-radius: 12px; padding: 20px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h4 style="color: #1E1B4B; margin: 0;">🃏 Staged Flashcards</h4>
+                        <div style="display: flex; gap: 10px;">
+                            <select id="stagingFlashcardFaFilter" class="btn btn-secondary" style="font-size: 0.85em;" onchange="renderStagedFlashcards()">
+                                <option value="">All FAs</option>
+                                <option value="FA1">FA1</option>
+                                <option value="FA2">FA2</option>
+                                <option value="FA3">FA3</option>
+                                <option value="FA4">FA4</option>
+                                <option value="FA5">FA5</option>
+                            </select>
+                            <button class="btn btn-secondary" style="font-size: 0.85em;" onclick="activateAllFlashcards()">Activate All Visible</button>
+                        </div>
+                    </div>
+                    <div id="stagedFlashcardsList" style="max-height: 400px; overflow-y: auto;">
+                        <p style="text-align: center; color: #64748B; padding: 30px;">No staged flashcards. Import content to get started!</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1753,12 +1857,26 @@
             return Math.floor((now - date) / (1000 * 60 * 60 * 24));
         }
 
-        function getTier(dateAdded, lastPracticed) {
-            const daysSinceAdded = getDaysSince(dateAdded);
-            const daysSincePracticed = lastPracticed ? getDaysSince(lastPracticed) : daysSinceAdded;
+        function isStaged(item) {
+            // Item is staged if it has no activatedDate
+            return !item.activatedDate;
+        }
+
+        function isActivatedToday(item) {
+            if (!item.activatedDate) return false;
+            const activated = new Date(item.activatedDate);
+            const today = new Date();
+            return activated.toDateString() === today.toDateString();
+        }
+
+        function getTier(activatedDate, lastPracticed) {
+            // If not activated, return 0 (staged)
+            if (!activatedDate) return 0;
             
-            if (daysSinceAdded <= 7) return 1;
-            if (daysSinceAdded <= 21) return 2;
+            const daysSinceActivated = getDaysSince(activatedDate);
+            
+            if (daysSinceActivated <= 7) return 1;
+            if (daysSinceActivated <= 21) return 2;
             return 3;
         }
 
@@ -1792,6 +1910,7 @@
                 // Refresh content when switching tabs
                 switch(tabId) {
                     case 'dashboard': updateDashboard(); break;
+                    case 'staging': updateStagingTab(); break;
                     case 'entries': renderEntries(); break;
                     case 'flashcards': renderFlashcards(); break;
                     case 'questions': renderQuestions(); break;
@@ -1851,10 +1970,11 @@
                 if (countEl) countEl.textContent = count + ' entries';
             });
 
-            // Tier Dashboard
+            // Tier Dashboard - only count activated entries
             let tier1 = 0, tier2 = 0, tier3 = 0;
-            entries.forEach(entry => {
-                const tier = getTier(entry.dateAdded, entry.lastPracticed);
+            const activeEntries = entries.filter(e => e.activatedDate);
+            activeEntries.forEach(entry => {
+                const tier = getTier(entry.activatedDate, entry.lastPracticed);
                 if (tier === 1) tier1++;
                 else if (tier === 2) tier2++;
                 else tier3++;
@@ -1864,9 +1984,15 @@
             document.getElementById('tier2Count').textContent = tier2;
             document.getElementById('tier3Count').textContent = tier3;
 
+            // Count staged items
+            const stagedEntries = entries.filter(e => !e.activatedDate).length;
+            const stagedFlashcards = flashcards.filter(f => !f.activatedDate).length;
+
             // Daily Suggestion
             let suggestion = 'Add your first entries to begin spacing practice!';
-            if (entries.length > 0) {
+            if (stagedEntries > 0 || stagedFlashcards > 0) {
+                suggestion = `📥 ${stagedEntries + stagedFlashcards} items in staging - activate 3-5 daily to begin spacing!`;
+            } else if (activeEntries.length > 0) {
                 if (tier1 > 0) {
                     suggestion = `Focus on ${tier1} Tier 1 items today (daily review needed)`;
                 } else if (tier2 > 0) {
@@ -2197,29 +2323,273 @@
             savePracticeLog(log);
         }
 
+        // ==================== STAGING SYSTEM ====================
+
+        function updateStagingTab() {
+            const entries = getEntries();
+            const flashcards = getFlashcards();
+            
+            const stagedEntries = entries.filter(e => !e.activatedDate);
+            const stagedFlashcards = flashcards.filter(f => !f.activatedDate);
+            
+            // Update counts
+            document.getElementById('stagingEntryCount').textContent = stagedEntries.length;
+            document.getElementById('stagingFlashcardCount').textContent = stagedFlashcards.length;
+            
+            // Count activated today
+            const activatedToday = entries.filter(e => isActivatedToday(e)).length + 
+                                   flashcards.filter(f => isActivatedToday(f)).length;
+            document.getElementById('activeTodayCount').textContent = activatedToday;
+            
+            // Render staged lists
+            renderStagedEntries();
+            renderStagedFlashcards();
+        }
+
+        function renderStagedEntries() {
+            const entries = getEntries();
+            const faFilter = document.getElementById('stagingEntryFaFilter')?.value || '';
+            
+            let stagedEntries = entries.filter(e => !e.activatedDate);
+            if (faFilter) {
+                stagedEntries = stagedEntries.filter(e => e.functionalArea === faFilter);
+            }
+            
+            const container = document.getElementById('stagedEntriesList');
+            
+            if (stagedEntries.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #64748B; padding: 30px;">No staged entries. Import content or all entries have been activated!</p>';
+                return;
+            }
+            
+            container.innerHTML = stagedEntries.map(entry => `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #E2E8F0;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; color: #1E1B4B;">${escapeHtml(entry.title)}</div>
+                        <div style="font-size: 0.85em; color: #64748B;">
+                            <span class="entry-fa-badge fa-${entry.functionalArea.slice(-1)}" style="font-size: 0.8em; padding: 2px 8px;">${entry.functionalArea}</span>
+                            ${entry.examRelevance ? ` • ${getRelevanceStars(entry.examRelevance)}` : ''}
+                            • Added ${formatDate(entry.dateAdded)}
+                        </div>
+                    </div>
+                    <button class="btn btn-small btn-primary" onclick="activateEntry('${entry.id}')" style="margin-left: 10px;">
+                        ⚡ Activate
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function renderStagedFlashcards() {
+            const flashcards = getFlashcards();
+            const faFilter = document.getElementById('stagingFlashcardFaFilter')?.value || '';
+            
+            let stagedFlashcards = flashcards.filter(f => !f.activatedDate);
+            if (faFilter) {
+                stagedFlashcards = stagedFlashcards.filter(f => f.functionalArea === faFilter);
+            }
+            
+            const container = document.getElementById('stagedFlashcardsList');
+            
+            if (stagedFlashcards.length === 0) {
+                container.innerHTML = '<p style="text-align: center; color: #64748B; padding: 30px;">No staged flashcards. Import content or all flashcards have been activated!</p>';
+                return;
+            }
+            
+            container.innerHTML = stagedFlashcards.map(card => `
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #E2E8F0;">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600; color: #1E1B4B;">${escapeHtml(card.question.substring(0, 60))}${card.question.length > 60 ? '...' : ''}</div>
+                        <div style="font-size: 0.85em; color: #64748B;">
+                            <span class="entry-fa-badge fa-${card.functionalArea.slice(-1)}" style="font-size: 0.8em; padding: 2px 8px;">${card.functionalArea}</span>
+                            • Added ${formatDate(card.dateAdded)}
+                        </div>
+                    </div>
+                    <button class="btn btn-small btn-primary" onclick="activateFlashcard('${card.id}')" style="margin-left: 10px;">
+                        ⚡ Activate
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function activateEntry(entryId) {
+            const entries = getEntries();
+            const entry = entries.find(e => e.id === entryId);
+            if (entry) {
+                entry.activatedDate = new Date().toISOString();
+                saveEntries(entries);
+                showToast('⚡ Entry activated!');
+                updateStagingTab();
+                updateDashboard();
+            }
+        }
+
+        function activateFlashcard(cardId) {
+            const flashcards = getFlashcards();
+            const card = flashcards.find(f => f.id === cardId);
+            if (card) {
+                card.activatedDate = new Date().toISOString();
+                saveFlashcards(flashcards);
+                showToast('⚡ Flashcard activated!');
+                updateStagingTab();
+                updateDashboard();
+            }
+        }
+
+        function activateAllEntries() {
+            const entries = getEntries();
+            const faFilter = document.getElementById('stagingEntryFaFilter')?.value || '';
+            
+            let toActivate = entries.filter(e => !e.activatedDate);
+            if (faFilter) {
+                toActivate = toActivate.filter(e => e.functionalArea === faFilter);
+            }
+            
+            if (toActivate.length === 0) {
+                showToast('No entries to activate');
+                return;
+            }
+            
+            if (!confirm(`Activate ${toActivate.length} entries? This will add them all to your practice rotation.`)) {
+                return;
+            }
+            
+            const now = new Date().toISOString();
+            toActivate.forEach(e => {
+                const entry = entries.find(x => x.id === e.id);
+                if (entry) entry.activatedDate = now;
+            });
+            
+            saveEntries(entries);
+            showToast(`⚡ ${toActivate.length} entries activated!`);
+            updateStagingTab();
+            updateDashboard();
+        }
+
+        function activateAllFlashcards() {
+            const flashcards = getFlashcards();
+            const faFilter = document.getElementById('stagingFlashcardFaFilter')?.value || '';
+            
+            let toActivate = flashcards.filter(f => !f.activatedDate);
+            if (faFilter) {
+                toActivate = toActivate.filter(f => f.functionalArea === faFilter);
+            }
+            
+            if (toActivate.length === 0) {
+                showToast('No flashcards to activate');
+                return;
+            }
+            
+            if (!confirm(`Activate ${toActivate.length} flashcards? This will add them all to your practice rotation.`)) {
+                return;
+            }
+            
+            const now = new Date().toISOString();
+            toActivate.forEach(f => {
+                const card = flashcards.find(x => x.id === f.id);
+                if (card) card.activatedDate = now;
+            });
+            
+            saveFlashcards(flashcards);
+            showToast(`⚡ ${toActivate.length} flashcards activated!`);
+            updateStagingTab();
+            updateDashboard();
+        }
+
+        function quickActivate() {
+            const faFilter = document.getElementById('quickActivateFA').value;
+            const typeFilter = document.getElementById('quickActivateType').value;
+            const count = parseInt(document.getElementById('quickActivateCount').value);
+            
+            const entries = getEntries();
+            const flashcards = getFlashcards();
+            const now = new Date().toISOString();
+            
+            let activatedCount = 0;
+            
+            // Activate entries
+            if (typeFilter === 'both' || typeFilter === 'entries') {
+                let stagedEntries = entries.filter(e => !e.activatedDate);
+                if (faFilter) {
+                    stagedEntries = stagedEntries.filter(e => e.functionalArea === faFilter);
+                }
+                
+                // Shuffle and take count
+                const toActivate = stagedEntries.sort(() => Math.random() - 0.5).slice(0, typeFilter === 'both' ? Math.ceil(count / 2) : count);
+                
+                toActivate.forEach(e => {
+                    const entry = entries.find(x => x.id === e.id);
+                    if (entry) {
+                        entry.activatedDate = now;
+                        activatedCount++;
+                    }
+                });
+                
+                saveEntries(entries);
+            }
+            
+            // Activate flashcards
+            if (typeFilter === 'both' || typeFilter === 'flashcards') {
+                let stagedFlashcards = flashcards.filter(f => !f.activatedDate);
+                if (faFilter) {
+                    stagedFlashcards = stagedFlashcards.filter(f => f.functionalArea === faFilter);
+                }
+                
+                // Shuffle and take count
+                const toActivate = stagedFlashcards.sort(() => Math.random() - 0.5).slice(0, typeFilter === 'both' ? Math.floor(count / 2) : count);
+                
+                toActivate.forEach(f => {
+                    const card = flashcards.find(x => x.id === f.id);
+                    if (card) {
+                        card.activatedDate = now;
+                        activatedCount++;
+                    }
+                });
+                
+                saveFlashcards(flashcards);
+            }
+            
+            if (activatedCount > 0) {
+                showToast(`⚡ ${activatedCount} items activated!`);
+                updateStagingTab();
+                updateDashboard();
+            } else {
+                showToast('No items available to activate with those filters');
+            }
+        }
+
         // ==================== ENTRIES CRUD ====================
 
         let currentEntryId = null;
 
         function renderEntries(filtered = null) {
-            const entries = filtered || getEntries();
+            let entries = filtered || getEntries();
+            
+            // Only show activated entries in the Entries tab
+            entries = entries.filter(e => e.activatedDate);
+            
             const container = document.getElementById('entriesResults');
 
             if (entries.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #64748B; padding: 40px;">No entries found. Go to "Add Content" to create your first entry!</p>';
+                const stagedCount = getEntries().filter(e => !e.activatedDate).length;
+                if (stagedCount > 0) {
+                    container.innerHTML = `<p style="text-align: center; color: #64748B; padding: 40px;">No activated entries yet. You have <strong>${stagedCount} entries in staging</strong>. Go to the <a href="#" onclick="document.querySelector('[data-tab=staging]').click(); return false;" style="color: #7C3AED; font-weight: 600;">📥 Staging tab</a> to activate them!</p>`;
+                } else {
+                    container.innerHTML = '<p style="text-align: center; color: #64748B; padding: 40px;">No entries yet. Go to "Add Content" to create your first entry!</p>';
+                }
                 return;
             }
 
             container.innerHTML = entries.map(entry => {
-                const tier = getTier(entry.dateAdded, entry.lastPracticed);
+                const tier = getTier(entry.activatedDate, entry.lastPracticed);
                 const faConfig = FA_CONFIG[entry.functionalArea] || {};
+                const tierDisplay = tier === 0 ? 'Staged' : `Tier ${tier}`;
                 
                 return `
                     <div class="entry-card">
                         <div class="entry-header">
                             <div>
                                 <div class="entry-title">${escapeHtml(entry.title)}</div>
-                                <div class="entry-meta">${entry.course ? entry.course + ' • ' : ''}Tier ${tier} • Added ${formatDate(entry.dateAdded)}</div>
+                                <div class="entry-meta">${entry.course ? entry.course + ' • ' : ''}${tierDisplay} • Added ${formatDate(entry.dateAdded)}</div>
                             </div>
                             <span class="entry-fa-badge fa-${entry.functionalArea.slice(-1)}">${entry.functionalArea}</span>
                         </div>
@@ -2282,14 +2652,15 @@
             modalTitle.textContent = entry.title;
             
             const faConfig = FA_CONFIG[entry.functionalArea] || {};
-            const tier = getTier(entry.dateAdded, entry.lastPracticed);
+            const tier = getTier(entry.activatedDate, entry.lastPracticed);
+            const tierDisplay = tier === 0 ? 'Staged' : `Tier ${tier}`;
 
             modalBody.innerHTML = `
                 <div class="detail-section">
                     <div class="detail-label">Functional Area & Classification</div>
                     <div class="detail-content">
                         <span class="entry-fa-badge fa-${entry.functionalArea.slice(-1)}">${entry.functionalArea}: ${faConfig.name || ''}</span>
-                        <span style="margin-left: 15px;">Tier ${tier} • ${getRelevanceStars(entry.examRelevance)}</span>
+                        <span style="margin-left: 15px;">${tierDisplay} • ${getRelevanceStars(entry.examRelevance)}</span>
                     </div>
                 </div>
 
@@ -2429,11 +2800,20 @@
         // ==================== FLASHCARDS CRUD ====================
 
         function renderFlashcards(filtered = null) {
-            const flashcards = filtered || getFlashcards();
+            let flashcards = filtered || getFlashcards();
+            
+            // Only show activated flashcards in the Flashcards tab
+            flashcards = flashcards.filter(f => f.activatedDate);
+            
             const container = document.getElementById('flashcardsResults');
 
             if (flashcards.length === 0) {
-                container.innerHTML = '<p style="text-align: center; color: #64748B; padding: 40px;">No flashcards yet. Go to "Add Content" to create flashcards!</p>';
+                const stagedCount = getFlashcards().filter(f => !f.activatedDate).length;
+                if (stagedCount > 0) {
+                    container.innerHTML = `<p style="text-align: center; color: #64748B; padding: 40px;">No activated flashcards yet. You have <strong>${stagedCount} flashcards in staging</strong>. Go to the <a href="#" onclick="document.querySelector('[data-tab=staging]').click(); return false;" style="color: #7C3AED; font-weight: 600;">📥 Staging tab</a> to activate them!</p>`;
+                } else {
+                    container.innerHTML = '<p style="text-align: center; color: #64748B; padding: 40px;">No flashcards yet. Go to "Add Content" to create flashcards!</p>';
+                }
                 return;
             }
 
@@ -2767,9 +3147,11 @@
         function updatePracticeDashboard() {
             const entries = getEntries();
             
+            // Only count activated entries
+            const activeEntries = entries.filter(e => e.activatedDate);
             let tier1 = [], tier2 = [], tier3 = [];
-            entries.forEach(entry => {
-                const tier = getTier(entry.dateAdded, entry.lastPracticed);
+            activeEntries.forEach(entry => {
+                const tier = getTier(entry.activatedDate, entry.lastPracticed);
                 if (tier === 1) tier1.push(entry);
                 else if (tier === 2) tier2.push(entry);
                 else tier3.push(entry);
@@ -2809,23 +3191,32 @@
             const entries = getEntries();
             const flashcards = getFlashcards();
             
-            if (entries.length === 0 && flashcards.length === 0) {
-                document.getElementById('practiceSession').innerHTML = '<p style="color: #64748B; text-align: center;">Add some entries or flashcards first!</p>';
+            // Only use activated items
+            const activeEntries = entries.filter(e => e.activatedDate);
+            const activeFlashcards = flashcards.filter(f => f.activatedDate);
+            
+            if (activeEntries.length === 0 && activeFlashcards.length === 0) {
+                const stagedCount = entries.filter(e => !e.activatedDate).length + flashcards.filter(f => !f.activatedDate).length;
+                if (stagedCount > 0) {
+                    document.getElementById('practiceSession').innerHTML = `<p style="color: #64748B; text-align: center;">No activated items yet. Go to the <strong>Staging tab</strong> to activate ${stagedCount} staged items!</p>`;
+                } else {
+                    document.getElementById('practiceSession').innerHTML = '<p style="color: #64748B; text-align: center;">Add some entries or flashcards first!</p>';
+                }
                 return;
             }
 
             const activeTierFilter = document.querySelector('.tier-filter.active')?.dataset.tier || 'all';
             
             // Filter entries by tier
-            let filteredEntries = entries;
+            let filteredEntries = activeEntries;
             if (activeTierFilter !== 'all') {
-                filteredEntries = entries.filter(e => getTier(e.dateAdded, e.lastPracticed) === parseInt(activeTierFilter));
+                filteredEntries = activeEntries.filter(e => getTier(e.activatedDate, e.lastPracticed) === parseInt(activeTierFilter));
             }
 
             // Filter flashcards by tier (same logic as entries)
-            let filteredFlashcards = flashcards;
+            let filteredFlashcards = activeFlashcards;
             if (activeTierFilter !== 'all') {
-                filteredFlashcards = flashcards.filter(f => getTier(f.dateAdded, f.lastPracticed) === parseInt(activeTierFilter));
+                filteredFlashcards = activeFlashcards.filter(f => getTier(f.activatedDate, f.lastPracticed) === parseInt(activeTierFilter));
             }
 
             // Check if anything matches the filter
@@ -2865,7 +3256,7 @@
             if (shuffledEntries.length > 0) {
                 html += `<h4 style="color: #1E1B4B; margin-bottom: 15px;">📖 Entry Retrieval (${shuffledEntries.length} items)</h4>`;
                 shuffledEntries.forEach((entry, i) => {
-                    const entryTier = getTier(entry.dateAdded, entry.lastPracticed);
+                    const entryTier = getTier(entry.activatedDate, entry.lastPracticed);
                     html += `
                         <div class="entry-card" style="margin-bottom: 15px;">
                             <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -2897,7 +3288,7 @@
             if (shuffledFlashcards.length > 0) {
                 html += `<h4 style="color: #1E1B4B; margin: 25px 0 15px;">🃏 Flashcard Drill (${shuffledFlashcards.length} cards)</h4>`;
                 shuffledFlashcards.forEach((card, i) => {
-                    const cardTier = getTier(card.dateAdded, card.lastPracticed);
+                    const cardTier = getTier(card.activatedDate, card.lastPracticed);
                     html += `
                         <div class="flashcard" style="margin-bottom: 15px;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
@@ -3175,7 +3566,7 @@
 
         // Console welcome message
         console.log('%c🎯 SPHR Knowledge Repository', 'font-size: 20px; font-weight: bold; color: #7C3AED;');
-        console.log('%cPKA Learning System v3.0 | Phase 3: Analytics & Tracking', 'font-size: 12px; color: #64748B;');
+        console.log('%cPKA Learning System v4.0 | Phase 4: Staging System', 'font-size: 12px; color: #64748B;');
         console.log('%cReady for exam preparation!', 'font-size: 12px; color: #10B981;');
     </script>
 </body>
