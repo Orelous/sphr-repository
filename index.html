@@ -1147,6 +1147,11 @@
             </div>
         </div>
 
+        <!-- Toast Notification (appears at top of screen) -->
+        <div id="toastNotification" style="display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #10B981; color: white; padding: 15px 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 9999; font-weight: 600;">
+            <span id="toastMessage">Success!</span>
+        </div>
+
         <!-- Questions Tab (placeholder) -->
         <div class="tab-content" id="questions">
             <div class="search-controls">
@@ -1254,8 +1259,8 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="entryCourse">O2O Course</label>
-                                <input type="text" id="entryCourse" placeholder="e.g., Strategic Management">
+                                <label for="entryCourse">HRCI Responsibility Reference</label>
+                                <input type="text" id="entryCourse" placeholder="e.g., 1.1 Strategic Planning, 3.2 Performance Management">
                             </div>
 
                             <div class="form-group">
@@ -1794,7 +1799,7 @@
                         <div class="entry-header">
                             <div>
                                 <div class="entry-title">${escapeHtml(entry.title)}</div>
-                                <div class="entry-meta">${entry.course || 'No course'} • Tier ${tier} • Added ${formatDate(entry.dateAdded)}</div>
+                                <div class="entry-meta">${entry.course ? entry.course + ' • ' : ''}Tier ${tier} • Added ${formatDate(entry.dateAdded)}</div>
                             </div>
                             <span class="entry-fa-badge fa-${entry.functionalArea.slice(-1)}">${entry.functionalArea}</span>
                         </div>
@@ -2043,8 +2048,20 @@
                 card.lastPracticed = new Date().toISOString();
                 card.timesPracticed = (card.timesPracticed || 0) + 1;
                 saveFlashcards(flashcards);
-                showStatus('flashcardStatusMessage', 'Marked as practiced!', 'success');
+                showToast('✓ Flashcard marked as practiced!');
+                updateDashboard();
             }
+        }
+
+        // Toast notification function
+        function showToast(message, duration = 2000) {
+            const toast = document.getElementById('toastNotification');
+            const toastMsg = document.getElementById('toastMessage');
+            toastMsg.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, duration);
         }
 
         function deleteFlashcard(cardId) {
@@ -2446,6 +2463,7 @@
                 entry.lastPracticed = new Date().toISOString();
                 entry.timesReviewed = (entry.timesReviewed || 0) + 1;
                 saveEntries(entries);
+                showToast('✓ Entry marked as practiced!');
                 updateDashboard();
                 updatePracticeDashboard();
             }
