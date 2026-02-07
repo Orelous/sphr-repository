@@ -3101,65 +3101,35 @@
                 }
             }
         }
-document.getElementById('correctAnswerSingle').style.display
+
+        function checkAnswer(questionId, selected, correct) {
+            const questionEl = document.getElementById('question-' + questionId);
             const options = questionEl.querySelectorAll('.answer-option');
-            const selectedAnswers = [];
             
             options.forEach(opt => {
-                if (opt.classList.contains('selected')) {
-                    selectedAnswers.push(opt.dataset.option);
+                opt.classList.remove('correct', 'incorrect');
+                const optLetter = opt.dataset.option;
+                if (optLetter === correct) {
+                    opt.classList.add('correct');
+                } else if (optLetter === selected && selected !== correct) {
+                    opt.classList.add('incorrect');
                 }
             });
-            
-            if (selectedAnswers.length === 0) {
-                alert('Please select at least one answer before submitting.');
-                return;
-            }
-            
-            // Grade: show correct, incorrect, and missed
-            let allCorrect = true;
-            options.forEach(opt => {
-                const letter = opt.dataset.option;
-                const isCorrect = correctAnswers.includes(letter);
-                const wasSelected = selectedAnswers.includes(letter);
-                
-                opt.classList.remove('selected');
-                
-                if (isCorrect && wasSelected) {
-                    opt.classList.add('correct');  // Green: correctly selected
-                } else if (!isCorrect && wasSelected) {
-                    opt.classList.add('incorrect');  // Red: wrongly selected
-                    allCorrect = false;
-                } else if (isCorrect && !wasSelected) {
-                    opt.classList.add('missed');  // Yellow: missed correct answer
-                    allCorrect = false;
-                }
-            });
-            
-            questionEl.dataset.answered = 'true';
+
             document.getElementById('explanation-' + questionId).style.display = 'block';
-            
-            // Disable submit button
-            const submitBtn = document.getElementById('submit-' + questionId);
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.textContent = allCorrect ? '\u2713 All Correct!' : '\u2717 Review Above';
-                submitBtn.style.background = allCorrect ? '#10B981' : '#EF4444';
-            }
-            
-            // Log practice
+
             const questions = getQuestions();
             const q = questions.find(x => x.id === questionId);
             if (q) {
                 q.lastPracticed = new Date().toISOString();
                 q.timesPracticed = (q.timesPracticed || 0) + 1;
-                if (allCorrect) {
+                if (selected === correct) {
                     q.timesCorrect = (q.timesCorrect || 0) + 1;
                 }
                 saveQuestions(questions);
             }
         }
-
+        
         function toggleMultiSelect(element) {
             element.classList.toggle('selected');
             if (element.classList.contains('selected')) {
@@ -3369,10 +3339,6 @@ document.getElementById('correctAnswerSingle').style.display
             const isMulti = document.querySelector('input[name="questionType"][value="multi"]').checked;
             var correctAnswer;
             
-            const questions = getQuestions();
-            
-            const isMulti = document.querySelector('input[name="questionType"][value="multi"]').checked;
-            let correctAnswer;
             if (isMulti) {
                 const checked = document.querySelectorAll('input[name="correctAnswerMulti"]:checked');
                 if (checked.length < 2) {
@@ -3424,17 +3390,6 @@ document.getElementById('correctAnswerSingle').style.display
             // Reset to single answer mode
             document.getElementById('singleAnswerGroup').style.display = 'block';
             document.getElementById('multiAnswerGroup').style.display = 'none';
-        }
-
-        function toggleCorrectAnswerMode() {
-            const questionType = document.querySelector('input[name="questionType"]:checked').value;
-            if (questionType === 'multi') {
-                document.getElementById('correctAnswerSingle').style.display = 'none';
-                document.getElementById('correctAnswerMulti').style.display = 'block';
-            } else {
-                document.getElementById('correctAnswerSingle').style.display = 'block';
-                document.getElementById('correctAnswerMulti').style.display = 'none';
-            }
         }
 
         // ==================== PRACTICE MODE ====================
