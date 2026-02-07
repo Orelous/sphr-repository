@@ -1749,18 +1749,6 @@
                                 <input type="text" id="questionOptionD" required>
                             </div>
 
-                            <div class="form-group">
-                                <label>Question Type <span class="required">*</span></label>
-                                <div style="display: flex; gap: 15px; margin-top: 5px;">
-                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                        <input type="radio" name="questionType" value="single" checked onchange="toggleCorrectAnswerMode()"> Single Answer
-                                    </label>
-                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                        <input type="radio" name="questionType" value="multi" onchange="toggleCorrectAnswerMode()"> Select All That Apply
-                                    </label>
-                                </div>
-                            </div>
-
                             <div class="form-group" id="singleAnswerGroup">
                                 <label for="questionCorrect">Correct Answer <span class="required">*</span></label>
                                 <select id="questionCorrect" required>
@@ -1790,23 +1778,6 @@
                                 </div>
                             </div>
 
-                            <div class="form-group" id="correctAnswerMulti" style="display: none;">
-                                <label>Correct Answers (check all that apply) <span class="required">*</span></label>
-                                <div style="display: flex; gap: 20px; margin-top: 8px;">
-                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                        <input type="checkbox" name="correctAnswersMulti" value="A"> A
-                                    </label>
-                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                        <input type="checkbox" name="correctAnswersMulti" value="B"> B
-                                    </label>
-                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                        <input type="checkbox" name="correctAnswersMulti" value="C"> C
-                                    </label>
-                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
-                                        <input type="checkbox" name="correctAnswersMulti" value="D"> D
-                                    </label>
-                                </div>
-                            </div>
 
                             <div class="form-group">
                                 <label for="questionExplanation">Explanation</label>
@@ -3075,7 +3046,6 @@
                         <li class="answer-option" data-option="D" onclick="checkAnswer('${q.id}', 'D', '${q.correctAnswer}')">D. ${escapeHtml(q.optionD)}</li>
                     </ul>
                     `}
-                    ${isMulti ? `<button class="submit-answer-btn" id="submit-${q.id}" onclick="submitMultiAnswer('${q.id}', '${correctData}')">Submit Answer</button>` : ''}
                     <div id="explanation-${q.id}" style="display: none; margin-top: 15px; padding: 15px; background: #F0FDF4; border-left: 4px solid #10B981; border-radius: 4px;">
                         <strong>Explanation:</strong> ${escapeHtml(q.explanation || 'No explanation provided.')}
                         ${isMulti ? '<br><strong>Correct answers:</strong> ' + q.correctAnswer.join(', ') : ''}
@@ -3131,12 +3101,7 @@
                 }
             }
         }
-
-        function submitMultiAnswer(questionId, correctData) {
-            const questionEl = document.getElementById('question-' + questionId);
-            if (questionEl.dataset.answered === 'true') return;
-            
-            const correctAnswers = correctData.split(',');
+document.getElementById('correctAnswerSingle').style.display
             const options = questionEl.querySelectorAll('.answer-option');
             const selectedAnswers = [];
             
@@ -3399,23 +3364,10 @@
         document.getElementById('newQuestionForm')?.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const questionType = document.querySelector('input[name="questionType"]:checked').value;
-            let correctAnswer;
+            const questions = getQuestions();
             
-            if (questionType === 'multi') {
-                const checked = document.querySelectorAll('input[name="correctAnswersMulti"]:checked');
-                correctAnswer = Array.from(checked).map(cb => cb.value);
-                if (correctAnswer.length < 2) {
-                    showStatus('questionStatusMessage', 'Select All That Apply questions need at least 2 correct answers.', 'error');
-                    return;
-                }
-            } else {
-                correctAnswer = document.getElementById('questionCorrect').value;
-                if (!correctAnswer) {
-                    showStatus('questionStatusMessage', 'Please select the correct answer.', 'error');
-                    return;
-                }
-            }
+            const isMulti = document.querySelector('input[name="questionType"][value="multi"]').checked;
+            var correctAnswer;
             
             const questions = getQuestions();
             
@@ -3443,6 +3395,11 @@
                 correctAnswer: correctAnswer,
                 questionType: isMulti ? 'multi' : 'single',
                 explanation: document.getElementById('questionExplanation').value,
+                dateAdded: new Date().toISOString(),
+                lastPracticed: null,
+                timesPracticed: 0,
+                timesCorrect: 0
+            };
 
             questions.push(questionData);
             saveQuestions(questions);
@@ -3465,8 +3422,8 @@
         function resetQuestionForm() {
             document.getElementById('newQuestionForm').reset();
             // Reset to single answer mode
-            document.getElementById('correctAnswerSingle').style.display = 'block';
-            document.getElementById('correctAnswerMulti').style.display = 'none';
+            document.getElementById('singleAnswerGroup').style.display = 'block';
+            document.getElementById('multiAnswerGroup').style.display = 'none';
         }
 
         function toggleCorrectAnswerMode() {
