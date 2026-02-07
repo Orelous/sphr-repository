@@ -907,6 +907,29 @@
         }
 
         .answer-option.missed {
+            background: #FEF3C7;
+            border-color: #F59E0B;
+        }
+
+        .question-type-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .question-type-badge.single {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .question-type-badge.multi {
+            background: #FCE7F3;
+            color: #9D174D;
+        }
+        .answer-option.missed {
             background: #FEF9C3;
             border-color: #F59E0B;
             font-weight: 600;
@@ -1690,6 +1713,18 @@
                             </div>
 
                             <div class="form-group">
+                                <label>Question Type</label>
+                                <div style="display: flex; gap: 15px;">
+                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: normal;">
+                                        <input type="radio" name="questionType" value="single" checked onchange="toggleQuestionType()" style="width: auto;"> Single Answer
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: normal;">
+                                        <input type="radio" name="questionType" value="multi" onchange="toggleQuestionType()" style="width: auto;"> Multiple Answers
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
                                 <label for="questionStem">Question Stem <span class="required">*</span></label>
                                 <textarea id="questionStem" placeholder="The scenario and question..." required></textarea>
                             </div>
@@ -1726,15 +1761,33 @@
                                 </div>
                             </div>
 
-                            <div class="form-group" id="correctAnswerSingle">
+                            <div class="form-group" id="singleAnswerGroup">
                                 <label for="questionCorrect">Correct Answer <span class="required">*</span></label>
-                                <select id="questionCorrect">
+                                <select id="questionCorrect" required>
                                     <option value="">Select correct answer...</option>
                                     <option value="A">A</option>
                                     <option value="B">B</option>
                                     <option value="C">C</option>
                                     <option value="D">D</option>
                                 </select>
+                            </div>
+
+                            <div class="form-group" id="multiAnswerGroup" style="display: none;">
+                                <label>Correct Answers (select all that apply) <span class="required">*</span></label>
+                                <div style="display: flex; gap: 20px; margin-top: 8px;">
+                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: normal;">
+                                        <input type="checkbox" name="correctAnswerMulti" value="A" style="width: auto;"> A
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: normal;">
+                                        <input type="checkbox" name="correctAnswerMulti" value="B" style="width: auto;"> B
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: normal;">
+                                        <input type="checkbox" name="correctAnswerMulti" value="C" style="width: auto;"> C
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: normal;">
+                                        <input type="checkbox" name="correctAnswerMulti" value="D" style="width: auto;"> D
+                                    </label>
+                                </div>
                             </div>
 
                             <div class="form-group" id="correctAnswerMulti" style="display: none;">
@@ -3001,16 +3054,27 @@
                 return `
                 <div class="review-question" id="question-${q.id}" data-multi="${isMulti}" data-answered="false">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
-                        <span class="content-type-badge type-question">Review Question ${typeBadge}</span>
+                        <span class="content-type-badge type-question">Review Question</span>${q.questionType === 'multi' ? '<span class="question-type-badge multi">MULTI</span>' : '<span class="question-type-badge single">SINGLE</span>'}
                         <span class="entry-fa-badge fa-${q.functionalArea.slice(-1)}">${q.functionalArea}</span>
                     </div>
                     <div class="question-stem">${escapeHtml(q.stem)}</div>
+                    ${q.questionType === 'multi' ? `
+                    <div style="margin-bottom: 10px; color: #9D174D; font-weight: 600; font-size: 0.9em;">Select ALL correct answers, then click Submit</div>
                     <ul class="answer-options">
-                        <li class="answer-option" data-option="A" onclick="handleAnswerClick('${q.id}', 'A', '${correctData}')">A. ${escapeHtml(q.optionA)}</li>
-                        <li class="answer-option" data-option="B" onclick="handleAnswerClick('${q.id}', 'B', '${correctData}')">B. ${escapeHtml(q.optionB)}</li>
-                        <li class="answer-option" data-option="C" onclick="handleAnswerClick('${q.id}', 'C', '${correctData}')">C. ${escapeHtml(q.optionC)}</li>
-                        <li class="answer-option" data-option="D" onclick="handleAnswerClick('${q.id}', 'D', '${correctData}')">D. ${escapeHtml(q.optionD)}</li>
+                        <li class="answer-option" data-option="A" onclick="toggleMultiSelect(this)">A. ${escapeHtml(q.optionA)}</li>
+                        <li class="answer-option" data-option="B" onclick="toggleMultiSelect(this)">B. ${escapeHtml(q.optionB)}</li>
+                        <li class="answer-option" data-option="C" onclick="toggleMultiSelect(this)">C. ${escapeHtml(q.optionC)}</li>
+                        <li class="answer-option" data-option="D" onclick="toggleMultiSelect(this)">D. ${escapeHtml(q.optionD)}</li>
                     </ul>
+                    <button class="btn btn-small btn-primary" onclick="submitMultiAnswer('${q.id}')" style="margin-top: 10px;">Submit Answers</button>
+                    ` : `
+                    <ul class="answer-options">
+                        <li class="answer-option" data-option="A" onclick="checkAnswer('${q.id}', 'A', '${q.correctAnswer}')">A. ${escapeHtml(q.optionA)}</li>
+                        <li class="answer-option" data-option="B" onclick="checkAnswer('${q.id}', 'B', '${q.correctAnswer}')">B. ${escapeHtml(q.optionB)}</li>
+                        <li class="answer-option" data-option="C" onclick="checkAnswer('${q.id}', 'C', '${q.correctAnswer}')">C. ${escapeHtml(q.optionC)}</li>
+                        <li class="answer-option" data-option="D" onclick="checkAnswer('${q.id}', 'D', '${q.correctAnswer}')">D. ${escapeHtml(q.optionD)}</li>
+                    </ul>
+                    `}
                     ${isMulti ? `<button class="submit-answer-btn" id="submit-${q.id}" onclick="submitMultiAnswer('${q.id}', '${correctData}')">Submit Answer</button>` : ''}
                     <div id="explanation-${q.id}" style="display: none; margin-top: 15px; padding: 15px; background: #F0FDF4; border-left: 4px solid #10B981; border-radius: 4px;">
                         <strong>Explanation:</strong> ${escapeHtml(q.explanation || 'No explanation provided.')}
@@ -3131,21 +3195,69 @@
             }
         }
 
+        function toggleMultiSelect(element) {
+            element.classList.toggle('selected');
+            if (element.classList.contains('selected')) {
+                element.style.borderColor = '#7C3AED';
+                element.style.background = '#EDE9FE';
+            } else {
+                element.style.borderColor = '#E2E8F0';
+                element.style.background = '#F8FAFC';
+            }
+        }
+
+        function submitMultiAnswer(questionId) {
+            const questions = getQuestions();
+            const q = questions.find(x => x.id === questionId);
+            if (!q) return;
+
+            const questionEl = document.getElementById('question-' + questionId);
+            const options = questionEl.querySelectorAll('.answer-option');
+            const selected = Array.from(questionEl.querySelectorAll('.answer-option.selected')).map(el => el.dataset.option);
+            const correctAnswers = Array.isArray(q.correctAnswer) ? q.correctAnswer : [q.correctAnswer];
+
+            // Grade each option with 3 colors:
+            // Green = correctly selected, Red = incorrectly selected, Yellow = missed (should have selected)
+            options.forEach(opt => {
+                const letter = opt.dataset.option;
+                const isCorrect = correctAnswers.includes(letter);
+                const wasSelected = selected.includes(letter);
+
+                opt.classList.remove('selected', 'correct', 'incorrect', 'missed');
+                opt.style.borderColor = '';
+                opt.style.background = '';
+
+                if (isCorrect && wasSelected) {
+                    opt.classList.add('correct');      // Green - got it right
+                } else if (!isCorrect && wasSelected) {
+                    opt.classList.add('incorrect');     // Red - wrong pick
+                } else if (isCorrect && !wasSelected) {
+                    opt.classList.add('missed');        // Yellow - missed it
+                }
+            });
+
+            document.getElementById('explanation-' + questionId).style.display = 'block';
+
+            // Score: correct only if ALL correct answers selected and NO incorrect ones
+            const isFullyCorrect = correctAnswers.length === selected.length &&
+                correctAnswers.every(a => selected.includes(a));
+
+            q.lastPracticed = new Date().toISOString();
+            q.timesPracticed = (q.timesPracticed || 0) + 1;
+            if (isFullyCorrect) {
+                q.timesCorrect = (q.timesCorrect || 0) + 1;
+            }
+            saveQuestions(questions);
+        }
+        
         function resetQuestion(questionId) {
             const questionEl = document.getElementById('question-' + questionId);
             questionEl.querySelectorAll('.answer-option').forEach(opt => {
-                opt.classList.remove('correct', 'incorrect', 'selected', 'missed');
+                opt.classList.remove('correct', 'incorrect', 'missed', 'selected');
+                opt.style.borderColor = '';
+                opt.style.background = '';
             });
-            questionEl.dataset.answered = 'false';
             document.getElementById('explanation-' + questionId).style.display = 'none';
-            
-            // Reset submit button for multi-select
-            const submitBtn = document.getElementById('submit-' + questionId);
-            if (submitBtn) {
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Submit Answer';
-                submitBtn.style.background = '#7C3AED';
-            }
         }
 
         function deleteQuestion(questionId) {
@@ -3190,6 +3302,15 @@
             document.querySelectorAll('#add .export-card').forEach(card => card.style.borderColor = '#E2E8F0');
             const cardId = 'add' + type.charAt(0).toUpperCase() + type.slice(1) + 'Card';
             document.getElementById(cardId).style.borderColor = '#7C3AED';
+        }
+
+        // Question type toggle
+        function toggleQuestionType() {
+            const isMulti = document.querySelector('input[name="questionType"][value="multi"]').checked;
+            document.getElementById('singleAnswerGroup').style.display = isMulti ? 'none' : 'block';
+            document.getElementById('multiAnswerGroup').style.display = isMulti ? 'block' : 'none';
+            // Toggle required attribute
+            document.getElementById('questionCorrect').required = !isMulti;
         }
 
         // Rating option selection
@@ -3298,6 +3419,19 @@
             
             const questions = getQuestions();
             
+            const isMulti = document.querySelector('input[name="questionType"][value="multi"]').checked;
+            let correctAnswer;
+            if (isMulti) {
+                const checked = document.querySelectorAll('input[name="correctAnswerMulti"]:checked');
+                if (checked.length < 2) {
+                    showStatus('questionStatusMessage', 'Please select at least 2 correct answers for multi-answer questions.', 'error');
+                    return;
+                }
+                correctAnswer = Array.from(checked).map(cb => cb.value);
+            } else {
+                correctAnswer = document.getElementById('questionCorrect').value;
+            }
+
             const questionData = {
                 id: generateId('Q'),
                 functionalArea: document.getElementById('questionFA').value,
@@ -3307,13 +3441,8 @@
                 optionC: document.getElementById('questionOptionC').value,
                 optionD: document.getElementById('questionOptionD').value,
                 correctAnswer: correctAnswer,
-                questionType: questionType,
+                questionType: isMulti ? 'multi' : 'single',
                 explanation: document.getElementById('questionExplanation').value,
-                dateAdded: new Date().toISOString(),
-                lastPracticed: null,
-                timesPracticed: 0,
-                timesCorrect: 0
-            };
 
             questions.push(questionData);
             saveQuestions(questions);
