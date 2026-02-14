@@ -976,6 +976,44 @@
             cursor: not-allowed;
         }
 
+        .fill-blank-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 12px 16px;
+            border: 2px solid #E2E8F0;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .fill-blank-input:focus {
+            border-color: #7C3AED;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+            outline: none;
+        }
+
+        .fill-blank-input.correct {
+            border-color: #10B981;
+            background: #D1FAE5;
+        }
+
+        .fill-blank-input.incorrect {
+            border-color: #EF4444;
+            background: #FEE2E2;
+        }
+
+        .fill-blank-accepted {
+            margin-top: 8px;
+            font-size: 0.85em;
+            color: #64748B;
+        }
+
+        .question-type-badge.blank {
+            background: #E0E7FF;
+            color: #3730A3;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header-content {
@@ -1714,12 +1752,15 @@
 
                             <div class="form-group">
                                 <label>Question Type</label>
-                                <div style="display: flex; gap: 15px;">
+                                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
                                     <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: normal;">
                                         <input type="radio" name="questionType" value="single" checked onchange="toggleQuestionType()" style="width: auto;"> Single Answer
                                     </label>
                                     <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: normal;">
                                         <input type="radio" name="questionType" value="multi" onchange="toggleQuestionType()" style="width: auto;"> Multiple Answers
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-weight: normal;">
+                                        <input type="radio" name="questionType" value="blank" onchange="toggleQuestionType()" style="width: auto;"> Fill in the Blank
                                     </label>
                                 </div>
                             </div>
@@ -1729,24 +1770,26 @@
                                 <textarea id="questionStem" placeholder="The scenario and question..." required></textarea>
                             </div>
 
-                            <div class="form-group">
-                                <label for="questionOptionA">Option A <span class="required">*</span></label>
-                                <input type="text" id="questionOptionA" required>
-                            </div>
+                            <div id="mcOptionsGroup">
+                                <div class="form-group">
+                                    <label for="questionOptionA">Option A <span class="required">*</span></label>
+                                    <input type="text" id="questionOptionA">
+                                </div>
 
-                            <div class="form-group">
-                                <label for="questionOptionB">Option B <span class="required">*</span></label>
-                                <input type="text" id="questionOptionB" required>
-                            </div>
+                                <div class="form-group">
+                                    <label for="questionOptionB">Option B <span class="required">*</span></label>
+                                    <input type="text" id="questionOptionB">
+                                </div>
 
-                            <div class="form-group">
-                                <label for="questionOptionC">Option C <span class="required">*</span></label>
-                                <input type="text" id="questionOptionC" required>
-                            </div>
+                                <div class="form-group">
+                                    <label for="questionOptionC">Option C <span class="required">*</span></label>
+                                    <input type="text" id="questionOptionC">
+                                </div>
 
-                            <div class="form-group">
-                                <label for="questionOptionD">Option D <span class="required">*</span></label>
-                                <input type="text" id="questionOptionD" required>
+                                <div class="form-group">
+                                    <label for="questionOptionD">Option D <span class="required">*</span></label>
+                                    <input type="text" id="questionOptionD">
+                                </div>
                             </div>
 
                             <div class="form-group" id="singleAnswerGroup">
@@ -1778,7 +1821,14 @@
                                 </div>
                             </div>
 
-
+                            <div class="form-group" id="blankAnswerGroup" style="display: none;">
+                                <label>Accepted Answers <span class="required">*</span></label>
+                                <input type="text" id="blankAnswer1" placeholder="Primary answer (e.g., twice)">
+                                <input type="text" id="blankAnswer2" placeholder="Alternate answer (e.g., 2)" style="margin-top: 8px;">
+                                <input type="text" id="blankAnswer3" placeholder="Another alternate (e.g., two)" style="margin-top: 8px;">
+                                <p style="color: #64748B; font-size: 0.85em; margin-top: 8px;">Enter all accepted answers. Matching is case-insensitive. Leave alternates blank if not needed.</p>
+                            </div>
+                            
                             <div class="form-group">
                                 <label for="questionExplanation">Explanation</label>
                                 <textarea id="questionExplanation" placeholder="Why this answer is correct..."></textarea>
@@ -3025,11 +3075,16 @@
                 return `
                 <div class="review-question" id="question-${q.id}" data-multi="${isMulti}" data-answered="false">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
-                        <span class="content-type-badge type-question">Review Question</span>${q.questionType === 'multi' ? '<span class="question-type-badge multi">MULTI</span>' : '<span class="question-type-badge single">SINGLE</span>'}
+                        <span class="content-type-badge type-question">Review Question</span>${q.questionType === 'multi' ? '<span class="question-type-badge multi">MULTI</span>' : q.questionType === 'blank' ? '<span class="question-type-badge blank">FILL IN BLANK</span>' : '<span class="question-type-badge single">SINGLE</span>'}
                         <span class="entry-fa-badge fa-${q.functionalArea.slice(-1)}">${q.functionalArea}</span>
                     </div>
                     <div class="question-stem">${escapeHtml(q.stem)}</div>
-                    ${q.questionType === 'multi' ? `
+                    ${q.questionType === 'blank' ? `
+                    <div style="margin-bottom: 10px;">
+                        <input type="text" class="fill-blank-input" id="blank-input-${q.id}" placeholder="Type your answer..." onkeydown="if(event.key==='Enter'){event.preventDefault();submitBlankAnswer('${q.id}');}">
+                        <button class="btn btn-small btn-primary" onclick="submitBlankAnswer('${q.id}')" style="margin-top: 8px;">Submit Answer</button>
+                    </div>
+                    ` : q.questionType === 'multi' ? `
                     <div style="margin-bottom: 10px; color: #9D174D; font-weight: 600; font-size: 0.9em;">Select ALL correct answers, then click Submit</div>
                     <ul class="answer-options">
                         <li class="answer-option" data-option="A" onclick="toggleMultiSelect(this)">A. ${escapeHtml(q.optionA)}</li>
@@ -3184,6 +3239,46 @@
             }
             saveQuestions(questions);
         }
+
+        function submitBlankAnswer(questionId) {
+            const questions = getQuestions();
+            const q = questions.find(x => x.id === questionId);
+            if (!q) return;
+
+            const inputEl = document.getElementById('blank-input-' + questionId);
+            const userAnswer = inputEl.value.trim().toLowerCase();
+            
+            if (!userAnswer) {
+                alert('Please type an answer before submitting.');
+                return;
+            }
+
+            const acceptedAnswers = Array.isArray(q.correctAnswer) ? q.correctAnswer : [q.correctAnswer];
+            const isCorrect = acceptedAnswers.some(ans => ans.toLowerCase() === userAnswer);
+
+            inputEl.disabled = true;
+            
+            if (isCorrect) {
+                inputEl.classList.add('correct');
+            } else {
+                inputEl.classList.add('incorrect');
+            }
+
+            // Show accepted answers
+            const acceptedDiv = document.createElement('div');
+            acceptedDiv.className = 'fill-blank-accepted';
+            acceptedDiv.innerHTML = '<strong>Accepted answers:</strong> ' + acceptedAnswers.join(', ');
+            inputEl.parentNode.insertBefore(acceptedDiv, inputEl.nextSibling);
+
+            document.getElementById('explanation-' + questionId).style.display = 'block';
+
+            q.lastPracticed = new Date().toISOString();
+            q.timesPracticed = (q.timesPracticed || 0) + 1;
+            if (isCorrect) {
+                q.timesCorrect = (q.timesCorrect || 0) + 1;
+            }
+            saveQuestions(questions);
+        }
         
         function resetQuestion(questionId) {
             const questionEl = document.getElementById('question-' + questionId);
@@ -3192,6 +3287,15 @@
                 opt.style.borderColor = '';
                 opt.style.background = '';
             });
+            // Reset fill-in-the-blank
+            const blankInput = document.getElementById('blank-input-' + questionId);
+            if (blankInput) {
+                blankInput.value = '';
+                blankInput.disabled = false;
+                blankInput.classList.remove('correct', 'incorrect');
+                const accepted = blankInput.parentNode.querySelector('.fill-blank-accepted');
+                if (accepted) accepted.remove();
+            }
             document.getElementById('explanation-' + questionId).style.display = 'none';
         }
 
@@ -3241,11 +3345,14 @@
 
         // Question type toggle
         function toggleQuestionType() {
-            const isMulti = document.querySelector('input[name="questionType"][value="multi"]').checked;
-            document.getElementById('singleAnswerGroup').style.display = isMulti ? 'none' : 'block';
-            document.getElementById('multiAnswerGroup').style.display = isMulti ? 'block' : 'none';
-            // Toggle required attribute
-            document.getElementById('questionCorrect').required = !isMulti;
+            const selected = document.querySelector('input[name="questionType"]:checked').value;
+            
+            document.getElementById('mcOptionsGroup').style.display = selected === 'blank' ? 'none' : 'block';
+            document.getElementById('singleAnswerGroup').style.display = selected === 'single' ? 'block' : 'none';
+            document.getElementById('multiAnswerGroup').style.display = selected === 'multi' ? 'block' : 'none';
+            document.getElementById('blankAnswerGroup').style.display = selected === 'blank' ? 'block' : 'none';
+            
+            document.getElementById('questionCorrect').required = (selected === 'single');
         }
 
         // Rating option selection
@@ -3334,18 +3441,27 @@
         document.getElementById('newQuestionForm')?.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            const questions = getQuestions();
-            
-            const isMulti = document.querySelector('input[name="questionType"][value="multi"]').checked;
+            const questionType = document.querySelector('input[name="questionType"]:checked').value;
             var correctAnswer;
             
-            if (isMulti) {
+            if (questionType === 'multi') {
                 const checked = document.querySelectorAll('input[name="correctAnswerMulti"]:checked');
                 if (checked.length < 2) {
                     showStatus('questionStatusMessage', 'Please select at least 2 correct answers for multi-answer questions.', 'error');
                     return;
                 }
                 correctAnswer = Array.from(checked).map(cb => cb.value);
+            } else if (questionType === 'blank') {
+                const primary = document.getElementById('blankAnswer1').value.trim();
+                if (!primary) {
+                    showStatus('questionStatusMessage', 'Please enter at least one accepted answer.', 'error');
+                    return;
+                }
+                correctAnswer = [primary];
+                const alt2 = document.getElementById('blankAnswer2').value.trim();
+                const alt3 = document.getElementById('blankAnswer3').value.trim();
+                if (alt2) correctAnswer.push(alt2);
+                if (alt3) correctAnswer.push(alt3);
             } else {
                 correctAnswer = document.getElementById('questionCorrect').value;
             }
@@ -3354,12 +3470,12 @@
                 id: generateId('Q'),
                 functionalArea: document.getElementById('questionFA').value,
                 stem: document.getElementById('questionStem').value,
-                optionA: document.getElementById('questionOptionA').value,
-                optionB: document.getElementById('questionOptionB').value,
-                optionC: document.getElementById('questionOptionC').value,
-                optionD: document.getElementById('questionOptionD').value,
+                optionA: questionType !== 'blank' ? document.getElementById('questionOptionA').value : '',
+                optionB: questionType !== 'blank' ? document.getElementById('questionOptionB').value : '',
+                optionC: questionType !== 'blank' ? document.getElementById('questionOptionC').value : '',
+                optionD: questionType !== 'blank' ? document.getElementById('questionOptionD').value : '',
                 correctAnswer: correctAnswer,
-                questionType: isMulti ? 'multi' : 'single',
+                questionType: questionType,
                 explanation: document.getElementById('questionExplanation').value,
                 dateAdded: new Date().toISOString(),
                 lastPracticed: null,
@@ -3387,9 +3503,10 @@
 
         function resetQuestionForm() {
             document.getElementById('newQuestionForm').reset();
-            // Reset to single answer mode
+            document.getElementById('mcOptionsGroup').style.display = 'block';
             document.getElementById('singleAnswerGroup').style.display = 'block';
             document.getElementById('multiAnswerGroup').style.display = 'none';
+            document.getElementById('blankAnswerGroup').style.display = 'none';
         }
 
         // ==================== PRACTICE MODE ====================
