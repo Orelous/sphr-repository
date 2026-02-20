@@ -1885,7 +1885,7 @@
                     <div class="form-group">
                         <label for="importType">Import Type</label>
                         <select id="importType">
-                            <option value="full">Complete Backup (All Data)</option>
+                            <option value="full">Full Dataset (Entries + Flashcards)</option>
                             <option value="entries">Entries Only</option>
                             <option value="flashcards">Flashcards Only</option>
                             <option value="questions">Questions Only</option>
@@ -3872,13 +3872,42 @@
 
                 switch(importType) {
                     case 'full':
-                        if (data.entries) saveEntries(data.entries);
-                        if (data.flashcards) saveFlashcards(data.flashcards);
-                        if (data.questions) saveQuestions(data.questions);
-                        if (data.practiceLog) savePracticeLog(data.practiceLog);
-                        const logCount = data.practiceLog?.length || 0;
-                        showStatus('importStatusMessage', `Imported ${data.entries?.length || 0} entries, ${data.flashcards?.length || 0} flashcards, ${data.questions?.length || 0} questions${logCount > 0 ? `, ${logCount} practice sessions` : ''}.`, 'success');
-                        break;
+    let fullStats = { entries: 0, flashcards: 0, questions: 0, dupes: 0 };
+    if (data.entries && Array.isArray(data.entries)) {
+        const existing = getEntries();
+        const existingIds = new Set(existing.map(e => e.id));
+        const newEntries = data.entries.filter(e => {
+            if (existingIds.has(e.id)) { fullStats.dupes++; return false; }
+            return true;
+        });
+        saveEntries([...existing, ...newEntries]);
+        fullStats.entries = newEntries.length;
+    }
+    if (data.flashcards && Array.isArray(data.flashcards)) {
+        const existing = getFlashcards();
+        const existingIds = new Set(existing.map(f => f.id));
+        const newFlashcards = data.flashcards.filter(f => {
+            if (existingIds.has(f.id)) { fullStats.dupes++; return false; }
+            return true;
+        });
+        saveFlashcards([...existing, ...newFlashcards]);
+        fullStats.flashcards = newFlashcards.length;
+    }
+    if (data.questions && Array.isArray(data.questions)) {
+        const existing = getQuestions();
+        const existingIds = new Set(existing.map(q => q.id));
+        const newQuestions = data.questions.filter(q => {
+            if (existingIds.has(q.id)) { fullStats.dupes++; return false; }
+            return true;
+        });
+        saveQuestions([...existing, ...newQuestions]);
+        fullStats.questions = newQuestions.length;
+    }
+    if (data.practiceLog) savePracticeLog(data.practiceLog);
+    const logCount = data.practiceLog?.length || 0;
+    const dupeMsg = fullStats.dupes > 0 ? ` (${fullStats.dupes} duplicates skipped)` : '';
+    showStatus('importStatusMessage', `Merged ${fullStats.entries} entries, ${fullStats.flashcards} flashcards, ${fullStats.questions} questions${logCount > 0 ? `, ${logCount} practice sessions` : ''}${dupeMsg}.`, 'success');
+    break;
 
                     case 'entries':
                         if (Array.isArray(data)) {
