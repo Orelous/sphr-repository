@@ -927,75 +927,87 @@
             }
         }
 
+        
+
+
         /* ============================================
-           STUDY PLAN TAB STYLES
+           STUDY PLAN TAB - WORKING CSS
            ============================================ */
-        .sp-phase-section { margin-bottom: 36px; }
-        .sp-phase-title {
-            display: flex; align-items: center; gap: 12px;
-            font-size: 1.15rem; font-weight: 700; color: #1E1B4B;
-            margin-bottom: 16px; padding-bottom: 10px;
-            border-bottom: 2px solid #E2E8F0;
-        }
-        .sp-phase-pill {
-            font-size: .7rem; font-weight: 700; padding: 3px 10px; border-radius: 99px;
-            text-transform: uppercase; letter-spacing: .08em;
-        }
-        .sp-p1 .sp-phase-pill { background: #EDE9FE; color: #6D28D9; }
-        .sp-p2 .sp-phase-pill { background: #FEF3C7; color: #B45309; }
-        .sp-p3 .sp-phase-pill { background: #FEE2E2; color: #B91C1C; }
-        .sp-day-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
-        .sp-card { background: #fff; border: 1.5px solid #E2E8F0; border-radius: 12px; overflow: hidden; transition: transform .15s, box-shadow .15s; position: relative; }
-        .sp-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.1); }
-        .sp-card.sp-done { opacity: .6; }
-        .sp-card.sp-today { border-color: #7C3AED; box-shadow: 0 0 0 3px rgba(124,58,237,.15); }
-        .sp-card-top { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 14px 10px; background: #F8FAFC; border-bottom: 1px solid #E2E8F0; }
-        .sp-day-num { font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; color: #94A3B8; }
-        .sp-date { font-size: 1rem; font-weight: 700; color: #1E1B4B; margin-top: 2px; }
-        .sp-fa-badge { font-size: .7rem; font-weight: 700; padding: 3px 10px; border-radius: 99px; text-transform: uppercase; letter-spacing: .05em; }
-        .sp-fa1 { background: #EDE9FE; color: #6D28D9; }
-        .sp-fa2 { background: #D1FAE5; color: #065F46; }
-        .sp-fa3 { background: #FEF3C7; color: #92400E; }
-        .sp-fa4 { background: #FCE7F3; color: #9D174D; }
-        .sp-fa5 { background: #E0E7FF; color: #3730A3; }
-        .sp-mixed { background: #DBEAFE; color: #1E40AF; }
-        .sp-buffer { background: #F1F5F9; color: #475569; }
-        .sp-card-body { padding: 12px 14px; }
-        .sp-focus { font-size: .78rem; font-weight: 700; color: #4C1D95; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 10px; }
-        .sp-task-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
-        .sp-task-item { display: flex; align-items: flex-start; gap: 8px; font-size: .82rem; color: #475569; line-height: 1.4; }
-        .sp-task-cb { margin-top: 2px; accent-color: #7C3AED; cursor: pointer; flex-shrink: 0; }
-        .sp-task-item.sp-checked .sp-task-text { text-decoration: line-through; color: #CBD5E1; }
-        .sp-chips { display: flex; gap: 8px; margin-top: 10px; flex-wrap: wrap; }
-        .sp-chip { font-size: .72rem; padding: 3px 9px; border-radius: 6px; background: #F1F5F9; color: #64748B; border: 1px solid #E2E8F0; }
-        .sp-chip span { color: #1E1B4B; font-weight: 700; }
-        .sp-score-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
-        .sp-score-label { font-size: .75rem; color: #64748B; }
-        .sp-score-input { width: 54px; border: 1px solid #E2E8F0; border-radius: 6px; padding: 4px 8px; font-size: .82rem; text-align: center; color: #1E1B4B; outline: none; }
-        .sp-score-input:focus { border-color: #7C3AED; }
-        .sp-notes { margin-top: 10px; border-top: 1px solid #F1F5F9; padding-top: 8px; }
-        .sp-notes-input { width: 100%; border: 1px solid #E2E8F0; border-radius: 6px; padding: 7px 10px; font-size: .78rem; color: #334155; resize: none; min-height: 48px; outline: none; font-family: inherit; }
-        .sp-notes-input:focus { border-color: #7C3AED; }
-        .sp-done-btn { margin-top: 10px; width: 100%; padding: 7px; border-radius: 8px; border: 1.5px solid #E2E8F0; background: transparent; color: #94A3B8; font-family: inherit; font-size: .8rem; cursor: pointer; transition: all .2s; }
-        .sp-done-btn:hover { background: #ECFDF5; border-color: #10B981; color: #065F46; }
-        .sp-done-btn.sp-is-done { background: #ECFDF5; border-color: #10B981; color: #065F46; font-weight: 600; }
-        .sp-today-badge { position: absolute; top: 8px; right: 8px; background: #7C3AED; color: #fff; font-size: .65rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; text-transform: uppercase; letter-spacing: .1em; }
-        .sp-header-bar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; margin-bottom: 28px; }
-        .sp-header-bar h2 { font-size: 1.4rem; font-weight: 700; color: #1E1B4B; margin: 0; }
-        .sp-stats-row { display: flex; gap: 12px; flex-wrap: wrap; }
-        .sp-stat-box { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 10px 16px; text-align: center; min-width: 90px; }
-        .sp-stat-num { font-size: 1.4rem; font-weight: 700; color: #7C3AED; }
-        .sp-stat-lbl { font-size: .72rem; color: #94A3B8; text-transform: uppercase; letter-spacing: .08em; }
-        .sp-progress-wrap { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 14px 18px; margin-bottom: 24px; }
-        .sp-progress-label { font-size: .8rem; color: #64748B; margin-bottom: 6px; font-weight: 600; }
-        .sp-progress-track { height: 8px; background: #E2E8F0; border-radius: 99px; }
-        .sp-progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #7C3AED, #06B6D4); transition: width .4s; }
-        .sp-filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
-        .sp-filter-btn { padding: 5px 14px; border-radius: 99px; border: 1.5px solid #E2E8F0; background: transparent; color: #64748B; font-size: .8rem; cursor: pointer; transition: all .2s; font-family: inherit; }
-        .sp-filter-btn:hover, .sp-filter-btn.sp-active { background: #7C3AED; border-color: #7C3AED; color: #fff; }
-        .sp-legend { display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 22px; }
-        .sp-legend-item { display: flex; align-items: center; gap: 6px; font-size: .78rem; color: #64748B; }
-        .sp-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+        #studyplan { background: #f8fafc; }
+        .sp-header-bar { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:28px; }
+        .sp-header-bar h2 { font-size:1.4rem; font-weight:700; color:#1E1B4B; margin:0; }
+        .sp-stats-row { display:flex; gap:12px; flex-wrap:wrap; }
+        .sp-stat-box { background:#fff; border:2px solid #E2E8F0; border-radius:10px; padding:10px 16px; text-align:center; min-width:90px; }
+        .sp-stat-num { font-size:1.4rem; font-weight:700; color:#7C3AED; }
+        .sp-stat-lbl { font-size:.72rem; color:#94A3B8; text-transform:uppercase; letter-spacing:.08em; }
+        .sp-progress-wrap { background:#fff; border:1px solid #E2E8F0; border-radius:10px; padding:14px 18px; margin-bottom:24px; }
+        .sp-progress-label { font-size:.85rem; color:#475569; margin-bottom:8px; font-weight:600; }
+        .sp-progress-track { height:8px; background:#E2E8F0; border-radius:99px; }
+        .sp-progress-fill { height:100%; border-radius:99px; background:linear-gradient(90deg,#7C3AED,#06B6D4); transition:width .4s; }
+        .sp-legend { display:flex; gap:18px; flex-wrap:wrap; margin-bottom:22px; }
+        .sp-legend-item { display:flex; align-items:center; gap:6px; font-size:.82rem; color:#475569; }
+        .sp-legend-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+        .sp-filters { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:24px; }
+        .sp-filter-btn { padding:6px 14px; border-radius:99px; border:2px solid #E2E8F0; background:transparent; color:#64748B; font-size:.82rem; cursor:pointer; transition:all .2s; font-family:inherit; }
+        .sp-filter-btn:hover, .sp-filter-btn.sp-active { background:#7C3AED; border-color:#7C3AED; color:#fff; }
+
+        /* Phase sections */
+        .sp-phase-section { margin-bottom:36px; }
+        .sp-phase-title { display:flex; align-items:center; gap:12px; font-size:1.15rem; font-weight:700; color:#1E1B4B; margin-bottom:16px; padding-bottom:10px; border-bottom:2px solid #E2E8F0; }
+        .sp-phase-pill { font-size:.7rem; font-weight:700; padding:3px 10px; border-radius:99px; text-transform:uppercase; letter-spacing:.08em; }
+        .sp-p1 .sp-phase-pill { background:#EDE9FE; color:#6D28D9; }
+        .sp-p2 .sp-phase-pill { background:#FEF3C7; color:#B45309; }
+        .sp-p3 .sp-phase-pill { background:#FEE2E2; color:#B91C1C; }
+
+        /* Day grid */
+        .sp-day-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(320px,1fr)); gap:16px; }
+
+        /* Day card - NO overflow:hidden anywhere */
+        .sp-card { background:#fff; border:2px solid #E2E8F0; border-radius:12px; transition:transform .15s,box-shadow .15s; position:relative; }
+        .sp-card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.1); }
+        .sp-card.sp-done { opacity:.65; }
+        .sp-card.sp-today { border-color:#7C3AED; box-shadow:0 0 0 3px rgba(124,58,237,.15); }
+
+        /* Card top */
+        .sp-card-top { display:flex; justify-content:space-between; align-items:flex-start; padding:14px 16px 10px; background:#F8FAFC; border-bottom:2px solid #E2E8F0; border-radius:12px 12px 0 0; }
+        .sp-day-num { font-size:.72rem; text-transform:uppercase; letter-spacing:.1em; color:#94A3B8; }
+        .sp-date { font-size:1.05rem; font-weight:700; color:#1E1B4B; margin-top:3px; }
+        .sp-fa-badge { font-size:.72rem; font-weight:700; padding:4px 12px; border-radius:99px; text-transform:uppercase; }
+        .sp-fa1 { background:#EDE9FE; color:#6D28D9; }
+        .sp-fa2 { background:#D1FAE5; color:#065F46; }
+        .sp-fa3 { background:#FEF3C7; color:#92400E; }
+        .sp-fa4 { background:#FCE7F3; color:#9D174D; }
+        .sp-fa5 { background:#E0E7FF; color:#3730A3; }
+        .sp-mixed { background:#DBEAFE; color:#1E40AF; }
+        .sp-buffer { background:#F1F5F9; color:#475569; }
+
+        /* Card body */
+        .sp-card-body { padding:14px 16px; }
+        .sp-focus { font-size:.8rem; font-weight:700; color:#4C1D95; text-transform:uppercase; letter-spacing:.04em; margin-bottom:12px; }
+
+        /* TASK LIST - copied exactly from working standalone */
+        .sp-task-list { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:8px; }
+        .sp-task-item { display:flex; align-items:flex-start; gap:10px; width:100%; }
+        .sp-task-cb { flex-shrink:0; margin-top:3px; accent-color:#7C3AED; cursor:pointer; width:15px; height:15px; }
+        .sp-task-text { flex:1; font-size:.88rem; color:#334155; line-height:1.5; }
+        .sp-task-item.sp-checked .sp-task-text { text-decoration:line-through; color:#94A3B8; }
+
+        /* Chips, score, notes */
+        .sp-chips { display:flex; gap:8px; margin-top:12px; flex-wrap:wrap; }
+        .sp-chip { font-size:.75rem; padding:3px 10px; border-radius:6px; background:#F1F5F9; color:#64748B; border:1px solid #E2E8F0; }
+        .sp-chip span { color:#1E1B4B; font-weight:700; }
+        .sp-score-row { display:flex; align-items:center; gap:8px; margin-top:12px; }
+        .sp-score-label { font-size:.8rem; color:#64748B; }
+        .sp-score-input { width:60px; border:2px solid #E2E8F0; border-radius:6px; padding:5px 8px; font-size:.85rem; text-align:center; color:#1E1B4B; outline:none; }
+        .sp-score-input:focus { border-color:#7C3AED; }
+        .sp-notes { margin-top:12px; border-top:1px solid #F1F5F9; padding-top:10px; }
+        .sp-notes-input { width:100%; border:2px solid #E2E8F0; border-radius:8px; padding:8px 12px; font-size:.82rem; color:#334155; resize:none; min-height:56px; outline:none; font-family:inherit; }
+        .sp-notes-input:focus { border-color:#7C3AED; }
+        .sp-notes-input::placeholder { color:#CBD5E1; }
+        .sp-done-btn { margin-top:12px; width:100%; padding:9px; border-radius:8px; border:2px solid #E2E8F0; background:transparent; color:#94A3B8; font-family:inherit; font-size:.85rem; cursor:pointer; transition:all .2s; display:flex; align-items:center; justify-content:center; gap:6px; }
+        .sp-done-btn:hover { background:#ECFDF5; border-color:#10B981; color:#065F46; }
+        .sp-done-btn.sp-is-done { background:#ECFDF5; border-color:#10B981; color:#065F46; font-weight:600; }
+        .sp-today-badge { position:absolute; top:10px; right:10px; background:#7C3AED; color:#fff; font-size:.65rem; font-weight:700; padding:2px 8px; border-radius:99px; text-transform:uppercase; letter-spacing:.1em; }
 
     </style>
 </head>
@@ -3713,39 +3725,56 @@
             var s = spGetState();
             var dk = 'day_' + d.day;
             var ds = s[dk] || {};
+            var dp = d.date.split('-');
+            var cardDate = new Date(parseInt(dp[0]), parseInt(dp[1])-1, parseInt(dp[2]));
             var today = new Date(); today.setHours(0,0,0,0);
-            var cd = new Date(d.date); cd.setHours(0,0,0,0);
-            var isToday = cd.getTime() === today.getTime();
+            var isToday = cardDate.getTime() === today.getTime();
             var isDone = ds.done || false;
-            var tasks = d.tasks.map(function(t, i) {
+
+            // Build tasks using simple clean HTML - same pattern as standalone tracker
+            var taskHTML = d.tasks.map(function(t, i) {
                 var chk = (ds.tasks || {})[i] || false;
                 return '<li class="sp-task-item ' + (chk ? 'sp-checked' : '') + '" id="sptask_' + d.day + '_' + i + '">' +
-                    '<input type="checkbox" class="sp-task-cb" ' + (chk ? 'checked' : '') + ' onchange="spToggleTask(' + d.day + ',' + i + ',this.checked)"/>' +
-                    '<span class="sp-task-text">' + escapeHtml(t) + '</span></li>';
+                    '<input type="checkbox" class="sp-task-cb" ' + (chk ? 'checked' : '') + ' onchange="spToggleTask(' + d.day + ',' + i + ',this.checked)" />' +
+                    '<span class="sp-task-text">' + escapeHtml(t) + '</span>' +
+                    '</li>';
             }).join('');
+
             var chips = [];
-            if (d.entries) chips.push('<span class="sp-chip">Entries: <span>' + d.entries + '</span></span>');
-            if (d.flashcards) chips.push('<span class="sp-chip">Cards: <span>' + d.flashcards + '</span></span>');
-            if (d.questions) chips.push('<span class="sp-chip">Qs: <span>' + d.questions + '</span></span>');
-            var scoreHtml = d.questions > 0 ? '<div class="sp-score-row"><span class="sp-score-label">Practice score:</span>' +
-                '<input type="number" class="sp-score-input" placeholder="%" min="0" max="100" value="' + (ds.score || '') + '" onchange="spSaveScore(' + d.day + ',this.value)"/>' +
-                '<span style="font-size:.75rem;color:#94A3B8">%</span></div>' : '';
-            return '<div class="sp-card ' + (isDone ? 'sp-done' : '') + ' ' + (isToday ? 'sp-today' : '') + '" id="spcard_' + d.day + '" data-phase="' + d.phase + '" data-done="' + isDone + '">' +
+            if (d.entries) chips.push('<div class="sp-chip">Entries: <span>' + d.entries + '</span></div>');
+            if (d.flashcards) chips.push('<div class="sp-chip">Cards: <span>' + d.flashcards + '</span></div>');
+            if (d.questions) chips.push('<div class="sp-chip">Qs: <span>' + d.questions + '</span></div>');
+
+            var scoreHTML = d.questions > 0
+                ? '<div class="sp-score-row"><span class="sp-score-label">Practice score:</span>' +
+                  '<input type="number" class="sp-score-input" placeholder="%" min="0" max="100" value="' + (ds.score || '') + '" onchange="spSaveScore(' + d.day + ',this.value)" />' +
+                  '<span style="font-size:.8rem;color:#94A3B8">%</span></div>'
+                : '';
+
+            var wday = cardDate.toLocaleDateString('en-US', {weekday:'short'});
+            var mday = cardDate.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+
+            return '<div class="sp-card' + (isDone ? ' sp-done' : '') + (isToday ? ' sp-today' : '') + '" id="spcard_' + d.day + '" data-phase="' + d.phase + '" data-done="' + isDone + '">' +
                 (isToday ? '<div class="sp-today-badge">Today</div>' : '') +
-                '<div class="sp-card-top"><div>' +
-                '<div class="sp-day-num">Day ' + d.day + ' &middot; ' + new Date(d.date).toLocaleDateString('en-US',{weekday:'short'}) + '</div>' +
-                '<div class="sp-date">' + new Date(d.date).toLocaleDateString('en-US',{month:'short',day:'numeric'}) + '</div>' +
-                '</div><span class="sp-fa-badge ' + spFaBadge(d.fa) + '">' + d.fa + '</span></div>' +
-                '<div class="sp-card-body"><div class="sp-focus">' + escapeHtml(d.focus) + '</div>' +
-                '<ul class="sp-task-list">' + tasks + '</ul>' +
-                (chips.length ? '<div class="sp-chips">' + chips.join('') + '</div>' : '') +
-                scoreHtml +
-                '<div class="sp-notes"><textarea class="sp-notes-input" placeholder="Notes, gaps, weak areas..." onchange="spSaveNotes(' + d.day + ',this.value)">' + escapeHtml(ds.notes || '') + '</textarea></div>' +
-                '<button class="sp-done-btn ' + (isDone ? 'sp-is-done' : '') + '" onclick="spToggleDone(' + d.day + ')">' +
-                (isDone ? '&#10003; Day Complete' : '&#9675; Mark Day Complete') + '</button>' +
-                '</div></div>';
+                '<div class="sp-card-top">' +
+                  '<div><div class="sp-day-num">Day ' + d.day + ' &middot; ' + wday + '</div>' +
+                  '<div class="sp-date">' + mday + '</div></div>' +
+                  '<span class="sp-fa-badge ' + spFaBadge(d.fa) + '">' + d.fa + '</span>' +
+                '</div>' +
+                '<div class="sp-card-body">' +
+                  '<div class="sp-focus">' + escapeHtml(d.focus) + '</div>' +
+                  '<ul class="sp-task-list">' + taskHTML + '</ul>' +
+                  (chips.length ? '<div class="sp-chips">' + chips.join('') + '</div>' : '') +
+                  scoreHTML +
+                  '<div class="sp-notes"><textarea class="sp-notes-input" placeholder="Notes, gaps, questions to revisit..." onchange="spSaveNotes(' + d.day + ',this.value)">' + escapeHtml(ds.notes || '') + '</textarea></div>' +
+                  '<button class="sp-done-btn' + (isDone ? ' sp-is-done' : '') + '" onclick="spToggleDone(' + d.day + ')">' +
+                    (isDone ? '&#10003; Day Complete' : '&#9675; Mark Day Complete') +
+                  '</button>' +
+                '</div>' +
+            '</div>';
         }
 
+        
         function renderStudyPlan() {
             var wrap = document.getElementById('sp-grid-wrap');
             if (!wrap) return;
