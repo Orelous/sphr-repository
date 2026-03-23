@@ -3760,6 +3760,8 @@
                             <div style="display: none; margin-top: 15px; padding: 15px; background: #F0FDF4; border-left: 4px solid #10B981; border-radius: 4px;">
                                 <strong>Summary:</strong> ${escapeHtml(entry.summary)}<br><br>
                                 ${entry.examPoints ? `<strong>Exam Points:</strong> ${escapeHtml(entry.examPoints)}` : ''}
+                                ${entry.failurePatterns ? `<br><br><div style="margin-top:10px;padding:10px 12px;background:#FEF3C7;border-left:4px solid #F59E0B;border-radius:4px;"><strong style="color:#92400E;">&#9888; Failure Patterns:</strong><span style="color:#78350F;"> ${escapeHtml(entry.failurePatterns)}</span></div>` : ''}
+                                ${entry.decisionCriteria ? `<br><div style="margin-top:8px;padding:10px 12px;background:#EDE9FE;border-left:4px solid #7C3AED;border-radius:4px;"><strong style="color:#4C1D95;">Decision Criteria:</strong><span style="color:#3730A3;"> ${escapeHtml(entry.decisionCriteria)}</span></div>` : ''}
                             </div>
                             <button class="btn btn-small btn-primary" onclick="markEntryPracticed('${entry.id}')" style="margin-top: 10px;">&#9200; Mark Practiced</button>
                         </div>
