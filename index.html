@@ -1009,199 +1009,6 @@
         .sp-done-btn.sp-is-done { background:#ECFDF5; border-color:#10B981; color:#065F46; font-weight:600; }
         .sp-today-badge { position:absolute; top:10px; right:10px; background:#7C3AED; color:#fff; font-size:.65rem; font-weight:700; padding:2px 8px; border-radius:99px; text-transform:uppercase; letter-spacing:.1em; }
 
-
-        /* ============================================
-           EXAM MODE STYLES
-           ============================================ */
-        #exammode { background: #F8FAFC; }
-
-        /* Setup screen */
-        .em-setup { max-width: 700px; margin: 0 auto; padding: 10px 0 40px; }
-        .em-setup h2 { font-size: 1.6rem; font-weight: 700; color: #1E1B4B; margin-bottom: 6px; }
-        .em-setup p { color: #64748B; font-size: .95rem; margin-bottom: 28px; }
-
-        .em-mode-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 28px; }
-        .em-mode-card {
-            background: #fff; border: 2px solid #E2E8F0; border-radius: 12px;
-            padding: 20px 16px; cursor: pointer; transition: all .2s; text-align: center;
-        }
-        .em-mode-card:hover { border-color: #7C3AED; transform: translateY(-2px); box-shadow: 0 4px 14px rgba(124,58,237,.12); }
-        .em-mode-card.em-selected { border-color: #7C3AED; background: #EDE9FE; }
-        .em-mode-icon { font-size: 2rem; margin-bottom: 8px; }
-        .em-mode-title { font-weight: 700; color: #1E1B4B; font-size: .95rem; margin-bottom: 4px; }
-        .em-mode-desc { font-size: .78rem; color: #64748B; line-height: 1.4; }
-
-        .em-config { background: #fff; border: 1px solid #E2E8F0; border-radius: 12px; padding: 24px; margin-bottom: 20px; }
-        .em-config h4 { font-weight: 700; color: #1E1B4B; margin-bottom: 16px; font-size: 1rem; }
-        .em-config-row { display: flex; gap: 16px; flex-wrap: wrap; align-items: center; margin-bottom: 14px; }
-        .em-config-row label { font-weight: 600; color: #475569; font-size: .9rem; min-width: 140px; }
-        .em-config-row select, .em-config-row input[type=number] {
-            padding: 8px 12px; border: 2px solid #E2E8F0; border-radius: 8px;
-            font-size: .9rem; color: #1E1B4B; outline: none; font-family: inherit;
-        }
-        .em-config-row select:focus, .em-config-row input:focus { border-color: #7C3AED; }
-
-        .em-info-bar {
-            background: #EDE9FE; border-radius: 8px; padding: 12px 16px;
-            display: flex; gap: 24px; flex-wrap: wrap; margin-bottom: 20px;
-        }
-        .em-info-item { font-size: .85rem; color: #4C1D95; }
-        .em-info-item strong { font-weight: 700; }
-
-        .em-start-btn {
-            width: 100%; padding: 14px; border-radius: 10px;
-            background: linear-gradient(135deg, #7C3AED, #4C1D95);
-            color: #fff; font-size: 1rem; font-weight: 700;
-            border: none; cursor: pointer; transition: all .2s;
-            box-shadow: 0 4px 14px rgba(124,58,237,.3);
-        }
-        .em-start-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(124,58,237,.4); }
-        .em-start-btn:disabled { background: #CBD5E1; box-shadow: none; cursor: not-allowed; transform: none; }
-
-        /* Active exam screen */
-        .em-exam-wrap { max-width: 860px; margin: 0 auto; }
-
-        .em-header-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            background: #1E1B4B; border-radius: 12px; padding: 14px 20px;
-            margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
-        }
-        .em-exam-title { color: #fff; font-weight: 700; font-size: .95rem; }
-        .em-progress-txt { color: #A5B4FC; font-size: .85rem; }
-        .em-timer-display {
-            font-size: 1.5rem; font-weight: 700; color: #FCD34D;
-            font-variant-numeric: tabular-nums; min-width: 80px; text-align: center;
-        }
-        .em-timer-display.em-timer-warn { color: #F87171; animation: em-pulse 1s infinite; }
-        @keyframes em-pulse { 0%,100%{opacity:1} 50%{opacity:.6} }
-
-        .em-progress-bar { height: 6px; background: #E2E8F0; border-radius: 99px; margin-bottom: 20px; }
-        .em-progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, #7C3AED, #06B6D4); transition: width .3s; }
-
-        /* Question card */
-        .em-q-card {
-            background: #fff; border: 2px solid #E2E8F0; border-radius: 12px;
-            padding: 28px; margin-bottom: 16px;
-        }
-        .em-q-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-        .em-q-num { font-size: .8rem; font-weight: 700; color: #7C3AED; text-transform: uppercase; letter-spacing: .06em; }
-        .em-q-fa { font-size: .75rem; font-weight: 700; padding: 3px 10px; border-radius: 99px; }
-        .em-q-stem { font-size: 1rem; color: #1E1B4B; line-height: 1.65; margin-bottom: 20px; font-weight: 500; }
-
-        .em-options { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-        .em-option {
-            display: flex; align-items: flex-start; gap: 12px;
-            padding: 12px 16px; border: 2px solid #E2E8F0; border-radius: 8px;
-            cursor: pointer; transition: all .15s; font-size: .92rem; color: #334155; line-height: 1.5;
-        }
-        .em-option:hover { border-color: #7C3AED; background: #FAF5FF; }
-        .em-option.em-opt-selected { border-color: #7C3AED; background: #EDE9FE; }
-        .em-option.em-opt-correct { border-color: #10B981; background: #ECFDF5; font-weight: 600; color: #065F46; }
-        .em-option.em-opt-wrong { border-color: #EF4444; background: #FEE2E2; color: #991B1B; }
-        .em-option.em-opt-missed { border-color: #F59E0B; background: #FFFBEB; color: #92400E; }
-        .em-option-letter {
-            flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
-            background: #F1F5F9; display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: .8rem; color: #475569; margin-top: 1px;
-        }
-        .em-opt-selected .em-option-letter { background: #7C3AED; color: #fff; }
-        .em-opt-correct .em-option-letter { background: #10B981; color: #fff; }
-        .em-opt-wrong .em-option-letter { background: #EF4444; color: #fff; }
-        .em-opt-missed .em-option-letter { background: #F59E0B; color: #fff; }
-
-        .em-multi-hint { font-size: .8rem; color: #F59E0B; font-weight: 600; margin-bottom: 10px; }
-
-        .em-blank-wrap { display: flex; align-items: center; gap: 12px; margin-top: 6px; }
-        .em-blank-input {
-            flex: 1; max-width: 360px; padding: 10px 14px; border: 2px solid #E2E8F0;
-            border-radius: 8px; font-size: .95rem; outline: none; font-family: inherit;
-        }
-        .em-blank-input:focus { border-color: #7C3AED; }
-        .em-blank-input.em-blank-correct { border-color: #10B981; background: #ECFDF5; }
-        .em-blank-input.em-blank-wrong { border-color: #EF4444; background: #FEE2E2; }
-
-        .em-explanation {
-            margin-top: 16px; padding: 14px 16px; background: #F0FDF4;
-            border-left: 4px solid #10B981; border-radius: 6px;
-            font-size: .88rem; color: #065F46; line-height: 1.55;
-            display: none;
-        }
-        .em-explanation.em-show { display: block; }
-
-        /* Navigation bar */
-        .em-nav-bar {
-            display: flex; justify-content: space-between; align-items: center;
-            background: #fff; border: 1px solid #E2E8F0; border-radius: 10px;
-            padding: 12px 16px; margin-bottom: 16px; flex-wrap: wrap; gap: 10px;
-        }
-        .em-nav-btn {
-            padding: 8px 18px; border-radius: 8px; border: 2px solid #E2E8F0;
-            background: transparent; font-weight: 600; font-size: .88rem;
-            cursor: pointer; transition: all .2s; font-family: inherit; color: #475569;
-        }
-        .em-nav-btn:hover { border-color: #7C3AED; color: #7C3AED; }
-        .em-nav-btn.em-primary { background: #7C3AED; color: #fff; border-color: #7C3AED; }
-        .em-nav-btn.em-primary:hover { background: #6D28D9; }
-        .em-nav-btn.em-danger { background: #EF4444; color: #fff; border-color: #EF4444; }
-        .em-nav-btn:disabled { opacity: .4; cursor: not-allowed; }
-
-        .em-q-dots {
-            display: flex; gap: 4px; flex-wrap: wrap; max-width: 400px;
-        }
-        .em-dot {
-            width: 10px; height: 10px; border-radius: 50%; background: #E2E8F0;
-            cursor: pointer; transition: background .15s; flex-shrink: 0;
-        }
-        .em-dot.em-dot-answered { background: #7C3AED; }
-        .em-dot.em-dot-correct { background: #10B981; }
-        .em-dot.em-dot-wrong { background: #EF4444; }
-        .em-dot.em-dot-current { box-shadow: 0 0 0 2px #7C3AED; }
-
-        /* Results screen */
-        .em-results { max-width: 800px; margin: 0 auto; }
-        .em-score-hero {
-            background: linear-gradient(135deg, #1E1B4B, #4C1D95);
-            border-radius: 16px; padding: 36px; text-align: center; margin-bottom: 24px; color: #fff;
-        }
-        .em-score-pct { font-size: 5rem; font-weight: 800; color: #FCD34D; line-height: 1; }
-        .em-score-label { font-size: 1.1rem; opacity: .8; margin-top: 8px; }
-        .em-score-detail { display: flex; gap: 30px; justify-content: center; margin-top: 16px; flex-wrap: wrap; }
-        .em-score-stat { text-align: center; }
-        .em-score-stat .num { font-size: 1.8rem; font-weight: 700; color: #fff; }
-        .em-score-stat .lbl { font-size: .8rem; opacity: .7; }
-
-        .em-fa-breakdown { margin-bottom: 24px; }
-        .em-fa-breakdown h3 { font-weight: 700; color: #1E1B4B; margin-bottom: 14px; font-size: 1rem; }
-        .em-fa-row {
-            display: flex; align-items: center; gap: 12px;
-            padding: 10px 14px; background: #fff; border: 1px solid #E2E8F0;
-            border-radius: 8px; margin-bottom: 8px;
-        }
-        .em-fa-name { font-weight: 700; color: #1E1B4B; font-size: .88rem; min-width: 50px; }
-        .em-fa-bar-wrap { flex: 1; height: 10px; background: #E2E8F0; border-radius: 99px; overflow: hidden; }
-        .em-fa-bar { height: 100%; border-radius: 99px; transition: width .5s; }
-        .em-fa-pct { font-weight: 700; font-size: .88rem; min-width: 42px; text-align: right; }
-        .em-fa-count { font-size: .78rem; color: #94A3B8; min-width: 70px; text-align: right; }
-
-        .em-weak-list h3 { font-weight: 700; color: #1E1B4B; margin-bottom: 14px; font-size: 1rem; }
-        .em-weak-item {
-            padding: 12px 16px; background: #FEE2E2; border-left: 4px solid #EF4444;
-            border-radius: 6px; margin-bottom: 8px; font-size: .88rem; color: #991B1B;
-        }
-        .em-result-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
-        .em-result-btn {
-            padding: 11px 22px; border-radius: 8px; font-weight: 700; font-size: .9rem;
-            cursor: pointer; border: 2px solid; font-family: inherit; transition: all .2s;
-        }
-        .em-result-btn.primary { background: #7C3AED; color: #fff; border-color: #7C3AED; }
-        .em-result-btn.secondary { background: transparent; color: #7C3AED; border-color: #7C3AED; }
-        .em-result-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,.15); }
-
-        @media(max-width:600px) {
-            .em-mode-grid { grid-template-columns: 1fr; }
-            .em-score-pct { font-size: 3.5rem; }
-        }
-
     </style>
 </head>
 <body>
@@ -1222,7 +1029,7 @@
                     </div>
                     <div class="deadline-item">
                         <div class="deadline-label">&#128221; SPHR Exam Date</div>
-                        <div class="deadline-date">May 8, 2026</div>
+                        <div class="deadline-date">May 3, 2026</div>
                         <div class="deadline-countdown" id="examCountdown">Calculating...</div>
                     </div>
                 </div>
@@ -1237,10 +1044,10 @@
             <button class="nav-tab" data-tab="flashcards">&#127183; Flashcards</button>
             <button class="nav-tab" data-tab="questions">&#10067; Questions</button>
             <button class="nav-tab" data-tab="practice">&#129504; Practice</button>
+            <button class="nav-tab" data-tab="interleave">&#128256; Interleave</button>
             <button class="nav-tab" data-tab="add">&#10133; Add Content</button>
             <button class="nav-tab" data-tab="manage">&#9881; Manage Data</button>
             <button class="nav-tab" data-tab="studyplan">&#128197; Study Plan</button>
-            <button class="nav-tab" data-tab="exammode">&#127891; Exam Mode</button>
         </nav>
 
         <!-- Dashboard Tab -->
@@ -1712,6 +1519,65 @@
             </div>
         </div>
 
+        <!-- Interleave Tab -->
+        <div class="tab-content" id="interleave">
+            <div style="max-width: 960px; margin: 0 auto;">
+
+                <!-- Header Banner -->
+                <div style="background: linear-gradient(135deg, #1E1B4B 0%, #4C1D95 100%); color: white; border-radius: 12px; padding: 24px 28px; margin-bottom: 28px;">
+                    <h2 style="margin:0 0 8px 0; font-size:1.5em; font-weight:600;">&#128256; Interleaved Practice Mode</h2>
+                    <p style="margin:0; opacity:0.88; font-size:0.97em;">Sessions mix topics across all 5 Functional Areas so your brain has to <em>distinguish and connect</em> — not just recall. After revealing each item, Bridge Prompts activate your crossRef network. Use "Ask AI" for live synthesis questions.</p>
+                </div>
+
+                <!-- How It Works -->
+                <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:14px; margin-bottom:28px;">
+                    <div style="background:#EDE9FE; border-radius:10px; padding:16px; border-left:4px solid #7C3AED;">
+                        <div style="font-size:1.6em; margin-bottom:6px;">&#127821;</div>
+                        <strong style="color:#4C1D95;">Cross-FA Mixing</strong>
+                        <p style="color:#6B21A8; font-size:0.85em; margin:6px 0 0 0;">No two consecutive items share a Functional Area. Forces context-switching.</p>
+                    </div>
+                    <div style="background:#DBEAFE; border-radius:10px; padding:16px; border-left:4px solid #3B82F6;">
+                        <div style="font-size:1.6em; margin-bottom:6px;">&#128279;</div>
+                        <strong style="color:#1E40AF;">Bridge Prompts</strong>
+                        <p style="color:#1D4ED8; font-size:0.85em; margin:6px 0 0 0;">Your existing crossRef links surface as active connection challenges after each reveal.</p>
+                    </div>
+                    <div style="background:#D1FAE5; border-radius:10px; padding:16px; border-left:4px solid #10B981;">
+                        <div style="font-size:1.6em; margin-bottom:6px;">&#129302;</div>
+                        <strong style="color:#065F46;">AI Synthesis</strong>
+                        <p style="color:#047857; font-size:0.85em; margin:6px 0 0 0;">One click generates 2–3 live cross-FA questions tailored to that exact entry.</p>
+                    </div>
+                </div>
+
+                <!-- Session Controls -->
+                <div class="form-section">
+                    <h3>&#127919; Configure Interleaved Session</h3>
+                    <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin-bottom:18px;">
+                        <div>
+                            <label style="font-size:0.85em; color:#64748B; display:block; margin-bottom:4px;">Items per FA</label>
+                            <select id="ilItemsPerFA" style="padding:8px 12px; border:2px solid #E2E8F0; border-radius:8px; font-size:0.95em;">
+                                <option value="1">1 per FA</option>
+                                <option value="2" selected>2 per FA</option>
+                                <option value="3">3 per FA</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size:0.85em; color:#64748B; display:block; margin-bottom:4px;">Include flashcards?</label>
+                            <select id="ilIncludeFC" style="padding:8px 12px; border:2px solid #E2E8F0; border-radius:8px; font-size:0.95em;">
+                                <option value="yes" selected>Yes — interleaved between entries</option>
+                                <option value="no">No — entries only</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="generateInterleavedSession()" style="background: linear-gradient(135deg,#7C3AED,#4F46E5); font-size:1em; padding:12px 28px;">
+                        &#128256; Generate Interleaved Session
+                    </button>
+                </div>
+
+                <!-- Session Output -->
+                <div id="ilSession"></div>
+            </div>
+        </div>
+
         <!-- Add Content Tab (placeholder) -->
         <div class="tab-content" id="add">
             <div style="max-width: 900px; margin: 0 auto;">
@@ -2037,12 +1903,12 @@
             <div class="sp-header-bar">
                 <div>
                     <h2>&#128197; 30-Day Study Plan</h2>
-                    <p style="color:#64748B;font-size:.9rem;margin-top:4px;">Mar 23 &rarr; May 1 &middot; Exam May 8, 2026 &middot; Weekdays only</p>
+                    <p style="color:#64748B;font-size:.9rem;margin-top:4px;">Mar 23 &rarr; May 1 &middot; Exam May 3, 2026 &middot; Weekdays only</p>
                 </div>
                 <div class="sp-stats-row">
                     <div class="sp-stat-box"><div class="sp-stat-num" id="sp-days-left">--</div><div class="sp-stat-lbl">Days to Exam</div></div>
                     <div class="sp-stat-box"><div class="sp-stat-num" id="sp-days-done" style="color:#10B981">0</div><div class="sp-stat-lbl">Days Done</div></div>
-                    <div class="sp-stat-box"><div class="sp-stat-num" id="sp-days-remain" style="color:#F59E0B">34</div><div class="sp-stat-lbl">Study Days Left</div></div>
+                    <div class="sp-stat-box"><div class="sp-stat-num" id="sp-days-remain" style="color:#F59E0B">30</div><div class="sp-stat-lbl">Study Days Left</div></div>
                 </div>
             </div>
             <div class="sp-progress-wrap">
@@ -2064,176 +1930,6 @@
                 <button class="sp-filter-btn" onclick="spFilter('done',this)">Completed</button>
             </div>
             <div id="sp-grid-wrap"></div>
-        </div>
-
-
-        <!-- Exam Mode Tab -->
-        <div class="tab-content" id="exammode">
-            <!-- SETUP SCREEN -->
-            <div id="em-setup-screen" class="em-setup">
-                <h2>&#127891; Exam Mode</h2>
-                <p>Choose a mode, configure your exam, and start when ready. The timer begins the moment you click Start.</p>
-
-                <!-- Mode selector -->
-                <div class="em-mode-grid">
-                    <div class="em-mode-card em-selected" onclick="emSelectMode('fa', this)">
-                        <div class="em-mode-icon">&#128202;</div>
-                        <div class="em-mode-title">End-of-FA Test</div>
-                        <div class="em-mode-desc">All questions for one functional area. Run after completing each FA in Phase 1.</div>
-                    </div>
-                    <div class="em-mode-card" onclick="emSelectMode('comprehensive', this)">
-                        <div class="em-mode-icon">&#127919;</div>
-                        <div class="em-mode-title">Comprehensive Exam</div>
-                        <div class="em-mode-desc">Mixed questions across all FAs. Mirrors the SPHR exam format. 3-hour timed option.</div>
-                    </div>
-                    <div class="em-mode-card" onclick="emSelectMode('weak', this)">
-                        <div class="em-mode-icon">&#9888;</div>
-                        <div class="em-mode-title">Weak Areas Focus</div>
-                        <div class="em-mode-desc">Only questions you have gotten wrong or scored below 80% on. Targeted remediation.</div>
-                    </div>
-                </div>
-
-                <!-- Config panel -->
-                <div class="em-config">
-                    <h4>Configure Your Exam</h4>
-                    <div class="em-config-row" id="em-fa-row">
-                        <label>Functional Area</label>
-                        <select id="em-fa-select">
-                            <option value="all">All FAs (Mixed)</option>
-                            <option value="FA1">FA1 &mdash; Leadership &amp; Strategy (40%)</option>
-                            <option value="FA2">FA2 &mdash; Workforce Planning (16%)</option>
-                            <option value="FA3">FA3 &mdash; Talent Management (12%)</option>
-                            <option value="FA4">FA4 &mdash; Total Rewards (12%)</option>
-                            <option value="FA5">FA5 &mdash; HR Info Mgmt &amp; Safety (20%)</option>
-                        </select>
-                    </div>
-                    <div class="em-config-row">
-                        <label>Question Count</label>
-                        <select id="em-q-count">
-                            <option value="all">All available</option>
-                            <option value="25">25 questions</option>
-                            <option value="50">50 questions</option>
-                            <option value="100">100 questions</option>
-                            <option value="165">165 questions (exam length)</option>
-                        </select>
-                    </div>
-                    <div class="em-config-row">
-                        <label>Timer</label>
-                        <select id="em-timer-select">
-                            <option value="0">No timer</option>
-                            <option value="30">30 minutes</option>
-                            <option value="60">60 minutes</option>
-                            <option value="90">90 minutes</option>
-                            <option value="120">2 hours</option>
-                            <option value="180">3 hours (full exam)</option>
-                        </select>
-                    </div>
-                    <div class="em-config-row">
-                        <label>Show Answers</label>
-                        <select id="em-show-answers">
-                            <option value="end">After exam ends (exam mode)</option>
-                            <option value="immediate">Immediately after each answer</option>
-                        </select>
-                    </div>
-                    <div class="em-config-row">
-                        <label>Question Order</label>
-                        <select id="em-order">
-                            <option value="random">Random (shuffle)</option>
-                            <option value="sequential">Sequential (by FA)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <!-- Info bar -->
-                <div class="em-info-bar" id="em-info-bar">
-                    <div class="em-info-item"><strong id="em-info-count">0</strong> questions available</div>
-                    <div class="em-info-item"><strong id="em-info-time">No timer</strong></div>
-                    <div class="em-info-item"><strong id="em-info-pace">--</strong> per question</div>
-                </div>
-
-                <button class="em-start-btn" id="em-start-btn" onclick="emStartExam()">&#9654; Start Exam</button>
-            </div>
-
-            <!-- EXAM SCREEN (hidden until started) -->
-            <div id="em-exam-screen" style="display:none;" class="em-exam-wrap">
-                <!-- Top bar -->
-                <div class="em-header-bar">
-                    <div>
-                        <div class="em-exam-title" id="em-exam-title">Exam Mode</div>
-                        <div class="em-progress-txt" id="em-progress-txt">Question 1 of 50</div>
-                    </div>
-                    <div class="em-timer-display" id="em-timer-display" style="display:none;">00:00</div>
-                    <div style="display:flex;gap:10px;">
-                        <button class="em-nav-btn" onclick="emTogglePause()" id="em-pause-btn" style="display:none;">&#9646;&#9646; Pause</button>
-                        <button class="em-nav-btn em-danger" onclick="emConfirmEnd()">&#9632; End Exam</button>
-                    </div>
-                </div>
-
-                <!-- Progress bar -->
-                <div class="em-progress-bar"><div class="em-progress-fill" id="em-prog-fill" style="width:0%"></div></div>
-
-                <!-- Question dots navigator -->
-                <div class="em-nav-bar">
-                    <button class="em-nav-btn" id="em-prev-btn" onclick="emNavQuestion(-1)" disabled>&#8592; Prev</button>
-                    <div class="em-q-dots" id="em-q-dots"></div>
-                    <button class="em-nav-btn em-primary" id="em-next-btn" onclick="emNavQuestion(1)">Next &#8594;</button>
-                </div>
-
-                <!-- Question card -->
-                <div class="em-q-card" id="em-q-card">
-                    <!-- populated by JS -->
-                </div>
-
-                <!-- Bottom nav -->
-                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-top:4px;">
-                    <button class="em-nav-btn" onclick="emNavQuestion(-1)" id="em-prev-btn2" disabled>&#8592; Previous</button>
-                    <span style="font-size:.85rem;color:#94A3B8;" id="em-answered-count">0 of 0 answered</span>
-                    <button class="em-nav-btn em-primary" onclick="emNavQuestion(1)" id="em-next-btn2">Next &#8594;</button>
-                </div>
-            </div>
-
-            <!-- RESULTS SCREEN (hidden until finished) -->
-            <div id="em-results-screen" style="display:none;" class="em-results">
-                <!-- Score hero -->
-                <div class="em-score-hero">
-                    <div class="em-score-pct" id="em-res-pct">--%</div>
-                    <div class="em-score-label" id="em-res-label">Overall Score</div>
-                    <div class="em-score-detail">
-                        <div class="em-score-stat"><div class="num" id="em-res-correct">0</div><div class="lbl">Correct</div></div>
-                        <div class="em-score-stat"><div class="num" id="em-res-wrong">0</div><div class="lbl">Wrong</div></div>
-                        <div class="em-score-stat"><div class="num" id="em-res-total">0</div><div class="lbl">Total</div></div>
-                        <div class="em-score-stat"><div class="num" id="em-res-time">--</div><div class="lbl">Time Used</div></div>
-                    </div>
-                </div>
-
-                <!-- FA breakdown -->
-                <div class="em-fa-breakdown">
-                    <h3>Score by Functional Area</h3>
-                    <div id="em-fa-breakdown-rows"></div>
-                </div>
-
-                <!-- Weak areas -->
-                <div class="em-weak-list" id="em-weak-section" style="display:none;">
-                    <h3>&#9888; Topics to Review</h3>
-                    <div id="em-weak-list-items"></div>
-                </div>
-
-                <!-- Actions -->
-                <div class="em-result-actions">
-                    <button class="em-result-btn primary" onclick="emReviewWrong()">Review Wrong Answers</button>
-                    <button class="em-result-btn secondary" onclick="emRetakeExam()">Retake This Exam</button>
-                    <button class="em-result-btn secondary" onclick="emNewExam()">New Exam</button>
-                </div>
-            </div>
-
-            <!-- REVIEW SCREEN (wrong answers) -->
-            <div id="em-review-screen" style="display:none;" class="em-exam-wrap">
-                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-                    <h3 style="font-weight:700;color:#1E1B4B;">Wrong Answer Review</h3>
-                    <button class="em-nav-btn" onclick="emBackToResults()">&#8592; Back to Results</button>
-                </div>
-                <div id="em-review-items"></div>
-            </div>
         </div>
 
         <!-- View Entry Modal -->
@@ -2398,8 +2094,8 @@
                     case 'flashcards': renderFlashcards(); break;
                     case 'questions': renderQuestions(); break;
                     case 'practice': updatePracticeDashboard(); break;
+                    case 'interleave': /* ready on demand */ break;
                     case 'studyplan': renderStudyPlan(); break;
-                    case 'exammode': initExamMode(); break;
                 }
             });
         });
@@ -2419,7 +2115,7 @@
             }
             
             // Exam date: May 3, 2026
-            const examDate = new Date('2026-05-08');
+            const examDate = new Date('2026-05-03');
             const examDays = Math.ceil((examDate - now) / (1000 * 60 * 60 * 24));
             document.getElementById('examCountdown').textContent = `${examDays} days to exam`;
         }
@@ -2513,7 +2209,7 @@
             const practiceLog = getPracticeLog();
             
             // Days to Exam
-            const examDate = new Date('2026-05-08');
+            const examDate = new Date('2026-05-03');
             const now = new Date();
             const daysToExam = Math.ceil((examDate - now) / (1000 * 60 * 60 * 24));
             document.getElementById('daysToExam').textContent = daysToExam;
@@ -3760,8 +3456,6 @@
                             <div style="display: none; margin-top: 15px; padding: 15px; background: #F0FDF4; border-left: 4px solid #10B981; border-radius: 4px;">
                                 <strong>Summary:</strong> ${escapeHtml(entry.summary)}<br><br>
                                 ${entry.examPoints ? `<strong>Exam Points:</strong> ${escapeHtml(entry.examPoints)}` : ''}
-                                ${entry.failurePatterns ? `<br><br><div style="margin-top:10px;padding:10px 12px;background:#FEF3C7;border-left:4px solid #F59E0B;border-radius:4px;"><strong style="color:#92400E;">&#9888; Failure Patterns:</strong><span style="color:#78350F;"> ${escapeHtml(entry.failurePatterns)}</span></div>` : ''}
-                                ${entry.decisionCriteria ? `<br><div style="margin-top:8px;padding:10px 12px;background:#EDE9FE;border-left:4px solid #7C3AED;border-radius:4px;"><strong style="color:#4C1D95;">Decision Criteria:</strong><span style="color:#3730A3;"> ${escapeHtml(entry.decisionCriteria)}</span></div>` : ''}
                             </div>
                             <button class="btn btn-small btn-primary" onclick="markEntryPracticed('${entry.id}')" style="margin-top: 10px;">&#9200; Mark Practiced</button>
                         </div>
@@ -4072,14 +3766,10 @@
           {day:24,date:'2026-04-23',phase:'phase2',fa:'FA3',focus:'FA3 Flashcard Burn + Practice Questions',tasks:["Full pass: all 35 FA3 flashcards (target 80%+)","FA3 practice questions - timed (ADDIE, Kirkpatrick, 70-20-10)","Flag weak FA3 cards","Note weak sub-topics for Day 28 remediation"],entries:0,flashcards:35,questions:40},
           {day:25,date:'2026-04-24',phase:'phase2',fa:'FA4',focus:'FA4 Flashcard Burn + Practice Questions',tasks:["Full pass: all 34 FA4 flashcards (target 80%+)","FA4 practice questions - timed (FLSA, ERISA, comp formulas)","Flag weak FA4 cards","Note weak sub-topics for Day 28 remediation"],entries:0,flashcards:34,questions:40},
           {day:26,date:'2026-04-27',phase:'phase2',fa:'mixed',focus:'Full Mixed Flashcard Pass + Mixed Questions',tasks:["Complete mixed pass: all 141 flashcards (shuffled)","Mixed practice questions across all 5 FAs","Score yourself - target 80%+ across all sections","Build your Phase 3 weak-list"],entries:0,flashcards:141,questions:50},
-          {day:27,date:'2026-04-28',phase:'phase3',fa:'FA1+FA2',focus:'FA Questions Checkpoint: FA1 + FA2',tasks:["Run all FA1 practice questions from Questions tab","Run all FA2 practice questions from Questions tab","Score per FA - log in Study Plan tab notes","Flag every question you got wrong - write the topic","This is diagnostic: find weak areas before the sim"],entries:0,flashcards:0,questions:0},
-          {day:28,date:'2026-04-29',phase:'phase3',fa:'FA3+FA5',focus:'FA Questions Checkpoint: FA3 + FA4 + FA5',tasks:["Run all FA3 practice questions from Questions tab","Run all FA4 practice questions from Questions tab","Run all FA5 practice questions from Questions tab","Score per FA - log in Study Plan tab notes","Add any new weak areas to your remediation list"],entries:0,flashcards:0,questions:0},
-          {day:29,date:'2026-04-30',phase:'phase3',fa:'WEAK',focus:'Targeted Remediation - All FAs',tasks:["Return to entries ONLY for weak sub-topics from Days 27-28 checkpoints","Re-read: Exam Points, Quick Ref, Decision Criteria only","Re-drill only the flashcards tied to weak sub-topic entries","Generate Practice Session - All Tiers - let system surface what needs review","No new material - reinforce what you know"],entries:0,flashcards:0,questions:0},
-          {day:30,date:'2026-05-01',phase:'phase3',fa:'mixed',focus:'FA1 + FA5 Final Deep Pass (60% of exam)',tasks:["Full entry re-read: all 20 FA1 entries (exam points only)","Full entry re-read: all 8 FA5 entries (exam points only)","All 25 FA1 flashcards + all 15 FA5 flashcards","Quick pass: FA1+FA5 practice questions","Generate Practice Session - All Tiers to catch anything surfacing","Sleep 8 hours tonight - non-negotiable"],entries:28,flashcards:40,questions:30},
-          {day:31,date:'2026-05-04',phase:'phase3',fa:'mixed',focus:'Full Mixed Flashcard Pass + Weak Area Questions',tasks:["Full mixed pass: all 141 flashcards shuffled (All Tiers in Practice Mode)","Run targeted practice questions on any remaining weak areas","Score yourself - note any topics still below 80%","Generate Practice Session one final time - trust what surfaces"],entries:0,flashcards:141,questions:0},
-          {day:32,date:'2026-05-05',phase:'phase3',fa:'mixed',focus:'Comprehensive Timed Sim - 165 Questions / 3 Hours',tasks:["Generate Practice Session or run Questions tab mixed across all FAs","Target 165 questions - set 3-hour timer, commit fully","Do NOT check answers mid-session","Score and categorize every wrong answer by FA","Build final remediation list for Day 33"],entries:0,flashcards:0,questions:165},
-          {day:33,date:'2026-05-06',phase:'phase3',fa:'WEAK',focus:'Final Targeted Remediation',tasks:["Return ONLY to entries for weak sub-topics from Day 32 sim","Re-read exam points and decision criteria only","Re-drill only the flashcards tied to your weak entries","30 targeted practice questions on weak areas only","No new material - reinforce what you know"],entries:0,flashcards:0,questions:30},
-          {day:34,date:'2026-05-07',phase:'phase3',fa:'buffer',focus:'Exam Eve - Light Review Only (Exam Tomorrow May 8)',tasks:["Review quick-reference notes and decision criteria only - no full entries","20 mixed flashcards maximum - stop after 20","Confirm exam location, login credentials, government ID","Pack or set up everything you need tonight","Relax - you have done the work"],entries:0,flashcards:20,questions:0}
+          {day:27,date:'2026-04-28',phase:'phase3',fa:'mixed',focus:'Timed Exam Simulation',tasks:["Simulate full timed exam block: 165 questions / 3 hours","Do NOT check answers mid-session - commit fully","Score and categorize errors by FA","Identify top 3 weak sub-topics for final 3 days"],entries:0,flashcards:0,questions:165},
+          {day:28,date:'2026-04-29',phase:'phase3',fa:'mixed',focus:'Targeted Remediation',tasks:["Return to entries for all weak sub-topics from Day 27","Re-drill weak flashcards only - not the full deck","Run targeted practice questions on weak areas","No new material - reinforce what you know"],entries:0,flashcards:0,questions:30},
+          {day:29,date:'2026-04-30',phase:'phase3',fa:'FA1',focus:'FA1 + FA5 Final Deep Pass (60% of exam)',tasks:["Full entry re-read: all 20 FA1 entries (exam points only)","Full entry re-read: all 8 FA5 entries (exam points only)","All 25 FA1 flashcards + all 15 FA5 flashcards","Quick pass: FA1+FA5 practice questions","Sleep 8 hours tonight - non-negotiable"],entries:28,flashcards:40,questions:30},
+          {day:30,date:'2026-05-01',phase:'phase3',fa:'buffer',focus:'Light Review - Exam Eve (Exam is Sunday May 3)',tasks:["Review quick-ref and decision criteria notes only","20 mixed flashcards maximum - then stop","Confirm exam location, login, ID requirements","Pack everything the night before","Relax - you are ready"],entries:0,flashcards:20,questions:0}
         ];
 
         function spGetState() {
@@ -4208,7 +3898,7 @@
             if (doneEl) doneEl.textContent = done;
             if (remEl) remEl.textContent = SP_DAYS.length - done;
             if (leftEl) {
-                var diff = Math.ceil((new Date('2026-05-08') - new Date()) / (1000*60*60*24));
+                var diff = Math.ceil((new Date('2026-05-03') - new Date()) / (1000*60*60*24));
                 leftEl.textContent = diff > 0 ? diff : 'EXAM!';
             }
         }
@@ -4232,571 +3922,233 @@
             });
         }
 
-        // ==================== EXAM MODE ====================
+        // ==================== INTERLEAVED PRACTICE ====================
 
-        var EM = {
-            mode: 'fa',
-            questions: [],
-            current: 0,
-            answers: {},       // { qId: selectedAnswer }
-            results: {},       // { qId: { correct: bool, selected, correctAnswer } }
-            timer: null,
-            timerSeconds: 0,
-            timerRunning: false,
-            paused: false,
-            showAnswers: 'end',
-            startTime: null,
-            examEnded: false,
-            lastConfig: {}
-        };
+        function generateInterleavedSession() {
+            const entries = getEntries().filter(e => e.activatedDate);
+            const flashcards = getFlashcards().filter(f => f.activatedDate);
+            const container = document.getElementById('ilSession');
 
-        function initExamMode() {
-            emUpdateInfoBar();
-            // Wire up config change listeners
-            ['em-fa-select','em-q-count','em-timer-select','em-show-answers','em-order'].forEach(function(id) {
-                var el = document.getElementById(id);
-                if (el) el.onchange = emUpdateInfoBar;
+            if (entries.length < 3) {
+                container.innerHTML = `<div style="text-align:center;padding:40px;background:#F8FAFC;border-radius:12px;border:2px dashed #E2E8F0;">
+                    <div style="font-size:3em;margin-bottom:12px;">&#128214;</div>
+                    <p style="color:#64748B;">You need at least 3 activated entries across different FAs to generate an interleaved session.</p>
+                </div>`;
+                return;
+            }
+
+            const perFA = parseInt(document.getElementById('ilItemsPerFA').value);
+            const includeFC = document.getElementById('ilIncludeFC').value === 'yes';
+
+            // Group entries by FA
+            const byFA = {};
+            entries.forEach(e => {
+                if (!byFA[e.functionalArea]) byFA[e.functionalArea] = [];
+                byFA[e.functionalArea].push(e);
             });
-        }
 
-        function emSelectMode(mode, card) {
-            EM.mode = mode;
-            document.querySelectorAll('.em-mode-card').forEach(function(c){ c.classList.remove('em-selected'); });
-            card.classList.add('em-selected');
-            // Show/hide FA selector
-            var faRow = document.getElementById('em-fa-row');
-            if (faRow) faRow.style.display = (mode === 'fa') ? 'flex' : 'none';
-            emUpdateInfoBar();
-        }
+            // Shuffle within each FA and take up to perFA
+            const faKeys = Object.keys(byFA).sort();
+            faKeys.forEach(fa => { byFA[fa] = [...byFA[fa]].sort(() => Math.random() - 0.5).slice(0, perFA); });
 
-        function emGetFilteredQuestions() {
-            var all = getQuestions();
-            var faFilter = document.getElementById('em-fa-select') ? document.getElementById('em-fa-select').value : 'all';
-            var countSel = document.getElementById('em-q-count') ? document.getElementById('em-q-count').value : 'all';
+            // Interleave: round-robin across FAs
+            const interleaved = [];
+            const maxRounds = Math.max(...faKeys.map(k => byFA[k].length));
+            for (let r = 0; r < maxRounds; r++) {
+                faKeys.forEach(fa => { if (byFA[fa][r]) interleaved.push({ type: 'entry', data: byFA[fa][r] }); });
+            }
 
-            var pool = all;
-            if (EM.mode === 'fa' && faFilter !== 'all') {
-                pool = all.filter(function(q){ return q.functionalArea === faFilter; });
-            } else if (EM.mode === 'weak') {
-                pool = all.filter(function(q){
-                    if (!q.timesPracticed || q.timesPracticed === 0) return true;
-                    return (q.timesCorrect || 0) / q.timesPracticed < 0.8;
+            // Weave in flashcards between entries if requested
+            if (includeFC && flashcards.length > 0) {
+                const shuffledFC = [...flashcards].sort(() => Math.random() - 0.5).slice(0, Math.min(flashcards.length, interleaved.length));
+                const final = [];
+                interleaved.forEach((item, i) => {
+                    final.push(item);
+                    if (shuffledFC[i]) final.push({ type: 'flashcard', data: shuffledFC[i] });
                 });
-            }
-
-            // Shuffle if random order
-            var order = document.getElementById('em-order') ? document.getElementById('em-order').value : 'random';
-            if (order === 'random') {
-                pool = pool.slice().sort(function(){ return Math.random() - 0.5; });
+                buildILSession(final, container);
             } else {
-                pool = pool.slice().sort(function(a,b){ return a.functionalArea.localeCompare(b.functionalArea); });
+                buildILSession(interleaved, container);
             }
-
-            // Apply count limit
-            if (countSel !== 'all') {
-                var n = parseInt(countSel);
-                pool = pool.slice(0, n);
-            }
-            return pool;
         }
 
-        function emUpdateInfoBar() {
-            var pool = emGetFilteredQuestions();
-            var count = pool.length;
-            var timerVal = document.getElementById('em-timer-select') ? parseInt(document.getElementById('em-timer-select').value) : 0;
-
-            var el = document.getElementById('em-info-count');
-            if (el) el.textContent = count;
-
-            var timeEl = document.getElementById('em-info-time');
-            if (timeEl) timeEl.textContent = timerVal > 0 ? emFmtMins(timerVal * 60) + ' timer' : 'No timer';
-
-            var paceEl = document.getElementById('em-info-pace');
-            if (paceEl && timerVal > 0 && count > 0) {
-                var secsPerQ = Math.round((timerVal * 60) / count);
-                paceEl.textContent = secsPerQ + 's';
-            } else if (paceEl) {
-                paceEl.textContent = '--';
-            }
-
-            var btn = document.getElementById('em-start-btn');
-            if (btn) btn.disabled = count === 0;
-        }
-
-        function emFmtMins(totalSecs) {
-            var h = Math.floor(totalSecs / 3600);
-            var m = Math.floor((totalSecs % 3600) / 60);
-            var s = totalSecs % 60;
-            if (h > 0) return h + 'h ' + String(m).padStart(2,'0') + 'm';
-            return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-        }
-
-        function emFmtTime(totalSecs) {
-            var h = Math.floor(totalSecs / 3600);
-            var m = Math.floor((totalSecs % 3600) / 60);
-            var s = totalSecs % 60;
-            if (h > 0) return h + ':' + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-            return String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
-        }
-
-        function emStartExam() {
-            var pool = emGetFilteredQuestions();
-            if (pool.length === 0) { alert('No questions match your selection. Add questions or change your filters.'); return; }
-
-            EM.questions = pool;
-            EM.current = 0;
-            EM.answers = {};
-            EM.results = {};
-            EM.examEnded = false;
-            EM.showAnswers = document.getElementById('em-show-answers').value;
-            EM.startTime = Date.now();
-            EM.lastConfig = {
-                mode: EM.mode,
-                fa: document.getElementById('em-fa-select').value,
-                count: document.getElementById('em-q-count').value,
-                timer: document.getElementById('em-timer-select').value,
-                order: document.getElementById('em-order').value,
+        function buildILSession(items, container) {
+            const faColors = {
+                FA1: { bg: '#EDE9FE', border: '#7C3AED', text: '#4C1D95', label: 'FA1 · Leadership & Strategy' },
+                FA2: { bg: '#DBEAFE', border: '#3B82F6', text: '#1E40AF', label: 'FA2 · Workforce Planning' },
+                FA3: { bg: '#D1FAE5', border: '#10B981', text: '#065F46', label: 'FA3 · Talent Management' },
+                FA4: { bg: '#FEF3C7', border: '#F59E0B', text: '#92400E', label: 'FA4 · Total Rewards' },
+                FA5: { bg: '#FCE7F3', border: '#EC4899', text: '#9D174D', label: 'FA5 · HR Info / Safety' },
             };
 
-            // Timer setup
-            var timerMins = parseInt(document.getElementById('em-timer-select').value);
-            EM.timerSeconds = timerMins * 60;
-            EM.timerRunning = timerMins > 0;
+            let html = `<div style="background:#E0E7FF;padding:12px 18px;border-radius:8px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;">
+                <strong style="color:#3730A3;">&#128256; Interleaved Session</strong>
+                <span style="color:#5B21B6;font-size:0.9em;">${items.length} items across ${[...new Set(items.filter(i=>i.type==='entry').map(i=>i.data.functionalArea))].length} Functional Areas</span>
+            </div>`;
 
-            document.getElementById('em-setup-screen').style.display = 'none';
-            document.getElementById('em-exam-screen').style.display = 'block';
-            document.getElementById('em-results-screen').style.display = 'none';
+            html += `<div style="background:#FEF3C7;padding:14px 18px;border-radius:8px;margin-bottom:22px;border-left:4px solid #F59E0B;">
+                <strong style="color:#92400E;">&#127775; How to use this session:</strong>
+                <ol style="color:#92400E;margin:8px 0 0 18px;font-size:0.9em;line-height:1.7;">
+                    <li>Recall the concept out loud <strong>before</strong> revealing.</li>
+                    <li>After revealing, read the Bridge Prompts and answer at least one <strong>out loud</strong> — connecting this entry to its linked topic.</li>
+                    <li>Use "Ask AI to Bridge" when you want a deeper synthesis challenge.</li>
+                </ol>
+            </div>`;
 
-            // Show timer if configured
-            var timerEl = document.getElementById('em-timer-display');
-            var pauseBtn = document.getElementById('em-pause-btn');
-            if (timerMins > 0) {
-                timerEl.style.display = 'block';
-                pauseBtn.style.display = 'block';
-                timerEl.textContent = emFmtTime(EM.timerSeconds);
-                EM.timer = setInterval(function() {
-                    if (!EM.paused) {
-                        EM.timerSeconds--;
-                        timerEl.textContent = emFmtTime(EM.timerSeconds);
-                        if (EM.timerSeconds <= 300) timerEl.classList.add('em-timer-warn');
-                        if (EM.timerSeconds <= 0) {
-                            clearInterval(EM.timer);
-                            emEndExam(true);
-                        }
-                    }
-                }, 1000);
-            } else {
-                timerEl.style.display = 'none';
-                pauseBtn.style.display = 'none';
-            }
+            items.forEach((item, idx) => {
+                if (item.type === 'entry') {
+                    const e = item.data;
+                    const c = faColors[e.functionalArea] || { bg:'#F8FAFC', border:'#94A3B8', text:'#1E293B', label: e.functionalArea };
+                    const tier = getTier(e.activatedDate, e.lastPracticed);
+                    const tierLabel = tier === 1 ? 'Tier 1' : tier === 2 ? 'Tier 2' : 'Tier 3';
+                    const tierColor = tier === 1 ? '#1E40AF' : tier === 2 ? '#92400E' : '#6B21A8';
+                    const tierBg = tier === 1 ? '#DBEAFE' : tier === 2 ? '#FEF3C7' : '#E9D5FF';
 
-            // Mode title
-            var modeLabels = { fa: 'FA Exam', comprehensive: 'Comprehensive Exam', weak: 'Weak Areas Focus' };
-            document.getElementById('em-exam-title').textContent = modeLabels[EM.mode] || 'Exam Mode';
+                    // Parse crossRef into array
+                    const crossRefRaw = e.crossRef || '';
+                    const crossLinks = crossRefRaw ? crossRefRaw.replace('Links to:', '').split(',').map(s => s.trim()).filter(Boolean) : [];
 
-            emBuildDots();
-            emRenderQuestion();
-        }
+                    const bridgePromptsHTML = crossLinks.length > 0 ? `
+                        <div style="margin-top:18px;padding:14px;background:#EFF6FF;border-left:4px solid #3B82F6;border-radius:6px;">
+                            <strong style="color:#1E40AF;">&#128279; Bridge Prompts — connect this to:</strong>
+                            <ul style="margin:10px 0 0 18px;color:#1D4ED8;font-size:0.9em;line-height:2;">
+                                ${crossLinks.map(link => `<li>How does <strong>${escapeHtml(link)}</strong> relate to what you just recalled? What would change if you combined both?</li>`).join('')}
+                            </ul>
+                        </div>` : '';
 
-        function emTogglePause() {
-            EM.paused = !EM.paused;
-            var btn = document.getElementById('em-pause-btn');
-            if (btn) btn.innerHTML = EM.paused ? '&#9654; Resume' : '&#9646;&#9646; Pause';
-            // Show/hide question when paused
-            var card = document.getElementById('em-q-card');
-            if (card) card.style.opacity = EM.paused ? '0.2' : '1';
-        }
+                    html += `
+                    <div class="entry-card" style="margin-bottom:18px;border-left:5px solid ${c.border};" id="il-card-${idx}">
+                        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+                            <div>
+                                <span style="background:${c.bg};color:${c.text};padding:3px 10px;border-radius:6px;font-size:0.78em;font-weight:700;margin-right:8px;">${c.label}</span>
+                                <span style="background:${tierBg};color:${tierColor};padding:3px 10px;border-radius:6px;font-size:0.78em;font-weight:700;">${tierLabel}</span>
+                            </div>
+                            <span style="color:#94A3B8;font-size:0.85em;">Item ${idx+1} of ${items.length}</span>
+                        </div>
+                        <div class="entry-title" style="margin-bottom:10px;">${escapeHtml(e.title)}</div>
+                        <div style="color:#64748B;font-size:0.9em;margin-bottom:12px;">
+                            <strong>Before revealing — recall:</strong> Core concept · When it appears on the exam · Key failure patterns
+                        </div>
+                        <button class="btn btn-small btn-secondary" onclick="ilReveal(${idx})">&#128065; Reveal Answer</button>
+                        <div id="il-reveal-${idx}" style="display:none;margin-top:14px;">
+                            <div style="padding:15px;background:#F0FDF4;border-left:4px solid #10B981;border-radius:6px;">
+                                <strong>Summary:</strong> ${escapeHtml(e.summary)}<br><br>
+                                ${e.examPoints ? `<strong>Exam Points:</strong> ${escapeHtml(e.examPoints)}` : ''}
+                                ${e.quickRef ? `<br><br><strong>Quick Ref:</strong> ${escapeHtml(e.quickRef)}` : ''}
+                            </div>
+                            ${bridgePromptsHTML}
+                            <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+                                <button class="btn btn-small btn-primary" onclick="markEntryPracticed('${e.id}')">&#9200; Mark Practiced</button>
+                                <button class="btn btn-small btn-secondary" onclick="ilAskAI('${e.id}', ${idx})" style="background:#F3E8FF;border-color:#7C3AED;color:#6D28D9;">&#129302; Ask AI to Bridge</button>
+                            </div>
+                            <div id="il-ai-${idx}" style="margin-top:12px;"></div>
+                        </div>
+                    </div>`;
 
-        function emBuildDots() {
-            var wrap = document.getElementById('em-q-dots');
-            if (!wrap) return;
-            wrap.innerHTML = EM.questions.map(function(q, i) {
-                return '<div class="em-dot' + (i===0?' em-dot-current':'') + '" id="emdot_'+i+'" onclick="emGoToQuestion('+i+')" title="Q'+(i+1)+'"></div>';
-            }).join('');
-        }
-
-        function emUpdateDots() {
-            EM.questions.forEach(function(q, i) {
-                var dot = document.getElementById('emdot_'+i);
-                if (!dot) return;
-                dot.className = 'em-dot';
-                if (i === EM.current) dot.classList.add('em-dot-current');
-                if (EM.examEnded && EM.results[q.id]) {
-                    dot.classList.add(EM.results[q.id].correct ? 'em-dot-correct' : 'em-dot-wrong');
-                } else if (EM.answers[q.id] !== undefined) {
-                    dot.classList.add('em-dot-answered');
+                } else if (item.type === 'flashcard') {
+                    const fc = item.data;
+                    const fcFAColors = faColors[fc.functionalArea] || { bg:'#F8FAFC', border:'#94A3B8', text:'#1E293B', label: fc.functionalArea };
+                    html += `
+                    <div class="flashcard" style="margin-bottom:18px;border-left:5px solid ${fcFAColors.border};background:#FAFAFA;" id="il-card-${idx}">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+                            <span style="background:${fcFAColors.bg};color:${fcFAColors.text};padding:3px 10px;border-radius:6px;font-size:0.78em;font-weight:700;">${fcFAColors.label}</span>
+                            <span style="background:#F1F5F9;color:#64748B;padding:3px 10px;border-radius:6px;font-size:0.78em;">&#127183; Flashcard</span>
+                        </div>
+                        <div class="flashcard-question" style="margin-bottom:10px;">${escapeHtml(fc.question)}</div>
+                        <button class="btn btn-small btn-secondary" onclick="this.nextElementSibling.style.display='block';this.style.display='none';">&#128065; Reveal Answer</button>
+                        <div style="display:none;margin-top:12px;padding:12px;background:#F0FDF4;border-left:4px solid #10B981;border-radius:6px;">
+                            <strong>A:</strong> ${escapeHtml(fc.answer)}
+                        </div>
+                        <button class="btn btn-small btn-primary" onclick="markFlashcardPracticed('${fc.id}')" style="margin-top:10px;">&#9200; Mark Practiced</button>
+                    </div>`;
                 }
             });
+
+            // Session complete footer
+            html += `<div style="text-align:center;padding:30px;background:linear-gradient(135deg,#EDE9FE,#E0E7FF);border-radius:12px;margin-top:10px;">
+                <div style="font-size:2.5em;margin-bottom:10px;">&#127881;</div>
+                <h4 style="color:#4C1D95;margin-bottom:8px;">Session Complete!</h4>
+                <p style="color:#6B21A8;font-size:0.9em;margin-bottom:16px;">Take 5 minutes to note: What unexpected connections did you discover? Which bridge felt hardest?</p>
+                <button class="btn btn-primary" onclick="generateInterleavedSession()" style="background:linear-gradient(135deg,#7C3AED,#4F46E5);">&#128256; Generate New Session</button>
+            </div>`;
+
+            container.innerHTML = html;
         }
 
-        function emFaBadgeStyle(fa) {
-            var styles = {
-                FA1:'background:#EDE9FE;color:#6D28D9',
-                FA2:'background:#D1FAE5;color:#065F46',
-                FA3:'background:#FEF3C7;color:#92400E',
-                FA4:'background:#FCE7F3;color:#9D174D',
-                FA5:'background:#E0E7FF;color:#3730A3'
-            };
-            return styles[fa] || 'background:#F1F5F9;color:#475569';
+        function ilReveal(idx) {
+            const btn = document.querySelector(`#il-card-${idx} .btn-secondary`);
+            const reveal = document.getElementById(`il-reveal-${idx}`);
+            if (btn) btn.style.display = 'none';
+            if (reveal) reveal.style.display = 'block';
         }
 
-        function emRenderQuestion() {
-            var q = EM.questions[EM.current];
-            if (!q) return;
-            var total = EM.questions.length;
-            var answered = Object.keys(EM.answers).length;
+        async function ilAskAI(entryId, idx) {
+            const entries = getEntries();
+            const entry = entries.find(e => e.id === entryId);
+            if (!entry) return;
 
-            document.getElementById('em-progress-txt').textContent = 'Question ' + (EM.current+1) + ' of ' + total;
-            document.getElementById('em-prog-fill').style.width = (((EM.current+1)/total)*100)+'%';
-            document.getElementById('em-answered-count').textContent = answered + ' of ' + total + ' answered';
+            const aiDiv = document.getElementById(`il-ai-${idx}`);
+            aiDiv.innerHTML = `<div style="padding:14px;background:#F3E8FF;border-radius:8px;text-align:center;color:#6D28D9;">
+                <span style="font-size:1.2em;">&#129302;</span> Generating cross-FA bridge questions...
+            </div>`;
 
-            // Nav buttons
-            document.getElementById('em-prev-btn').disabled = EM.current === 0;
-            document.getElementById('em-prev-btn2').disabled = EM.current === 0;
-            var isLast = EM.current === total - 1;
-            var nextBtn = document.getElementById('em-next-btn');
-            var nextBtn2 = document.getElementById('em-next-btn2');
-            if (isLast) {
-                nextBtn.innerHTML = '&#9632; Finish Exam';
-                nextBtn.onclick = function(){ emConfirmEnd(); };
-                nextBtn2.innerHTML = '&#9632; Finish Exam';
-                nextBtn2.onclick = function(){ emConfirmEnd(); };
-            } else {
-                nextBtn.innerHTML = 'Next &#8594;';
-                nextBtn.onclick = function(){ emNavQuestion(1); };
-                nextBtn2.innerHTML = 'Next &#8594;';
-                nextBtn2.onclick = function(){ emNavQuestion(1); };
-            }
+            const crossRefRaw = entry.crossRef || '';
+            const prompt = `You are an SPHR exam coach helping a candidate build integrated HR knowledge.
 
-            var isMulti = q.questionType === 'multi' || (Array.isArray(q.correctAnswer) && q.correctAnswer.length > 1);
-            var isBlank = q.questionType === 'blank';
-            var savedAnswer = EM.answers[q.id];
-            var result = EM.results[q.id];
-            var showExpl = EM.examEnded || (EM.showAnswers === 'immediate' && result);
+The learner just reviewed this entry:
 
-            var optionsHTML = '';
-            if (!isBlank) {
-                var opts = ['A','B','C','D'];
-                if (isMulti) {
-                    optionsHTML += '<div class="em-multi-hint">Select ALL correct answers, then click Submit</div>';
-                }
-                optionsHTML += '<ul class="em-options">';
-                opts.forEach(function(letter) {
-                    var text = q['option'+letter];
-                    if (!text) return;
-                    var cls = 'em-option';
-                    if (result) {
-                        var correctAnswers = Array.isArray(q.correctAnswer) ? q.correctAnswer : [q.correctAnswer];
-                        var wasSelected = isMulti
-                            ? (savedAnswer && savedAnswer.indexOf(letter) !== -1)
-                            : savedAnswer === letter;
-                        var isCorrectLetter = correctAnswers.indexOf(letter) !== -1;
-                        if (isCorrectLetter && wasSelected) cls += ' em-opt-correct';
-                        else if (!isCorrectLetter && wasSelected) cls += ' em-opt-wrong';
-                        else if (isCorrectLetter && !wasSelected) cls += ' em-opt-missed';
-                    } else if (!isMulti && savedAnswer === letter) {
-                        cls += ' em-opt-selected';
-                    } else if (isMulti && savedAnswer && savedAnswer.indexOf(letter) !== -1) {
-                        cls += ' em-opt-selected';
-                    }
-                    var clickHandler = result
-                        ? ''
-                        : (isMulti
-                            ? 'onclick="emToggleMulti(\''+q.id+'\',\''+letter+'\')"'
-                            : 'onclick="emSelectSingle(\''+q.id+'\',\''+letter+'\')"');
-                    optionsHTML += '<li class="'+cls+'" '+clickHandler+'>'
-                        + '<span class="em-option-letter">'+letter+'</span>'
-                        + escapeHtml(text)+'</li>';
+ENTRY: "${entry.title}" (${entry.functionalArea})
+SUMMARY: ${entry.summary}
+EXAM POINTS: ${entry.examPoints || 'N/A'}
+CROSS-REFERENCES: ${crossRefRaw || 'None listed'}
+
+Generate exactly 3 high-quality interleaving synthesis questions. Each question must:
+1. Force the learner to connect THIS entry to a DIFFERENT functional area or crossRef topic listed above
+2. Be framed as a realistic SPHR exam scenario or strategic HR decision
+3. Require integration of TWO concepts — not just recall of one
+
+Format your response as JSON only (no markdown, no extra text):
+{
+  "questions": [
+    {"q": "...", "hint": "Key concepts to connect: ... + ..."},
+    {"q": "...", "hint": "Key concepts to connect: ... + ..."},
+    {"q": "...", "hint": "Key concepts to connect: ... + ..."}
+  ]
+}`;
+
+            try {
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        model: 'claude-sonnet-4-20250514',
+                        max_tokens: 1000,
+                        messages: [{ role: 'user', content: prompt }]
+                    })
                 });
-                optionsHTML += '</ul>';
-                if (isMulti && !result) {
-                    optionsHTML += '<button class="em-nav-btn em-primary" style="margin-top:14px;" onclick="emSubmitMulti(\''+q.id+'\')">Submit Answers</button>';
-                }
-            } else {
-                // Fill in blank
-                var blankVal = (savedAnswer && typeof savedAnswer === 'string') ? savedAnswer : '';
-                var blankCls = result ? (result.correct ? 'em-blank-correct' : 'em-blank-wrong') : '';
-                optionsHTML = '<div class="em-blank-wrap">'
-                    + '<input type="text" class="em-blank-input '+blankCls+'" id="em-blank-'+q.id+'" placeholder="Type your answer..." value="'+escapeHtml(blankVal)+'" '+(result?'disabled':'')+' onkeydown="if(event.key===\'Enter\' && !'+!!result+'){emSubmitBlank(\''+q.id+'\');}">'
-                    + (result ? '' : '<button class="em-nav-btn em-primary" onclick="emSubmitBlank(\''+q.id+'\')">Submit</button>')
-                    + '</div>';
-                if (result) {
-                    var accepted = Array.isArray(q.correctAnswer) ? q.correctAnswer : [q.correctAnswer];
-                    optionsHTML += '<div style="margin-top:8px;font-size:.82rem;color:#64748B;">Accepted: '+accepted.join(', ')+'</div>';
-                }
+                const data = await response.json();
+                const text = data.content?.map(c => c.text || '').join('') || '';
+                const clean = text.replace(/```json|```/g, '').trim();
+                const parsed = JSON.parse(clean);
+
+                let qHTML = `<div style="background:#F3E8FF;border-left:4px solid #7C3AED;border-radius:8px;padding:16px;margin-top:4px;">
+                    <strong style="color:#4C1D95;display:block;margin-bottom:12px;">&#129302; AI Bridge Questions — answer at least one out loud:</strong>`;
+                parsed.questions.forEach((item, i) => {
+                    qHTML += `
+                    <div style="background:white;border-radius:8px;padding:14px;margin-bottom:10px;border:1px solid #DDD6FE;">
+                        <p style="color:#1E1B4B;font-weight:600;margin:0 0 8px 0;">${i+1}. ${escapeHtml(item.q)}</p>
+                        <p style="color:#7C3AED;font-size:0.85em;margin:0;font-style:italic;">&#128161; ${escapeHtml(item.hint)}</p>
+                    </div>`;
+                });
+                qHTML += '</div>';
+                aiDiv.innerHTML = qHTML;
+            } catch (err) {
+                aiDiv.innerHTML = `<div style="padding:12px;background:#FEE2E2;border-radius:8px;color:#991B1B;">
+                    &#9888; Could not generate questions. Check your connection and try again.<br>
+                    <small>${err.message}</small>
+                </div>`;
             }
-
-            // Explanation
-            var explHTML = '';
-            if (showExpl && q.explanation) {
-                explHTML = '<div class="em-explanation em-show">'+escapeHtml(q.explanation)+'</div>';
-            }
-
-            document.getElementById('em-q-card').innerHTML =
-                '<div class="em-q-meta">'
-                    + '<span class="em-q-num">Q'+(EM.current+1)+'</span>'
-                    + '<span class="em-q-fa" style="'+emFaBadgeStyle(q.functionalArea)+'">'+q.functionalArea+'</span>'
-                + '</div>'
-                + '<div class="em-q-stem">'+escapeHtml(q.stem)+'</div>'
-                + optionsHTML
-                + explHTML;
-
-            emUpdateDots();
         }
-
-        function emSelectSingle(qId, letter) {
-            if (EM.results[qId]) return; // already answered
-            EM.answers[qId] = letter;
-            if (EM.showAnswers === 'immediate') {
-                emGradeQuestion(qId);
-            }
-            emRenderQuestion();
-        }
-
-        function emToggleMulti(qId, letter) {
-            if (EM.results[qId]) return;
-            if (!EM.answers[qId]) EM.answers[qId] = [];
-            var arr = EM.answers[qId];
-            var idx = arr.indexOf(letter);
-            if (idx === -1) arr.push(letter);
-            else arr.splice(idx, 1);
-            emRenderQuestion();
-        }
-
-        function emSubmitMulti(qId) {
-            if (!EM.answers[qId] || EM.answers[qId].length === 0) { alert('Select at least one answer.'); return; }
-            emGradeQuestion(qId);
-            emRenderQuestion();
-        }
-
-        function emSubmitBlank(qId) {
-            var inp = document.getElementById('em-blank-'+qId);
-            if (!inp || !inp.value.trim()) { alert('Enter an answer first.'); return; }
-            EM.answers[qId] = inp.value.trim();
-            emGradeQuestion(qId);
-            emRenderQuestion();
-        }
-
-        function emGradeQuestion(qId) {
-            var q = EM.questions.find(function(x){ return x.id === qId; });
-            if (!q) return;
-            var selected = EM.answers[qId];
-            var correct = false;
-            var isMulti = q.questionType === 'multi' || (Array.isArray(q.correctAnswer) && q.correctAnswer.length > 1);
-            var isBlank = q.questionType === 'blank';
-            if (isMulti) {
-                var correctSet = Array.isArray(q.correctAnswer) ? q.correctAnswer : [q.correctAnswer];
-                var selSet = Array.isArray(selected) ? selected : [];
-                correct = correctSet.length === selSet.length && correctSet.every(function(x){ return selSet.indexOf(x) !== -1; });
-            } else if (isBlank) {
-                var accepted = Array.isArray(q.correctAnswer) ? q.correctAnswer : [q.correctAnswer];
-                correct = accepted.some(function(a){ return a.toLowerCase().trim() === String(selected).toLowerCase().trim(); });
-            } else {
-                correct = selected === q.correctAnswer;
-            }
-            EM.results[qId] = { correct: correct, selected: selected, correctAnswer: q.correctAnswer };
-        }
-
-        function emNavQuestion(dir) {
-            var newIdx = EM.current + dir;
-            if (newIdx < 0 || newIdx >= EM.questions.length) return;
-            EM.current = newIdx;
-            emRenderQuestion();
-        }
-
-        function emGoToQuestion(idx) {
-            EM.current = idx;
-            emRenderQuestion();
-        }
-
-        function emConfirmEnd() {
-            var answered = Object.keys(EM.answers).length;
-            var total = EM.questions.length;
-            var unanswered = total - answered;
-            if (unanswered > 0) {
-                if (!confirm('You have ' + unanswered + ' unanswered question(s). End exam anyway?')) return;
-            }
-            emEndExam(false);
-        }
-
-        function emEndExam(timedOut) {
-            if (EM.timer) { clearInterval(EM.timer); EM.timer = null; }
-            EM.examEnded = true;
-            var elapsed = Math.round((Date.now() - EM.startTime) / 1000);
-
-            // Grade all unanswered as wrong
-            EM.questions.forEach(function(q) {
-                if (!EM.results[q.id]) {
-                    EM.results[q.id] = { correct: false, selected: null, correctAnswer: q.correctAnswer };
-                } else if (!EM.results[q.id].hasOwnProperty('correct')) {
-                    emGradeQuestion(q.id);
-                }
-            });
-
-            // For single-answer questions answered but not explicitly graded
-            EM.questions.forEach(function(q) {
-                if (EM.answers[q.id] && !EM.results[q.id]) emGradeQuestion(q.id);
-                else if (EM.answers[q.id] && EM.results[q.id] && EM.showAnswers === 'end') {
-                    // re-grade to be sure
-                }
-            });
-            // Grade single-answer that was selected but not submitted
-            EM.questions.forEach(function(q) {
-                var isMulti = q.questionType === 'multi' || (Array.isArray(q.correctAnswer) && q.correctAnswer.length > 1);
-                var isBlank = q.questionType === 'blank';
-                if (!isMulti && !isBlank && EM.answers[q.id] && !EM.results[q.id]) {
-                    emGradeQuestion(q.id);
-                }
-            });
-
-            // Update question accuracy in storage
-            var questions = getQuestions();
-            EM.questions.forEach(function(q) {
-                var stored = questions.find(function(x){ return x.id === q.id; });
-                if (stored && EM.results[q.id]) {
-                    stored.timesPracticed = (stored.timesPracticed || 0) + 1;
-                    if (EM.results[q.id].correct) stored.timesCorrect = (stored.timesCorrect || 0) + 1;
-                    stored.lastPracticed = new Date().toISOString();
-                }
-            });
-            saveQuestions(questions);
-
-            // Log session
-            var correct = EM.questions.filter(function(q){ return EM.results[q.id] && EM.results[q.id].correct; }).length;
-            var log = getPracticeLog();
-            log.push({
-                date: new Date().toISOString(),
-                type: 'exam_mode_' + EM.mode,
-                itemCount: EM.questions.length,
-                score: Math.round((correct / EM.questions.length) * 100),
-                durationSeconds: elapsed,
-                timedOut: timedOut
-            });
-            savePracticeLog(log);
-
-            emShowResults(elapsed);
-        }
-
-        function emShowResults(elapsedSecs) {
-            document.getElementById('em-exam-screen').style.display = 'none';
-            document.getElementById('em-results-screen').style.display = 'block';
-
-            var total = EM.questions.length;
-            var correct = EM.questions.filter(function(q){ return EM.results[q.id] && EM.results[q.id].correct; }).length;
-            var pct = total > 0 ? Math.round((correct/total)*100) : 0;
-
-            document.getElementById('em-res-pct').textContent = pct + '%';
-            document.getElementById('em-res-pct').style.color = pct >= 80 ? '#4ADE80' : pct >= 70 ? '#FCD34D' : '#F87171';
-            document.getElementById('em-res-label').textContent = pct >= 80 ? 'Passing Score &#10003;' : pct >= 70 ? 'Getting Close' : 'Needs Work';
-            document.getElementById('em-res-correct').textContent = correct;
-            document.getElementById('em-res-wrong').textContent = total - correct;
-            document.getElementById('em-res-total').textContent = total;
-            document.getElementById('em-res-time').textContent = emFmtTime(elapsedSecs);
-
-            // FA breakdown
-            var faData = {};
-            EM.questions.forEach(function(q) {
-                var fa = q.functionalArea || 'Unknown';
-                if (!faData[fa]) faData[fa] = { correct:0, total:0 };
-                faData[fa].total++;
-                if (EM.results[q.id] && EM.results[q.id].correct) faData[fa].correct++;
-            });
-            var faColors = { FA1:'#818CF8', FA2:'#34D399', FA3:'#FBBF24', FA4:'#FB923C', FA5:'#F472B6' };
-            var faRows = Object.keys(faData).sort().map(function(fa) {
-                var d = faData[fa];
-                var p = d.total > 0 ? Math.round((d.correct/d.total)*100) : 0;
-                var barColor = p >= 80 ? '#10B981' : p >= 70 ? '#F59E0B' : '#EF4444';
-                return '<div class="em-fa-row">'
-                    + '<span class="em-fa-name">'+fa+'</span>'
-                    + '<div class="em-fa-bar-wrap"><div class="em-fa-bar" style="width:'+p+'%;background:'+barColor+'"></div></div>'
-                    + '<span class="em-fa-pct" style="color:'+barColor+'">'+p+'%</span>'
-                    + '<span class="em-fa-count">'+d.correct+'/'+d.total+'</span>'
-                    + '</div>';
-            }).join('');
-            document.getElementById('em-fa-breakdown-rows').innerHTML = faRows;
-
-            // Weak areas
-            var weakFAs = Object.keys(faData).filter(function(fa){ return faData[fa].total > 0 && Math.round((faData[fa].correct/faData[fa].total)*100) < 80; });
-            var weakSec = document.getElementById('em-weak-section');
-            if (weakFAs.length > 0) {
-                weakSec.style.display = 'block';
-                document.getElementById('em-weak-list-items').innerHTML = weakFAs.map(function(fa) {
-                    var d = faData[fa];
-                    var p = Math.round((d.correct/d.total)*100);
-                    return '<div class="em-weak-item">'+fa+': '+p+'% ('+d.correct+'/'+d.total+') &#8212; Return to '+fa+' entries and flashcards for targeted review</div>';
-                }).join('');
-            } else {
-                weakSec.style.display = 'none';
-            }
-
-            // Show toast
-            showToast('Exam complete: ' + pct + '% (' + correct + '/' + total + ')');
-        }
-
-        function emReviewWrong() {
-            var wrongQs = EM.questions.filter(function(q){ return EM.results[q.id] && !EM.results[q.id].correct; });
-            if (wrongQs.length === 0) { alert('No wrong answers to review!'); return; }
-
-            document.getElementById('em-results-screen').style.display = 'none';
-            document.getElementById('em-review-screen').style.display = 'block';
-
-            var html = wrongQs.map(function(q, i) {
-                var res = EM.results[q.id];
-                var isMulti = q.questionType === 'multi' || (Array.isArray(q.correctAnswer) && q.correctAnswer.length > 1);
-                var isBlank = q.questionType === 'blank';
-                var correctAnswers = Array.isArray(q.correctAnswer) ? q.correctAnswer : [q.correctAnswer];
-
-                var optsHTML = '';
-                if (!isBlank) {
-                    ['A','B','C','D'].forEach(function(letter) {
-                        var text = q['option'+letter];
-                        if (!text) return;
-                        var sel = isMulti ? (res.selected && res.selected.indexOf(letter) !== -1) : res.selected === letter;
-                        var isCorrectL = correctAnswers.indexOf(letter) !== -1;
-                        var cls = 'em-option';
-                        if (isCorrectL && sel) cls += ' em-opt-correct';
-                        else if (!isCorrectL && sel) cls += ' em-opt-wrong';
-                        else if (isCorrectL && !sel) cls += ' em-opt-missed';
-                        optsHTML += '<li class="'+cls+'" style="cursor:default;">'
-                            +'<span class="em-option-letter">'+letter+'</span>'+escapeHtml(text)+'</li>';
-                    });
-                    optsHTML = '<ul class="em-options">'+optsHTML+'</ul>';
-                } else {
-                    optsHTML = '<div style="margin-top:8px;"><span style="background:#FEE2E2;padding:4px 10px;border-radius:6px;font-size:.88rem;color:#991B1B;">Your answer: '+escapeHtml(String(res.selected||'(blank)'))+'</span>'
-                        + '&nbsp;&nbsp;<span style="background:#D1FAE5;padding:4px 10px;border-radius:6px;font-size:.88rem;color:#065F46;">Correct: '+correctAnswers.join(', ')+'</span></div>';
-                }
-
-                return '<div class="em-q-card" style="margin-bottom:16px;">'
-                    + '<div class="em-q-meta"><span class="em-q-num">Wrong #'+(i+1)+'</span><span class="em-q-fa" style="'+emFaBadgeStyle(q.functionalArea)+'">'+q.functionalArea+'</span></div>'
-                    + '<div class="em-q-stem">'+escapeHtml(q.stem)+'</div>'
-                    + optsHTML
-                    + (q.explanation ? '<div class="em-explanation em-show">'+escapeHtml(q.explanation)+'</div>' : '')
-                    + '</div>';
-            }).join('');
-
-            document.getElementById('em-review-items').innerHTML = html;
-        }
-
-        function emBackToResults() {
-            document.getElementById('em-review-screen').style.display = 'none';
-            document.getElementById('em-results-screen').style.display = 'block';
-        }
-
-        function emRetakeExam() {
-            document.getElementById('em-results-screen').style.display = 'none';
-            document.getElementById('em-exam-screen').style.display = 'none';
-            emStartExam();
-        }
-
-        function emNewExam() {
-            if (EM.timer) { clearInterval(EM.timer); EM.timer = null; }
-            document.getElementById('em-results-screen').style.display = 'none';
-            document.getElementById('em-review-screen').style.display = 'none';
-            document.getElementById('em-exam-screen').style.display = 'none';
-            document.getElementById('em-setup-screen').style.display = 'block';
-            emUpdateInfoBar();
-        }
-
 
         // ==================== INITIALIZATION ====================
 
@@ -4804,7 +4156,6 @@
             updateCountdowns();
             updateDashboard();
             showAddForm('entry');
-            initExamMode();
             
             // Update countdown every hour
             setInterval(updateCountdowns, 3600000);
