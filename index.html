@@ -1039,7 +1039,7 @@
                     </div>
                     <div class="deadline-item">
                         <div class="deadline-label">&#128221; SPHR Exam Date</div>
-                        <div class="deadline-date">May 3, 2026</div>
+                        <div class="deadline-date">May 8, 2026</div>
                         <div class="deadline-countdown" id="examCountdown">Calculating...</div>
                     </div>
                 </div>
@@ -1509,6 +1509,34 @@
                     <div id="practiceSession"></div>
                 </div>
 
+                <!-- Flash Burn Mode -->
+                <div class="form-section" style="background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%); border: 2px solid #F59E0B;">
+                    <h3 style="color:#92400E;">&#9889; Flash Burn Mode</h3>
+                    <p style="color:#78350F; font-size:0.9em; margin-bottom:14px;">
+                        Auto-pulls <strong>all activated flashcards for a specific Functional Area</strong> in random order — no setup required. Use on Phase 2 Flashcard Burn days. Select your FA, hit Start Flash Burn, drill every card out loud before revealing.
+                    </p>
+                    <div style="display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; margin-bottom:14px;">
+                        <div>
+                            <label style="font-size:0.85em; color:#78350F; display:block; margin-bottom:4px; font-weight:600;">Select FA to Burn</label>
+                            <select id="flashBurnFA" style="padding:8px 14px; border:2px solid #F59E0B; border-radius:8px; font-size:0.95em; background:white; min-width:280px;">
+                                <option value="all">All FAs — Full Mixed Burn (141 cards)</option>
+                                <option value="FA1">FA1 — Leadership &amp; Strategy (~25 cards)</option>
+                                <option value="FA2">FA2 — Workforce Planning (~32 cards)</option>
+                                <option value="FA3">FA3 — Talent Management (~35 cards)</option>
+                                <option value="FA4">FA4 — Total Rewards (~34 cards)</option>
+                                <option value="FA5">FA5 — HR Info / Safety (~15 cards)</option>
+                                <option value="FA1+FA5">FA1 + FA5 — 60% of Exam (~40 cards)</option>
+                                <option value="FA2+FA3">FA2 + FA3 — Combined Burn (~67 cards)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="generateFlashBurn()" style="background: linear-gradient(135deg,#F59E0B,#D97706); border-color:#B45309; font-size:1em; padding:10px 24px;">
+                            &#9889; Start Flash Burn
+                        </button>
+                    </div>
+                    <div id="flashBurnStats" style="font-size:0.85em; color:#78350F; margin-bottom:8px;"></div>
+                    <div id="flashBurnSession"></div>
+                </div>
+
                 <!-- Session Timer -->
                 <div class="form-section">
                     <h3>&#9201; Session Timer</h3>
@@ -1932,13 +1960,13 @@
         <div class="tab-content" id="studyplan">
             <div class="sp-header-bar">
                 <div>
-                    <h2>&#128197; 30-Day Study Plan</h2>
-                    <p style="color:#64748B;font-size:.9rem;margin-top:4px;">Mar 23 &rarr; May 1 &middot; Exam May 3, 2026 &middot; Weekdays only</p>
+                    <h2>&#128197; 34-Day Study Plan</h2>
+                    <p style="color:#64748B;font-size:.9rem;margin-top:4px;">Mar 23 &rarr; May 7 &middot; Exam May 8, 2026 &middot; Weekdays only</p>
                 </div>
                 <div class="sp-stats-row">
                     <div class="sp-stat-box"><div class="sp-stat-num" id="sp-days-left">--</div><div class="sp-stat-lbl">Days to Exam</div></div>
                     <div class="sp-stat-box"><div class="sp-stat-num" id="sp-days-done" style="color:#10B981">0</div><div class="sp-stat-lbl">Days Done</div></div>
-                    <div class="sp-stat-box"><div class="sp-stat-num" id="sp-days-remain" style="color:#F59E0B">30</div><div class="sp-stat-lbl">Study Days Left</div></div>
+                    <div class="sp-stat-box"><div class="sp-stat-num" id="sp-days-remain" style="color:#F59E0B">34</div><div class="sp-stat-lbl">Study Days Left</div></div>
                 </div>
             </div>
             <div class="sp-progress-wrap">
@@ -2155,8 +2183,8 @@
                 platformEl.classList.add('deadline-warning');
             }
             
-            // Exam date: May 3, 2026
-            const examDate = new Date('2026-05-03');
+            // Exam date: May 8, 2026
+            const examDate = new Date('2026-05-08');
             const examDays = Math.ceil((examDate - now) / (1000 * 60 * 60 * 24));
             document.getElementById('examCountdown').textContent = `${examDays} days to exam`;
         }
@@ -2250,7 +2278,7 @@
             const practiceLog = getPracticeLog();
             
             // Days to Exam
-            const examDate = new Date('2026-05-03');
+            const examDate = new Date('2026-05-08');
             const now = new Date();
             const daysToExam = Math.ceil((examDate - now) / (1000 * 60 * 60 * 24));
             document.getElementById('daysToExam').textContent = daysToExam;
@@ -3807,10 +3835,14 @@
           {day:24,date:'2026-04-23',phase:'phase2',fa:'mixed',pkaType:'deep-interleave',focus:'Phase 2: Deep Interleave — FA3 × FA4 + Weak Area Bridges',tasks:["SINGLE BLOCK — DEDICATED DEEP INTERLEAVE","[INTERLEAVE] SESSION 1: Interleave tab, 3 per FA, focus on FA3 × FA4 connections (Training/Comp is a high-exam bridge — how do rewards reinforce learning?)","For each FA4 entry: use Decision Criteria to answer 'when does this comp concept appear in an employee engagement or performance scenario?'","[INTERLEAVE] SESSION 2: AI Bridge on all entries you flagged weak across Days 21-23","30 targeted questions on FA3 and FA4 weak areas","Log: Build final remediation list for Day 28"],entries:0,flashcards:0,questions:30},
           {day:25,date:'2026-04-24',phase:'phase2',fa:'FA4',pkaType:'flashburn',focus:'Phase 2: FA4 Flashcard Burn + Full Mixed Pass',tasks:["Full pass: all 34 FA4 flashcards — out loud, target 80%+ (FLSA, ERISA, 401k tests are high-frequency)","Full mixed pass: all 141 flashcards shuffled — Practice tab, All Tiers — this is your first full integrated pass","Score yourself on mixed pass: target 75%+ overall. Note FA accuracy breakdown.","Flag any FA where accuracy is below 70% — priority for Day 26 and Day 28"],entries:0,flashcards:141,questions:0},
           {day:26,date:'2026-04-27',phase:'phase2',fa:'mixed',pkaType:'deep-interleave',focus:'Phase 2: Final Deep Interleave + Mixed Practice Questions',tasks:["[INTERLEAVE] SESSION: Interleave tab, 2 per FA, use AI Bridge on your 5 most consistently weak entries","50 mixed practice questions from Questions tab — all 5 FAs, timed","Score and categorize errors by FA — this is your diagnostic for the Day 27 simulation","Confirm your top 3 weak sub-topics: these drive Day 28 remediation","Rest well tonight — Day 27 is full exam simulation"],entries:0,flashcards:0,questions:50},
-          {day:27,date:'2026-04-28',phase:'phase3',fa:'mixed',pkaType:'simulate',focus:'Phase 3: Full Timed Exam Simulation (165 questions / 3 hours)',tasks:["EXAM MODE — Treat this as the real exam. Same location, same setup, same mindset.","165 questions from Questions tab — mixed all FAs — 3-hour timer. Start it.","DO NOT check answers mid-session. Commit fully. Flag uncertain questions.","After completing: score every answer, categorize errors by FA","Identify your top 3 weak sub-topics — write them down. These are Day 28.","Pace check: 165 questions / 180 min = ~1 min 5 sec per question"],entries:0,flashcards:0,questions:165},
-          {day:28,date:'2026-04-29',phase:'phase3',fa:'mixed',pkaType:'remediate',focus:'Phase 3: Targeted Remediation + Weak-FA Interleave',tasks:["Return ONLY to entries for weak sub-topics from Day 27 — read Exam Points + Decision Criteria only, no new material","Re-drill weak flashcards only — not the full deck","[INTERLEAVE] Interleave tab focused on weak FAs: set the session to pull 3 per FA for your weakest 2-3 FAs. Use AI Bridge on every entry in those FAs.","30 targeted questions on weak areas from Questions tab","Log: What Decision Criteria distinctions are still causing errors? Memorize those specifically."],entries:0,flashcards:0,questions:30},
-          {day:29,date:'2026-04-30',phase:'phase3',fa:'FA1',pkaType:'encode-retrieve',focus:'Phase 3: FA1 + FA5 Final Deep Pass (60% of exam)',tasks:["Full entry re-read: all 20 FA1 entries — Exam Points and Decision Criteria only (no full summaries)","Full entry re-read: all 8 FA5 entries — Exam Points and Decision Criteria only","All 25 FA1 flashcards + all 15 FA5 flashcards — out loud, one final pass","Quick pass: 30 FA1+FA5 practice questions","Sleep 8 hours tonight — non-negotiable. You are ready."],entries:28,flashcards:40,questions:30},
-          {day:30,date:'2026-05-01',phase:'phase3',fa:'buffer',pkaType:'light',focus:'Exam Eve — Light Review Only (Exam is Sunday May 3)',tasks:["Review Quick Ref and Decision Criteria notes ONLY — no full entries, no new content","20 mixed flashcards maximum via Practice Mode — stop at 20, your strongest material only","Confirm exam environment: location/login, government ID, system check","Pack or set up everything you need tonight","Relax — you ran the full PKA system for 30 days. Trust the work."],entries:0,flashcards:20,questions:0}
+          {day:27,date:'2026-04-28',phase:'phase3',fa:'mixed',pkaType:'simulate',focus:'Phase 3: Exam Simulation #1 — 165 Questions / 3 Hours',tasks:["EXAM MODE — same setup and mindset as the real thing. No checking mid-session.","165 questions from Questions tab — mixed all FAs — start the 3-hour timer.","DO NOT check answers mid-session. Commit fully. Flag uncertain questions and move on.","After completing: score every answer, categorize every error by FA.","Write down your top 3 weak sub-topics — these drive Days 28 and 29.","Pace: 165 questions / 180 min = ~1 min 5 sec per question."],entries:0,flashcards:0,questions:165},
+          {day:28,date:'2026-04-29',phase:'phase3',fa:'mixed',pkaType:'remediate',focus:'Phase 3: Targeted Remediation + Weak-FA Interleave',tasks:["Return ONLY to entries for weak sub-topics from Day 27 — Exam Points + Decision Criteria only.","Re-drill weak flashcards only — not the full deck.","[INTERLEAVE] Interleave tab: 3 per FA, focused on your weakest 2–3 FAs. Use AI Bridge on every weak entry.","30 targeted questions on weak areas from Questions tab.","Log: Which Decision Criteria distinctions are still causing errors? Carry the list to Day 29."],entries:0,flashcards:0,questions:30},
+          {day:29,date:'2026-04-30',phase:'phase3',fa:'mixed',pkaType:'deep-interleave',focus:'Phase 3: Cross-FA Synthesis — Final Deep Interleave',tasks:["[INTERLEAVE] SESSION 1 (30 min): Interleave tab, 3 per FA, all 5 FAs. Bridge prompts — full answers out loud. AI Bridge on at least 3 entries.","[INTERLEAVE] SESSION 2 (20 min): 2 per FA — focus on the FA pairs where Day 27 errors clustered.","20 mixed practice questions on remaining weak areas.","Log: What bridges are now solid? What is still fuzzy? Carry fuzzy list to Day 30."],entries:0,flashcards:0,questions:20},
+          {day:30,date:'2026-05-01',phase:'phase3',fa:'mixed',pkaType:'simulate',focus:'Phase 3: Exam Simulation #2 — 80 Questions Targeted',tasks:["80 questions from Questions tab, weighted toward your weak FAs. 90-minute timer.","Score and categorize. Compare accuracy to Day 27 — measure the improvement.","Identify any remaining gaps for a 15-minute targeted entry re-read on Day 31.","Rest well tonight. No cramming after this point."],entries:0,flashcards:0,questions:80},
+          {day:31,date:'2026-05-04',phase:'phase3',fa:'FA1',pkaType:'encode-retrieve',focus:'Phase 3: FA1 + FA5 Deep Pass — 60% of the Exam',tasks:["Full re-read: all 20 FA1 entries — Exam Points and Decision Criteria only (no full summaries).","Full re-read: all 8 FA5 entries — Exam Points and Decision Criteria only.","All 25 FA1 flashcards + all 15 FA5 flashcards — out loud, full timed pass.","30 FA1+FA5 practice questions — timed.","FA1 is 40% of your score. FA5 is 20%. These two FAs are more than half the exam."],entries:28,flashcards:40,questions:30},
+          {day:32,date:'2026-05-05',phase:'phase3',fa:'mixed',pkaType:'flashburn',focus:'Phase 3: FA2 + FA3 + FA4 Targeted Review',tasks:["Re-read Exam Points + Decision Criteria for any FA2/FA3/FA4 entries still causing errors.","FA2 weak flashcards + FA3 weak flashcards + FA4 weak flashcards — targeted pass, not full decks.","30 mixed questions across FA2, FA3, FA4 from Questions tab.","No new material. Reinforce only."],entries:0,flashcards:0,questions:30},
+          {day:33,date:'2026-05-06',phase:'phase3',fa:'mixed',pkaType:'deep-interleave',focus:'Phase 3: Final Interleave Session + Quick Reference Lock',tasks:["[INTERLEAVE] Final Interleave session: 2 per FA, all 5 FAs. Last cross-FA synthesis pass — full bridge prompts out loud.","After the session: review the Quick Reference table in the PKA guide — formulas, thresholds, sequences. Say them out loud.","20 mixed flashcards from Practice tab — your strongest material only.","Stop studying by early evening. Rest is preparation."],entries:0,flashcards:20,questions:0},
+          {day:34,date:'2026-05-07',phase:'phase3',fa:'buffer',pkaType:'light',focus:'Exam Eve — Light Review Only (Exam Tomorrow May 8)',tasks:["Quick Reference notes and Decision Criteria distinctions ONLY — no full entries, no new content.","10 mixed flashcards maximum — your absolute strongest material — then stop completely.","Confirm exam environment: location or login, government ID, tech setup.","Prepare everything you need tonight — packed, login tested, ID ready.","Sleep 8 hours. You ran the full PKA system. The knowledge is there."],entries:0,flashcards:10,questions:0}
         ];
 
         function spGetState() {
@@ -3959,7 +3991,7 @@
             if (doneEl) doneEl.textContent = done;
             if (remEl) remEl.textContent = SP_DAYS.length - done;
             if (leftEl) {
-                var diff = Math.ceil((new Date('2026-05-03') - new Date()) / (1000*60*60*24));
+                var diff = Math.ceil((new Date('2026-05-08') - new Date()) / (1000*60*60*24));
                 leftEl.textContent = diff > 0 ? diff : 'EXAM!';
             }
         }
@@ -4263,6 +4295,140 @@ Format your response as JSON only (no markdown, no extra text):
                     <small style="font-family:monospace;">${escapeHtml(helpText)}</small>
                 </div>`;
             }
+        }
+
+        // ==================== FLASH BURN MODE ====================
+
+        function generateFlashBurn() {
+            const selected = document.getElementById('flashBurnFA').value;
+            const allCards = getFlashcards().filter(f => f.activatedDate);
+            const statsEl = document.getElementById('flashBurnStats');
+            const container = document.getElementById('flashBurnSession');
+
+            if (allCards.length === 0) {
+                container.innerHTML = '<p style="color:#78350F;text-align:center;padding:20px;">No activated flashcards yet. Activate items in the Staging tab first.</p>';
+                return;
+            }
+
+            let cards = [];
+            if (selected === 'all') {
+                cards = allCards;
+            } else if (selected === 'FA1+FA5') {
+                cards = allCards.filter(f => f.functionalArea === 'FA1' || f.functionalArea === 'FA5');
+            } else if (selected === 'FA2+FA3') {
+                cards = allCards.filter(f => f.functionalArea === 'FA2' || f.functionalArea === 'FA3');
+            } else {
+                cards = allCards.filter(f => f.functionalArea === selected);
+            }
+
+            if (cards.length === 0) {
+                container.innerHTML = `<p style="color:#78350F;text-align:center;padding:20px;">No activated flashcards found for <strong>${selected}</strong>. Activate them in the Staging tab first.</p>`;
+                return;
+            }
+
+            const shuffled = [...cards].sort(() => Math.random() - 0.5);
+            const faColors = {
+                FA1:{bg:'#EDE9FE',border:'#7C3AED',text:'#4C1D95'},
+                FA2:{bg:'#DBEAFE',border:'#3B82F6',text:'#1E40AF'},
+                FA3:{bg:'#D1FAE5',border:'#10B981',text:'#065F46'},
+                FA4:{bg:'#FEF3C7',border:'#F59E0B',text:'#92400E'},
+                FA5:{bg:'#FCE7F3',border:'#EC4899',text:'#9D174D'},
+            };
+
+            statsEl.innerHTML = `&#9889; <strong>${shuffled.length} flashcards</strong> loaded — ${selected === 'all' ? 'Full Mixed Burn' : selected} &nbsp;|&nbsp; Shuffled randomly &nbsp;|&nbsp; Speak your answer before every reveal`;
+
+            window._fbCards = shuffled;
+            window._fbScore = { correct: 0, wrong: 0, total: shuffled.length };
+
+            let html = `
+            <div style="background:#FEF3C7;padding:12px 16px;border-radius:8px;margin-bottom:14px;border-left:4px solid #F59E0B;">
+                <strong style="color:#92400E;">&#128483; Protocol:</strong>
+                <span style="color:#78350F;"> Speak your answer before clicking Reveal. Struggle 10 seconds minimum. Mark every card Got It or Missed It to track your score.</span>
+            </div>
+            <div style="display:flex;gap:12px;background:#FFF7ED;padding:12px 16px;border-radius:8px;margin-bottom:16px;align-items:center;flex-wrap:wrap;">
+                <span style="color:#78350F;font-weight:600;font-size:0.9em;">Score:</span>
+                <span id="fbScore" style="font-size:1.1em;font-weight:700;color:#D97706;">0 / ${shuffled.length}</span>
+                <div style="margin-left:auto;display:flex;gap:8px;">
+                    <button class="btn btn-small" onclick="fbMarkAll(true)" style="background:#D1FAE5;color:#065F46;border-color:#10B981;">&#9989; All Correct</button>
+                    <button class="btn btn-small" onclick="fbMarkAll(false)" style="background:#FEE2E2;color:#991B1B;border-color:#EF4444;">&#10060; All Wrong</button>
+                </div>
+            </div>`;
+
+            shuffled.forEach((card, i) => {
+                const c = faColors[card.functionalArea] || {bg:'#F8FAFC',border:'#94A3B8',text:'#1E293B'};
+                const tier = getTier(card.activatedDate, card.lastPracticed);
+                const tierBg = tier===1?'#DBEAFE':tier===2?'#FEF3C7':'#E9D5FF';
+                const tierColor = tier===1?'#1E40AF':tier===2?'#92400E':'#6B21A8';
+                html += `
+                <div class="flashcard" style="margin-bottom:12px;border-left:4px solid ${c.border};" id="fb-card-${i}">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
+                        <div style="display:flex;gap:6px;">
+                            <span style="background:${c.bg};color:${c.text};padding:2px 9px;border-radius:5px;font-size:0.75em;font-weight:700;">${card.functionalArea}</span>
+                            <span style="background:${tierBg};color:${tierColor};padding:2px 9px;border-radius:5px;font-size:0.75em;font-weight:700;">T${tier}</span>
+                        </div>
+                        <span style="color:#94A3B8;font-size:0.8em;">${i+1} / ${shuffled.length}</span>
+                    </div>
+                    <div class="flashcard-question" style="margin-bottom:10px;">${escapeHtml(card.question)}</div>
+                    <button class="btn btn-small btn-secondary" id="fb-reveal-btn-${i}" onclick="fbReveal(${i})">&#128065; Reveal Answer</button>
+                    <div id="fb-answer-${i}" style="display:none;margin-top:10px;padding:12px;background:#F0FDF4;border-left:3px solid #10B981;border-radius:4px;">
+                        <strong>A:</strong> ${escapeHtml(card.answer)}
+                    </div>
+                    <div id="fb-actions-${i}" style="display:none;margin-top:10px;gap:8px;flex-wrap:wrap;">
+                        <button class="btn btn-small" onclick="fbMark('${card.id}',${i},true)" style="background:#D1FAE5;border-color:#10B981;color:#065F46;">&#9989; Got it</button>
+                        <button class="btn btn-small" onclick="fbMark('${card.id}',${i},false)" style="background:#FEE2E2;border-color:#EF4444;color:#991B1B;">&#10060; Missed it</button>
+                    </div>
+                </div>`;
+            });
+
+            html += `
+            <div style="text-align:center;padding:24px;background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-radius:12px;margin-top:8px;">
+                <div style="font-size:2em;margin-bottom:8px;">&#9889;</div>
+                <h4 style="color:#92400E;margin-bottom:8px;">Burn Complete!</h4>
+                <p style="color:#78350F;font-size:0.9em;margin-bottom:14px;">Any FA scoring below 70% is a Phase 3 priority.</p>
+                <button class="btn btn-primary" onclick="generateFlashBurn()" style="background:linear-gradient(135deg,#F59E0B,#D97706);border-color:#B45309;">&#9889; Burn Again (New Shuffle)</button>
+            </div>`;
+
+            container.innerHTML = html;
+        }
+
+        function fbReveal(i) {
+            const btn = document.getElementById(`fb-reveal-btn-${i}`);
+            const ans = document.getElementById(`fb-answer-${i}`);
+            const act = document.getElementById(`fb-actions-${i}`);
+            if (btn) btn.style.display = 'none';
+            if (ans) ans.style.display = 'block';
+            if (act) act.style.display = 'flex';
+        }
+
+        function fbMark(cardId, idx, correct) {
+            if (!window._fbScore) return;
+            const card = document.getElementById(`fb-card-${idx}`);
+            if (correct) {
+                window._fbScore.correct++;
+                if (card) card.style.background = '#F0FDF4';
+            } else {
+                window._fbScore.wrong++;
+                if (card) card.style.background = '#FEF2F2';
+            }
+            const done = window._fbScore.correct + window._fbScore.wrong;
+            const pct = Math.round((window._fbScore.correct / window._fbScore.total) * 100);
+            const scoreEl = document.getElementById('fbScore');
+            if (scoreEl) scoreEl.innerHTML = `${window._fbScore.correct} / ${window._fbScore.total} &nbsp;<span style="color:#64748B;font-size:0.85em;">(${pct}% correct, ${done} graded)</span>`;
+            markFlashcardPracticed(cardId);
+        }
+
+        function fbMarkAll(correct) {
+            if (!window._fbCards) return;
+            window._fbCards.forEach((card, i) => {
+                const btn = document.getElementById(`fb-reveal-btn-${i}`);
+                if (btn && btn.style.display !== 'none') {
+                    fbReveal(i);
+                }
+                const act = document.getElementById(`fb-actions-${i}`);
+                if (act && act.style.display !== 'none' || act && act.style.display === 'flex') {
+                    fbMark(card.id, i, correct);
+                }
+            });
         }
 
         // ==================== INITIALIZATION ====================
