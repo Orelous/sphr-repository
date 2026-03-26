@@ -3588,10 +3588,13 @@
                             <strong>Recall:</strong> Core concept · When it appears on the exam · Key failure patterns · Decision Criteria
                         </div>
                         <button class="btn btn-small btn-secondary" onclick="this.nextElementSibling.style.display='block';this.style.display='none';">Reveal Answer</button>
-                        <div style="display:none;margin-top:13px;padding:14px;background:#F0FDF4;border-left:4px solid #10B981;border-radius:4px;">
-                            <strong>Summary:</strong> ${escapeHtml(entry.summary)}<br><br>
-                            ${entry.examPoints?`<strong>Exam Points:</strong> ${escapeHtml(entry.examPoints)}`:''}
-                            ${entry.decisionCriteria?`<br><br><strong>Decision Criteria:</strong> ${escapeHtml(entry.decisionCriteria)}`:''}
+                        <div style="display:none;margin-top:13px;">
+                            <div style="padding:14px;background:#F0FDF4;border-left:4px solid #10B981;border-radius:4px;margin-bottom:${entry.failurePatterns?'8px':'0'};">
+                                <strong>Summary:</strong> ${escapeHtml(entry.summary)}<br><br>
+                                ${entry.examPoints?`<strong>Exam Points:</strong> ${escapeHtml(entry.examPoints)}`:''}
+                                ${entry.decisionCriteria?`<br><br><strong>Decision Criteria:</strong> ${escapeHtml(entry.decisionCriteria)}`:''}
+                            </div>
+                            ${entry.failurePatterns?`<div style="padding:12px 14px;background:#FEF2F2;border-left:4px solid #EF4444;border-radius:4px;"><strong style="color:#991B1B;">⚠ Key Failure Patterns:</strong><div style="color:#7F1D1D;margin-top:5px;">${escapeHtml(entry.failurePatterns)}</div></div>`:''}
                         </div>
                         <button class="btn btn-small btn-primary" onclick="markEntryPracticed('${entry.id}')" style="margin-top:10px;">⏱ Mark Practiced</button>
                     </div>`;
@@ -4196,6 +4199,11 @@
                                 ${e.examPoints ? `<strong>Exam Points:</strong> ${escapeHtml(e.examPoints)}` : ''}
                                 ${e.quickRef ? `<br><br><strong>Quick Ref:</strong> ${escapeHtml(e.quickRef)}` : ''}
                             </div>
+                            ${e.failurePatterns ? `
+                            <div style="margin-top:10px;padding:13px 15px;background:#FEF2F2;border-left:4px solid #EF4444;border-radius:6px;">
+                                <strong style="color:#991B1B;">⚠ Key Failure Patterns:</strong>
+                                <div style="color:#7F1D1D;margin-top:6px;">${escapeHtml(e.failurePatterns)}</div>
+                            </div>` : ''}
                             ${bridgePromptsHTML}
                             <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
                                 <button class="btn btn-small btn-primary" onclick="markEntryPracticed('${e.id}')">&#9200; Mark Practiced</button>
