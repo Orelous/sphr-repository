@@ -1074,6 +1074,7 @@
             <button class="nav-tab" data-tab="flashcards">&#127183; Flashcards</button>
             <button class="nav-tab" data-tab="questions">&#10067; Questions</button>
             <button class="nav-tab" data-tab="practice">&#129504; Practice</button>
+            <button class="nav-tab" data-tab="exammode">&#127981; Exam Mode</button>
             <button class="nav-tab" data-tab="add">&#10133; Add Content</button>
             <button class="nav-tab" data-tab="manage">&#9881; Manage Data</button>
             <button class="nav-tab" data-tab="studyplan">&#128197; Study Plan</button>
@@ -1545,6 +1546,99 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Exam Mode Tab -->
+        <div class="tab-content" id="exammode">
+            <div style="max-width: 960px; margin: 0 auto;">
+
+                <!-- Mode selector -->
+                <div id="examModeSelector" style="display:block;">
+                    <h2 style="margin-bottom: 6px; color: #1E3A8A;">&#127981; Exam Mode</h2>
+                    <p style="color:#64748B; margin-bottom: 28px;">Choose a mode. Each session is scored and tracked separately from regular practice.</p>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-bottom: 30px;">
+
+                        <!-- End-of-FA Test -->
+                        <div style="border: 2px solid #DBEAFE; border-radius: 12px; padding: 24px; background: #F8FAFF; cursor: pointer;" onclick="launchEndOfFA()">
+                            <div style="font-size: 2em; margin-bottom: 10px;">&#128203;</div>
+                            <div style="font-weight: 700; font-size: 1.1em; color: #1E3A8A; margin-bottom: 8px;">End-of-FA Test</div>
+                            <div style="color: #64748B; font-size: 0.9em; margin-bottom: 16px;">Run all questions for one functional area. Use after completing each FA in Phase 1.</div>
+                            <select id="endOfFASelect" onclick="event.stopPropagation()" style="width:100%; padding:8px; border-radius:6px; border:1px solid #CBD5E1; font-size:0.9em;">
+                                <option value="FA1">FA1: Leadership & Strategy (33%)</option>
+                                <option value="FA2">FA2: Workforce Planning (17%)</option>
+                                <option value="FA3">FA3: Talent Management (23%)</option>
+                                <option value="FA4">FA4: Total Rewards (17%)</option>
+                                <option value="FA5">FA5: HR Info & Safety (10%)</option>
+                            </select>
+                            <button class="btn btn-primary" style="width:100%; margin-top:12px;" onclick="event.stopPropagation(); launchEndOfFA()">Start FA Test &#9658;</button>
+                        </div>
+
+                        <!-- Comprehensive Exam -->
+                        <div style="border: 2px solid #D1FAE5; border-radius: 12px; padding: 24px; background: #F0FDF8; cursor: pointer;" onclick="launchComprehensive()">
+                            <div style="font-size: 2em; margin-bottom: 10px;">&#9200;</div>
+                            <div style="font-weight: 700; font-size: 1.1em; color: #065F46; margin-bottom: 8px;">Comprehensive Exam</div>
+                            <div style="color: #64748B; font-size: 0.9em; margin-bottom: 16px;">165 questions · 3-hour timer · All FAs mixed. Full exam simulation. Use on Day 32.</div>
+                            <div style="background: #FEF3C7; border-radius: 6px; padding: 8px 12px; font-size: 0.85em; color: #92400E; margin-bottom: 12px;">
+                                &#9888; Do not check answers mid-session. Commit fully.
+                            </div>
+                            <button class="btn btn-primary" style="width:100%; background:#065F46; border-color:#065F46;" onclick="event.stopPropagation(); launchComprehensive()">Start Full Exam &#9658;</button>
+                        </div>
+
+                        <!-- Weak Areas Focus -->
+                        <div style="border: 2px solid #EDE9FE; border-radius: 12px; padding: 24px; background: #FAFAFE; cursor: pointer;" onclick="launchWeakFocus()">
+                            <div style="font-size: 2em; margin-bottom: 10px;">&#127919;</div>
+                            <div style="font-weight: 700; font-size: 1.1em; color: #7C3AED; margin-bottom: 8px;">Weak Areas Focus</div>
+                            <div style="color: #64748B; font-size: 0.9em; margin-bottom: 16px;">Questions you've answered wrong most. Prioritizes low-accuracy items across all FAs.</div>
+                            <div id="weakAreasSummary" style="font-size: 0.85em; color: #7C3AED; margin-bottom: 12px;">Loading weak areas...</div>
+                            <button class="btn btn-primary" style="width:100%; background:#7C3AED; border-color:#7C3AED;" onclick="event.stopPropagation(); launchWeakFocus()">Drill Weak Areas &#9658;</button>
+                        </div>
+                    </div>
+
+                    <!-- Session history -->
+                    <div style="border: 1px solid #E2E8F0; border-radius: 10px; padding: 20px; background: #F8FAFC;">
+                        <div style="font-weight: 600; color: #374151; margin-bottom: 14px;">&#128202; Recent Exam Sessions</div>
+                        <div id="examSessionHistory">Loading...</div>
+                    </div>
+                </div>
+
+                <!-- Active exam panel -->
+                <div id="examActivePanel" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:10px;">
+                        <div>
+                            <span id="examModeLabel" style="font-weight:700; font-size:1.1em; color:#1E3A8A;"></span>
+                            <span id="examQCounter" style="color:#64748B; font-size:0.9em; margin-left:12px;"></span>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:14px;">
+                            <div id="examTimerDisplay" style="display:none; font-size:1.3em; font-weight:700; color:#065F46; font-family:monospace; background:#D1FAE5; padding:6px 16px; border-radius:8px;"></div>
+                            <button class="btn btn-secondary" onclick="abandonExam()" style="font-size:0.85em;">&#9209; Exit Session</button>
+                        </div>
+                    </div>
+
+                    <!-- Progress bar -->
+                    <div style="background:#E2E8F0; border-radius:4px; height:6px; margin-bottom:24px;">
+                        <div id="examProgressBar" style="background:#1E3A8A; height:6px; border-radius:4px; width:0%; transition:width 0.3s;"></div>
+                    </div>
+
+                    <div id="examQuestionsContainer"></div>
+
+                    <!-- Submit all (for comprehensive) -->
+                    <div id="examSubmitRow" style="display:none; margin-top:30px; text-align:center;">
+                        <button class="btn btn-primary" style="padding:14px 40px; font-size:1.05em;" onclick="submitFullExam()">&#10003; Submit Exam &amp; See Results</button>
+                    </div>
+
+                    <!-- Results panel -->
+                    <div id="examResultsPanel" style="display:none; margin-top:30px; border:2px solid #10B981; border-radius:12px; padding:28px; background:#F0FDF4;">
+                        <h3 style="color:#065F46; margin-bottom:16px;">&#127881; Session Results</h3>
+                        <div id="examResultsContent"></div>
+                        <div style="margin-top:20px; display:flex; gap:12px; flex-wrap:wrap;">
+                            <button class="btn btn-primary" onclick="showExamModeSelector()">&#8592; Back to Exam Mode</button>
+                            <button class="btn btn-secondary" onclick="retryExamSession()">&#8635; Retry Same Session</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
@@ -2064,6 +2158,7 @@
                     case 'flashcards': renderFlashcards(); break;
                     case 'questions': renderQuestions(); break;
                     case 'practice': updatePracticeDashboard(); break;
+                    case 'exammode': initExamModeTab(); break;
                     case 'studyplan': renderStudyPlan(); break;
                 }
             });
@@ -3998,6 +4093,439 @@
         // Console welcome message
         console.log('%cSPHR Knowledge Repository', 'font-size: 20px; font-weight: bold; color: #7C3AED;');
         console.log('%cPKA Learning System v4.0 | Phase 4: Staging System', 'font-size: 12px; color: #64748B;');
+        // ==================== EXAM MODE ====================
+
+        let examState = null; // current session state
+
+        function initExamModeTab() {
+            showExamModeSelector();
+            renderExamHistory();
+            updateWeakAreasSummary();
+        }
+
+        function showExamModeSelector() {
+            document.getElementById('examModeSelector').style.display = 'block';
+            document.getElementById('examActivePanel').style.display = 'none';
+            document.getElementById('examResultsPanel').style.display = 'none';
+            stopExamTimer();
+            renderExamHistory();
+            updateWeakAreasSummary();
+        }
+
+        function updateWeakAreasSummary() {
+            const questions = getQuestions().filter(q => q.timesPracticed > 0);
+            const weak = questions.filter(q => {
+                const acc = q.timesCorrect / q.timesPracticed;
+                return acc < 0.7;
+            });
+            const el = document.getElementById('weakAreasSummary');
+            if (el) {
+                el.textContent = weak.length > 0
+                    ? `${weak.length} weak question${weak.length !== 1 ? 's' : ''} identified (< 70% accuracy)`
+                    : 'No weak areas yet — complete some questions first.';
+            }
+        }
+
+        function getExamSessions() {
+            try { return JSON.parse(localStorage.getItem('sphr_exam_sessions') || '[]'); } catch(e) { return []; }
+        }
+
+        function saveExamSession(session) {
+            const sessions = getExamSessions();
+            sessions.unshift(session);
+            localStorage.setItem('sphr_exam_sessions', JSON.stringify(sessions.slice(0, 20)));
+        }
+
+        function renderExamHistory() {
+            const sessions = getExamSessions();
+            const el = document.getElementById('examSessionHistory');
+            if (!el) return;
+            if (sessions.length === 0) {
+                el.innerHTML = '<p style="color:#94A3B8; font-size:0.9em;">No exam sessions yet. Launch a mode above to start.</p>';
+                return;
+            }
+            el.innerHTML = sessions.slice(0, 5).map(s => {
+                const pct = Math.round((s.correct / s.total) * 100);
+                const color = pct >= 80 ? '#10B981' : pct >= 65 ? '#F59E0B' : '#EF4444';
+                const date = new Date(s.date).toLocaleDateString('en-US', { month:'short', day:'numeric', hour:'numeric', minute:'2-digit' });
+                return `<div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #F1F5F9; font-size:0.9em;">
+                    <div>
+                        <span style="font-weight:600; color:#374151;">${s.mode}</span>
+                        <span style="color:#64748B; margin-left:10px;">${date}</span>
+                    </div>
+                    <div style="font-weight:700; color:${color};">${s.correct}/${s.total} (${pct}%)</div>
+                </div>`;
+            }).join('');
+        }
+
+        // ── LAUNCH MODES ──────────────────────────────────────────────
+
+        function launchEndOfFA() {
+            const fa = document.getElementById('endOfFASelect').value;
+            const allQ = getQuestions().filter(q => q.functionalArea === fa);
+            if (allQ.length === 0) {
+                alert(`No questions found for ${fa}. Make sure questions are imported.`);
+                return;
+            }
+            const shuffled = shuffleArray([...allQ]);
+            startExamSession({
+                mode: `End-of-FA Test · ${fa}`,
+                questions: shuffled,
+                timed: false,
+                showSubmitAll: false,
+                fa: fa
+            });
+        }
+
+        function launchComprehensive() {
+            const allQ = getQuestions();
+            if (allQ.length < 10) {
+                alert('Not enough questions loaded for a comprehensive exam.');
+                return;
+            }
+            // Target 165, shuffle all, cap at 165
+            const shuffled = shuffleArray([...allQ]).slice(0, 165);
+            startExamSession({
+                mode: 'Comprehensive Exam · 165Q · 3hr',
+                questions: shuffled,
+                timed: true,
+                timerSeconds: 3 * 60 * 60,
+                showSubmitAll: true,
+                fa: 'ALL'
+            });
+        }
+
+        function launchWeakFocus() {
+            const allQ = getQuestions().filter(q => q.timesPracticed > 0);
+            const weak = allQ
+                .filter(q => (q.timesCorrect || 0) / q.timesPracticed < 0.7)
+                .sort((a, b) => (a.timesCorrect/a.timesPracticed) - (b.timesCorrect/b.timesPracticed));
+            if (weak.length === 0) {
+                alert('No weak areas identified yet. Complete some questions in the Questions tab first, then return here.');
+                return;
+            }
+            startExamSession({
+                mode: `Weak Areas Focus · ${weak.length}Q`,
+                questions: shuffleArray([...weak]),
+                timed: false,
+                showSubmitAll: false,
+                fa: 'WEAK'
+            });
+        }
+
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // ── SESSION ENGINE ────────────────────────────────────────────
+
+        function startExamSession(config) {
+            examState = {
+                mode: config.mode,
+                questions: config.questions,
+                timed: config.timed || false,
+                timerSeconds: config.timerSeconds || 0,
+                showSubmitAll: config.showSubmitAll || false,
+                fa: config.fa,
+                startTime: Date.now(),
+                answers: {},      // qId -> selected letter(s)
+                graded: false
+            };
+
+            document.getElementById('examModeSelector').style.display = 'none';
+            document.getElementById('examActivePanel').style.display = 'block';
+            document.getElementById('examResultsPanel').style.display = 'none';
+            document.getElementById('examSubmitRow').style.display = config.showSubmitAll ? 'block' : 'none';
+
+            document.getElementById('examModeLabel').textContent = config.mode;
+            updateExamProgress(0, config.questions.length);
+
+            if (config.timed) {
+                document.getElementById('examTimerDisplay').style.display = 'block';
+                startExamTimer(config.timerSeconds);
+            } else {
+                document.getElementById('examTimerDisplay').style.display = 'none';
+            }
+
+            renderExamQuestions(config.questions, config.showSubmitAll);
+        }
+
+        function renderExamQuestions(questions, submitAll) {
+            const container = document.getElementById('examQuestionsContainer');
+            container.innerHTML = questions.map((q, idx) => {
+                const multi = isMultiSelect(q);
+                const correctArr = getCorrectArray(q.correctAnswer);
+                const correctEncoded = encodeURIComponent(JSON.stringify(correctArr));
+                const modePrefix = submitAll ? 'exam' : 'examimm'; // immediate vs deferred grading
+
+                const optionItems = ['A','B','C','D'].map(letter => {
+                    const text = escapeHtml(q['option' + letter] || '');
+                    if (!text) return '';
+                    if (submitAll) {
+                        // Comprehensive mode: just toggleable, graded on submit
+                        return `<li class="answer-option ${multi ? '' : 'exam-single'}" 
+                                    data-option="${letter}" data-qid="${q.id}" data-multi="${multi}"
+                                    onclick="examToggleOption(this, ${multi})">
+                                    ${letter}. ${text}
+                                </li>`;
+                    } else {
+                        // Immediate feedback mode
+                        if (multi) {
+                            return `<li class="answer-option" data-option="${letter}" data-qid="${q.id}"
+                                        onclick="toggleMultiOption(this)">
+                                        ${letter}. ${text}
+                                    </li>`;
+                        } else {
+                            return `<li class="answer-option" data-option="${letter}"
+                                        onclick="examImmediateSingle('${q.id}', '${letter}', '${correctArr[0]}', ${idx}, ${questions.length})">
+                                        ${letter}. ${text}
+                                    </li>`;
+                        }
+                    }
+                }).join('');
+
+                const multiHint = multi ? `<div class="multi-select-hint">&#10003; Select all correct answers${submitAll ? '' : ', then click Check Answer'}</div>` : '';
+                const checkBtn = (!submitAll && multi)
+                    ? `<button class="btn-check-answer" onclick="examImmediateMulti('${q.id}', '${correctEncoded}', ${idx}, ${questions.length})">Check Answer</button>`
+                    : '';
+
+                return `<div class="review-question" id="examq-${q.id}" data-idx="${idx}">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                        <span style="font-size:0.85em; color:#94A3B8; font-weight:600;">Q${idx+1} of ${questions.length}</span>
+                        <span class="entry-fa-badge fa-${q.functionalArea.slice(-1)}">${q.functionalArea}${multi ? ' · Multi-Select' : ''}</span>
+                    </div>
+                    <div class="question-stem">${escapeHtml(q.stem)}</div>
+                    ${multiHint}
+                    <ul class="answer-options">${optionItems}</ul>
+                    ${checkBtn}
+                    <div id="examexp-${q.id}" style="display:none; margin-top:15px; padding:15px; background:#F0FDF4; border-left:4px solid #10B981; border-radius:4px;">
+                        <strong>Explanation:</strong> ${escapeHtml(q.explanation || 'No explanation provided.')}
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        // Comprehensive mode: toggle selection (single = radio behavior, multi = checkbox)
+        function examToggleOption(el, isMulti) {
+            if (el.classList.contains('correct') || el.classList.contains('incorrect')) return;
+            const qid = el.dataset.qid;
+            const siblings = document.querySelectorAll(`[data-qid="${qid}"]`);
+            if (!isMulti) {
+                // Radio: deselect others
+                siblings.forEach(s => s.classList.remove('selected'));
+            }
+            el.classList.toggle('selected');
+        }
+
+        // Immediate mode single answer
+        function examImmediateSingle(qid, selected, correct, idx, total) {
+            const qel = document.getElementById('examq-' + qid);
+            qel.querySelectorAll('.answer-option').forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                opt.classList.remove('selected');
+                if (opt.dataset.option === correct) opt.classList.add('correct');
+                else if (opt.dataset.option === selected) opt.classList.add('incorrect');
+            });
+            document.getElementById('examexp-' + qid).style.display = 'block';
+            trackExamAnswer(qid, [selected], [correct]);
+            updateExamProgress(idx + 1, total);
+        }
+
+        // Immediate mode multi answer
+        function examImmediateMulti(qid, correctEncoded, idx, total) {
+            const correct = JSON.parse(decodeURIComponent(correctEncoded));
+            const qel = document.getElementById('examq-' + qid);
+            const selected = [];
+            qel.querySelectorAll('.answer-option').forEach(opt => {
+                if (opt.classList.contains('selected')) selected.push(opt.dataset.option);
+            });
+            qel.querySelectorAll('.answer-option').forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                opt.classList.remove('selected');
+                if (correct.includes(opt.dataset.option)) opt.classList.add('correct');
+                else if (selected.includes(opt.dataset.option)) opt.classList.add('incorrect');
+            });
+            const btn = qel.querySelector('.btn-check-answer');
+            if (btn) btn.style.display = 'none';
+            document.getElementById('examexp-' + qid).style.display = 'block';
+            trackExamAnswer(qid, selected, correct);
+            updateExamProgress(idx + 1, total);
+        }
+
+        function trackExamAnswer(qid, selected, correct) {
+            if (!examState) return;
+            const isCorrect = selected.length === correct.length && correct.every(c => selected.includes(c));
+            examState.answers[qid] = { selected, correct, isCorrect };
+        }
+
+        function updateExamProgress(done, total) {
+            const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+            document.getElementById('examProgressBar').style.width = pct + '%';
+            document.getElementById('examQCounter').textContent = `${done} / ${total} answered`;
+        }
+
+        // ── COMPREHENSIVE SUBMIT ──────────────────────────────────────
+
+        function submitFullExam() {
+            if (!examState) return;
+            const questions = examState.questions;
+            let answered = 0;
+
+            questions.forEach(q => {
+                const qel = document.getElementById('examq-' + q.id);
+                if (!qel) return;
+                const selected = [];
+                qel.querySelectorAll('.answer-option.selected').forEach(opt => selected.push(opt.dataset.option));
+                const correct = getCorrectArray(q.correctAnswer);
+
+                // Grade it
+                qel.querySelectorAll('.answer-option').forEach(opt => {
+                    opt.style.pointerEvents = 'none';
+                    opt.classList.remove('selected');
+                    if (correct.includes(opt.dataset.option)) opt.classList.add('correct');
+                    else if (selected.includes(opt.dataset.option)) opt.classList.add('incorrect');
+                });
+                document.getElementById('examexp-' + q.id).style.display = 'block';
+                if (selected.length > 0) answered++;
+                trackExamAnswer(q.id, selected, correct);
+            });
+
+            stopExamTimer();
+            document.getElementById('examSubmitRow').style.display = 'none';
+            showExamResults();
+        }
+
+        // ── RESULTS ──────────────────────────────────────────────────
+
+        function showExamResults() {
+            if (!examState) return;
+            const answers = Object.values(examState.answers);
+            const total = examState.questions.length;
+            const correct = answers.filter(a => a.isCorrect).length;
+            const pct = total > 0 ? Math.round((correct / total) * 100) : 0;
+
+            // Per-FA breakdown
+            const faBreakdown = {};
+            examState.questions.forEach(q => {
+                const fa = q.functionalArea;
+                if (!faBreakdown[fa]) faBreakdown[fa] = { total: 0, correct: 0 };
+                faBreakdown[fa].total++;
+                const ans = examState.answers[q.id];
+                if (ans && ans.isCorrect) faBreakdown[fa].correct++;
+            });
+
+            const color = pct >= 80 ? '#10B981' : pct >= 65 ? '#F59E0B' : '#EF4444';
+            const grade = pct >= 80 ? '&#127881; Strong Pass' : pct >= 65 ? '&#9888; Borderline' : '&#128308; Needs Work';
+
+            const faRows = Object.entries(faBreakdown).map(([fa, data]) => {
+                const faPct = Math.round((data.correct / data.total) * 100);
+                const faColor = faPct >= 80 ? '#10B981' : faPct >= 65 ? '#F59E0B' : '#EF4444';
+                return `<div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #E2E8F0; font-size:0.9em;">
+                    <span style="color:#374151; font-weight:600;">${fa}</span>
+                    <span style="color:${faColor}; font-weight:700;">${data.correct}/${data.total} (${faPct}%)</span>
+                </div>`;
+            }).join('');
+
+            const elapsed = Math.round((Date.now() - examState.startTime) / 1000);
+            const elapsedStr = elapsed >= 3600
+                ? `${Math.floor(elapsed/3600)}h ${Math.floor((elapsed%3600)/60)}m`
+                : `${Math.floor(elapsed/60)}m ${elapsed%60}s`;
+
+            document.getElementById('examResultsContent').innerHTML = `
+                <div style="text-align:center; margin-bottom:24px;">
+                    <div style="font-size:3em; font-weight:800; color:${color};">${pct}%</div>
+                    <div style="font-size:1.2em; margin-top:4px;">${grade}</div>
+                    <div style="color:#64748B; margin-top:8px;">${correct} correct of ${total} questions · ${elapsedStr}</div>
+                </div>
+                <div style="margin-bottom:16px;">${faRows}</div>
+                ${pct < 80 ? '<div style="margin-top:16px; padding:12px 16px; background:#FEF3C7; border-left:4px solid #F59E0B; border-radius:6px; font-size:0.9em; color:#92400E;"><strong>&#128270; Weak areas to review:</strong> Any FA below 70% should be targeted in your next remediation session. Use Weak Areas Focus mode to drill those questions specifically.</div>' : ''}
+            `;
+
+            // Save session
+            saveExamSession({
+                date: new Date().toISOString(),
+                mode: examState.mode,
+                correct, total,
+                elapsed,
+                faBreakdown
+            });
+
+            // Log to question practice records
+            examState.questions.forEach(q => {
+                const ans = examState.answers[q.id];
+                if (ans) logQuestionPractice(q.id, ans.isCorrect);
+            });
+
+            document.getElementById('examResultsPanel').style.display = 'block';
+            document.getElementById('examResultsPanel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function retryExamSession() {
+            if (!examState) return;
+            const config = {
+                mode: examState.mode,
+                questions: shuffleArray([...examState.questions]),
+                timed: examState.timed,
+                timerSeconds: examState.timerSeconds,
+                showSubmitAll: examState.showSubmitAll,
+                fa: examState.fa
+            };
+            startExamSession(config);
+        }
+
+        function abandonExam() {
+            if (Object.keys(examState?.answers || {}).length > 0) {
+                showExamResults();
+            } else {
+                showExamModeSelector();
+            }
+        }
+
+        // ── TIMER ────────────────────────────────────────────────────
+
+        let examTimerInterval = null;
+
+        function startExamTimer(totalSeconds) {
+            let remaining = totalSeconds;
+            const display = document.getElementById('examTimerDisplay');
+            stopExamTimer();
+            function tick() {
+                if (remaining <= 0) {
+                    display.textContent = 'TIME UP';
+                    display.style.background = '#FEE2E2';
+                    display.style.color = '#EF4444';
+                    stopExamTimer();
+                    submitFullExam();
+                    return;
+                }
+                const h = Math.floor(remaining / 3600);
+                const m = Math.floor((remaining % 3600) / 60);
+                const s = remaining % 60;
+                display.textContent = h > 0
+                    ? `${h}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
+                    : `${m}:${String(s).padStart(2,'0')}`;
+                // Turn orange under 10 min
+                if (remaining <= 600) {
+                    display.style.background = '#FEF3C7';
+                    display.style.color = '#92400E';
+                }
+                remaining--;
+            }
+            tick();
+            examTimerInterval = setInterval(tick, 1000);
+        }
+
+        function stopExamTimer() {
+            if (examTimerInterval) {
+                clearInterval(examTimerInterval);
+                examTimerInterval = null;
+            }
+        }
+
         console.log('%cReady for exam preparation!', 'font-size: 12px; color: #10B981;');
     </script>
 </body>
