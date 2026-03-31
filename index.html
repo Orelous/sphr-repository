@@ -4331,7 +4331,9 @@
                 else if (opt.dataset.option === selected) opt.classList.add('incorrect');
             });
             document.getElementById('examexp-' + qid).style.display = 'block';
+            const isCorrect = selected === correct;
             trackExamAnswer(qid, [selected], [correct]);
+            logQuestionPractice(qid, isCorrect);  // write to localStorage immediately
             updateExamProgress(idx + 1, total);
         }
 
@@ -4352,7 +4354,9 @@
             const btn = qel.querySelector('.btn-check-answer');
             if (btn) btn.style.display = 'none';
             document.getElementById('examexp-' + qid).style.display = 'block';
+            const isCorrect = selected.length === correct.length && correct.every(c => selected.includes(c));
             trackExamAnswer(qid, selected, correct);
+            logQuestionPractice(qid, isCorrect);  // write to localStorage immediately
             updateExamProgress(idx + 1, total);
         }
 
@@ -4454,14 +4458,18 @@
                 faBreakdown
             });
 
-            // Log to question practice records
-            examState.questions.forEach(q => {
-                const ans = examState.answers[q.id];
-                if (ans) logQuestionPractice(q.id, ans.isCorrect);
-            });
+            // Log to question practice records — only for comprehensive (deferred) mode
+            // Immediate-feedback modes (End-of-FA, Weak Focus) already logged per-answer
+            if (examState.showSubmitAll) {
+                examState.questions.forEach(q => {
+                    const ans = examState.answers[q.id];
+                    if (ans) logQuestionPractice(q.id, ans.isCorrect);
+                });
+            }
 
             document.getElementById('examResultsPanel').style.display = 'block';
             document.getElementById('examResultsPanel').scrollIntoView({ behavior: 'smooth' });
+            updateDashboard(); // refresh FA accuracy bars and weak areas immediately
         }
 
         function retryExamSession() {
