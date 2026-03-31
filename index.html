@@ -900,6 +900,36 @@
             border-color: #EF4444;
         }
 
+        .answer-option.selected {
+            background: #EDE9FE;
+            border-color: #7C3AED;
+        }
+
+        .multi-select-hint {
+            font-size: 0.82em;
+            color: #7C3AED;
+            font-weight: 600;
+            margin-bottom: 10px;
+            padding: 6px 12px;
+            background: #EDE9FE;
+            border-radius: 6px;
+            display: inline-block;
+        }
+
+        .btn-check-answer {
+            margin-top: 12px;
+            padding: 8px 20px;
+            background: #7C3AED;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .btn-check-answer:hover { background: #6D28D9; }
+
         /* Responsive */
         @media (max-width: 768px) {
             .header-content {
@@ -3019,6 +3049,18 @@
 
         // ==================== QUESTIONS CRUD ====================
 
+        function isMultiSelect(q) {
+            return Array.isArray(q.correctAnswer) || 
+                   (typeof q.correctAnswer === 'string' && q.correctAnswer.includes(','));
+        }
+
+        function getCorrectArray(correctAnswer) {
+            if (Array.isArray(correctAnswer)) return correctAnswer.map(x => x.trim().toUpperCase());
+            if (typeof correctAnswer === 'string' && correctAnswer.includes(','))
+                return correctAnswer.split(',').map(x => x.trim().toUpperCase());
+            return [String(correctAnswer).trim().toUpperCase()];
+        }
+
         function renderQuestions(filtered = null) {
             const questions = filtered || getQuestions();
             const container = document.getElementById('questionsResults');
@@ -3028,19 +3070,46 @@
                 return;
             }
 
-            container.innerHTML = questions.map(q => `
+            container.innerHTML = questions.map(q => {
+                const multi = isMultiSelect(q);
+                const correctArr = getCorrectArray(q.correctAnswer);
+                // Encode correctAnswer safely for data attribute
+                const correctEncoded = encodeURIComponent(JSON.stringify(correctArr));
+
+                const optionItems = ['A','B','C','D'].map(letter => {
+                    const text = escapeHtml(q['option' + letter] || '');
+                    if (!text) return '';
+                    if (multi) {
+                        return `<li class="answer-option" data-option="${letter}" 
+                                    data-qid="${q.id}" 
+                                    onclick="toggleMultiOption(this)">
+                                    ${letter}. ${text}
+                                </li>`;
+                    } else {
+                        return `<li class="answer-option" data-option="${letter}" 
+                                    onclick="checkSingleAnswer('${q.id}', '${letter}', '${correctArr[0]}')">
+                                    ${letter}. ${text}
+                                </li>`;
+                    }
+                }).join('');
+
+                const multiHint = multi 
+                    ? `<div class="multi-select-hint">✓ Select all correct answers, then click Check Answer</div>` 
+                    : '';
+                const submitBtn = multi 
+                    ? `<button class="btn-check-answer" onclick="checkMultiAnswer('${q.id}', '${correctEncoded}')">Check Answer</button>` 
+                    : '';
+
+                return `
                 <div class="review-question" id="question-${q.id}">
                     <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 15px;">
-                        <span class="content-type-badge type-question">Review Question</span>
+                        <span class="content-type-badge type-question">${multi ? 'Multi-Select' : 'Review Question'}</span>
                         <span class="entry-fa-badge fa-${q.functionalArea.slice(-1)}">${q.functionalArea}</span>
                     </div>
                     <div class="question-stem">${escapeHtml(q.stem)}</div>
-                    <ul class="answer-options">
-                        <li class="answer-option" data-option="A" onclick="checkAnswer('${q.id}', 'A', '${q.correctAnswer}')">A. ${escapeHtml(q.optionA)}</li>
-                        <li class="answer-option" data-option="B" onclick="checkAnswer('${q.id}', 'B', '${q.correctAnswer}')">B. ${escapeHtml(q.optionB)}</li>
-                        <li class="answer-option" data-option="C" onclick="checkAnswer('${q.id}', 'C', '${q.correctAnswer}')">C. ${escapeHtml(q.optionC)}</li>
-                        <li class="answer-option" data-option="D" onclick="checkAnswer('${q.id}', 'D', '${q.correctAnswer}')">D. ${escapeHtml(q.optionD)}</li>
-                    </ul>
+                    ${multiHint}
+                    <ul class="answer-options">${optionItems}</ul>
+                    ${submitBtn}
                     <div id="explanation-${q.id}" style="display: none; margin-top: 15px; padding: 15px; background: #F0FDF4; border-left: 4px solid #10B981; border-radius: 4px;">
                         <strong>Explanation:</strong> ${escapeHtml(q.explanation || 'No explanation provided.')}
                     </div>
@@ -3048,45 +3117,99 @@
                         <button class="btn btn-small btn-secondary" onclick="resetQuestion('${q.id}')">Reset</button>
                         <button class="btn btn-small btn-delete" onclick="deleteQuestion('${q.id}')"></button>
                     </div>
-                </div>
-            `).join('');
+                </div>`;
+            }).join('');
         }
 
-        function checkAnswer(questionId, selected, correct) {
+        // Single-answer: click once, reveal immediately
+        function checkSingleAnswer(questionId, selected, correct) {
             const questionEl = document.getElementById('question-' + questionId);
             const options = questionEl.querySelectorAll('.answer-option');
-            
+            // Disable further clicks
             options.forEach(opt => {
-                opt.classList.remove('correct', 'incorrect');
-                const optLetter = opt.dataset.option;
-                if (optLetter === correct) {
+                opt.style.pointerEvents = 'none';
+                opt.classList.remove('correct', 'incorrect', 'selected');
+                const letter = opt.dataset.option;
+                if (letter === correct) {
                     opt.classList.add('correct');
-                } else if (optLetter === selected && selected !== correct) {
+                } else if (letter === selected) {
                     opt.classList.add('incorrect');
                 }
             });
+            document.getElementById('explanation-' + questionId).style.display = 'block';
+            logQuestionPractice(questionId, selected === correct);
+        }
+
+        // Multi-select: toggle selection state
+        function toggleMultiOption(el) {
+            // Don't toggle if already graded (correct/incorrect class present)
+            if (el.classList.contains('correct') || el.classList.contains('incorrect')) return;
+            el.classList.toggle('selected');
+        }
+
+        // Multi-select: grade all selected options on Submit
+        function checkMultiAnswer(questionId, correctEncoded) {
+            const questionEl = document.getElementById('question-' + questionId);
+            const options = questionEl.querySelectorAll('.answer-option');
+            const correct = JSON.parse(decodeURIComponent(correctEncoded));
+            const selected = [];
+
+            options.forEach(opt => {
+                if (opt.classList.contains('selected')) selected.push(opt.dataset.option);
+            });
+
+            // Grade each option
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                opt.classList.remove('selected');
+                const letter = opt.dataset.option;
+                const isCorrect = correct.includes(letter);
+                const isSelected = selected.includes(letter);
+                if (isCorrect) {
+                    opt.classList.add('correct');  // always highlight correct answers
+                } else if (isSelected && !isCorrect) {
+                    opt.classList.add('incorrect'); // highlight wrong selections
+                }
+            });
+
+            // Hide submit button
+            const btn = questionEl.querySelector('.btn-check-answer');
+            if (btn) btn.style.display = 'none';
 
             document.getElementById('explanation-' + questionId).style.display = 'block';
 
-            // Log practice
+            // Score: correct only if selected set matches correct set exactly
+            const isFullyCorrect = 
+                selected.length === correct.length && 
+                correct.every(c => selected.includes(c));
+            logQuestionPractice(questionId, isFullyCorrect);
+        }
+
+        function logQuestionPractice(questionId, isCorrect) {
             const questions = getQuestions();
             const q = questions.find(x => x.id === questionId);
             if (q) {
                 q.lastPracticed = new Date().toISOString();
                 q.timesPracticed = (q.timesPracticed || 0) + 1;
-                if (selected === correct) {
-                    q.timesCorrect = (q.timesCorrect || 0) + 1;
-                }
+                if (isCorrect) q.timesCorrect = (q.timesCorrect || 0) + 1;
                 saveQuestions(questions);
             }
+        }
+
+        // Keep old checkAnswer as alias for any other callers
+        function checkAnswer(questionId, selected, correct) {
+            checkSingleAnswer(questionId, selected, String(correct));
         }
 
         function resetQuestion(questionId) {
             const questionEl = document.getElementById('question-' + questionId);
             questionEl.querySelectorAll('.answer-option').forEach(opt => {
-                opt.classList.remove('correct', 'incorrect');
+                opt.classList.remove('correct', 'incorrect', 'selected');
+                opt.style.pointerEvents = '';
             });
             document.getElementById('explanation-' + questionId).style.display = 'none';
+            const btn = questionEl.querySelector('.btn-check-answer');
+            if (btn) btn.style.display = '';
         }
 
         function deleteQuestion(questionId) {
