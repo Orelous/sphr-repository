@@ -967,16 +967,6 @@
         .sp-card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.1); }
         .sp-card.sp-done { opacity:.65; }
         .sp-card.sp-today { border-color:#7C3AED; box-shadow:0 0 0 3px rgba(124,58,237,.15); }
-        /* PKA Mode badges */
-        .pka-mode-bar { display:flex; align-items:center; gap:6px; padding:6px 16px; border-bottom:1px solid #E2E8F0; font-size:0.75em; font-weight:700; letter-spacing:.04em; }
-        .pka-mode-bar.pka-encode    { background:#EFF6FF; color:#1E40AF; border-left:4px solid #3B82F6; }
-        .pka-mode-bar.pka-interleave { background:#EDE9FE; color:#4C1D95; border-left:4px solid #7C3AED; }
-        .pka-mode-bar.pka-deep-interleave { background:#F3E8FF; color:#6D28D9; border-left:4px solid #9333EA; }
-        .pka-mode-bar.pka-flashburn  { background:#FEF3C7; color:#92400E; border-left:4px solid #F59E0B; }
-        .pka-mode-bar.pka-simulate   { background:#FEE2E2; color:#991B1B; border-left:4px solid #EF4444; }
-        .pka-mode-bar.pka-buffer     { background:#F1F5F9; color:#475569; border-left:4px solid #94A3B8; }
-        .pka-il-task { color:#6D28D9 !important; font-weight:600; }
-        .pka-il-task::before { content:"🔀 "; }
 
         /* Card top */
         .sp-card-top { display:flex; justify-content:space-between; align-items:flex-start; padding:14px 16px 10px; background:#F8FAFC; border-bottom:2px solid #E2E8F0; border-radius:12px 12px 0 0; }
@@ -1039,7 +1029,7 @@
                     </div>
                     <div class="deadline-item">
                         <div class="deadline-label">&#128221; SPHR Exam Date</div>
-                        <div class="deadline-date">May 8, 2026</div>
+                        <div class="deadline-date">May 3, 2026</div>
                         <div class="deadline-countdown" id="examCountdown">Calculating...</div>
                     </div>
                 </div>
@@ -1054,7 +1044,6 @@
             <button class="nav-tab" data-tab="flashcards">&#127183; Flashcards</button>
             <button class="nav-tab" data-tab="questions">&#10067; Questions</button>
             <button class="nav-tab" data-tab="practice">&#129504; Practice</button>
-            <button class="nav-tab" data-tab="interleave">&#128256; Interleave</button>
             <button class="nav-tab" data-tab="add">&#10133; Add Content</button>
             <button class="nav-tab" data-tab="manage">&#9881; Manage Data</button>
             <button class="nav-tab" data-tab="studyplan">&#128197; Study Plan</button>
@@ -1509,34 +1498,6 @@
                     <div id="practiceSession"></div>
                 </div>
 
-                <!-- Flash Burn Mode -->
-                <div class="form-section" style="background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%); border: 2px solid #F59E0B;">
-                    <h3 style="color:#92400E;">&#9889; Flash Burn Mode</h3>
-                    <p style="color:#78350F; font-size:0.9em; margin-bottom:14px;">
-                        Auto-pulls <strong>all activated flashcards for a specific Functional Area</strong> in random order — no setup required. Use on Phase 2 Flashcard Burn days. Select your FA, hit Start Flash Burn, drill every card out loud before revealing.
-                    </p>
-                    <div style="display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; margin-bottom:14px;">
-                        <div>
-                            <label style="font-size:0.85em; color:#78350F; display:block; margin-bottom:4px; font-weight:600;">Select FA to Burn</label>
-                            <select id="flashBurnFA" style="padding:8px 14px; border:2px solid #F59E0B; border-radius:8px; font-size:0.95em; background:white; min-width:280px;">
-                                <option value="all">All FAs — Full Mixed Burn (141 cards)</option>
-                                <option value="FA1">FA1 — Leadership &amp; Strategy (~25 cards)</option>
-                                <option value="FA2">FA2 — Workforce Planning (~32 cards)</option>
-                                <option value="FA3">FA3 — Talent Management (~35 cards)</option>
-                                <option value="FA4">FA4 — Total Rewards (~34 cards)</option>
-                                <option value="FA5">FA5 — HR Info / Safety (~15 cards)</option>
-                                <option value="FA1+FA5">FA1 + FA5 — 60% of Exam (~40 cards)</option>
-                                <option value="FA2+FA3">FA2 + FA3 — Combined Burn (~67 cards)</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-primary" onclick="generateFlashBurn()" style="background: linear-gradient(135deg,#F59E0B,#D97706); border-color:#B45309; font-size:1em; padding:10px 24px;">
-                            &#9889; Start Flash Burn
-                        </button>
-                    </div>
-                    <div id="flashBurnStats" style="font-size:0.85em; color:#78350F; margin-bottom:8px;"></div>
-                    <div id="flashBurnSession"></div>
-                </div>
-
                 <!-- Session Timer -->
                 <div class="form-section">
                     <h3>&#9201; Session Timer</h3>
@@ -1554,85 +1515,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Interleave Tab -->
-        <div class="tab-content" id="interleave">
-            <div style="max-width: 960px; margin: 0 auto;">
-
-                <!-- Header Banner -->
-                <div style="background: linear-gradient(135deg, #1E1B4B 0%, #4C1D95 100%); color: white; border-radius: 12px; padding: 24px 28px; margin-bottom: 28px;">
-                    <h2 style="margin:0 0 8px 0; font-size:1.5em; font-weight:600;">&#128256; Interleaved Practice Mode</h2>
-                    <p style="margin:0; opacity:0.88; font-size:0.97em;">Sessions mix topics across all 5 Functional Areas so your brain has to <em>distinguish and connect</em> — not just recall. After revealing each item, Bridge Prompts activate your crossRef network. Use "Ask AI" for live synthesis questions.</p>
-                </div>
-
-                <!-- How It Works -->
-                <div style="display:grid; grid-template-columns: repeat(3,1fr); gap:14px; margin-bottom:28px;">
-                    <div style="background:#EDE9FE; border-radius:10px; padding:16px; border-left:4px solid #7C3AED;">
-                        <div style="font-size:1.6em; margin-bottom:6px;">&#127821;</div>
-                        <strong style="color:#4C1D95;">Cross-FA Mixing</strong>
-                        <p style="color:#6B21A8; font-size:0.85em; margin:6px 0 0 0;">No two consecutive items share a Functional Area. Forces context-switching.</p>
-                    </div>
-                    <div style="background:#DBEAFE; border-radius:10px; padding:16px; border-left:4px solid #3B82F6;">
-                        <div style="font-size:1.6em; margin-bottom:6px;">&#128279;</div>
-                        <strong style="color:#1E40AF;">Bridge Prompts</strong>
-                        <p style="color:#1D4ED8; font-size:0.85em; margin:6px 0 0 0;">Your existing crossRef links surface as active connection challenges after each reveal.</p>
-                    </div>
-                    <div style="background:#D1FAE5; border-radius:10px; padding:16px; border-left:4px solid #10B981;">
-                        <div style="font-size:1.6em; margin-bottom:6px;">&#129302;</div>
-                        <strong style="color:#065F46;">AI Synthesis</strong>
-                        <p style="color:#047857; font-size:0.85em; margin:6px 0 0 0;">One click generates 2–3 live cross-FA questions tailored to that exact entry.</p>
-                    </div>
-                </div>
-
-                <!-- API Key Config -->
-                <div class="form-section" id="ilApiKeySection" style="background:#FFFBEB; border:1.5px solid #FCD34D;">
-                    <h3 style="color:#92400E;">&#128273; Anthropic API Key — Required for "Ask AI to Bridge"</h3>
-                    <p style="color:#78350F; font-size:0.9em; margin-bottom:14px;">
-                        Your key is stored only in your browser's localStorage and never sent anywhere except directly to <code>api.anthropic.com</code>.
-                        Get yours free at <a href="https://console.anthropic.com" target="_blank" style="color:#7C3AED;">console.anthropic.com</a>.
-                    </p>
-                    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-                        <input type="password" id="ilApiKeyInput" placeholder="sk-ant-api03-..." 
-                               style="flex:1; min-width:260px; padding:10px 14px; border:2px solid #FCD34D; border-radius:8px; font-size:0.95em; font-family:monospace;">
-                        <button class="btn btn-primary" onclick="ilSaveApiKey()" style="background:#F59E0B; border-color:#D97706; white-space:nowrap;">
-                            &#128190; Save Key
-                        </button>
-                        <button class="btn btn-small btn-secondary" onclick="ilClearApiKey()" style="white-space:nowrap;">
-                            &#128465; Clear
-                        </button>
-                    </div>
-                    <div id="ilApiKeyStatus" style="margin-top:10px; font-size:0.85em; color:#64748B;"></div>
-                </div>
-
-                <!-- Session Controls -->
-                <div class="form-section">
-                    <h3>&#127919; Configure Interleaved Session</h3>
-                    <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:center; margin-bottom:18px;">
-                        <div>
-                            <label style="font-size:0.85em; color:#64748B; display:block; margin-bottom:4px;">Items per FA</label>
-                            <select id="ilItemsPerFA" style="padding:8px 12px; border:2px solid #E2E8F0; border-radius:8px; font-size:0.95em;">
-                                <option value="1">1 per FA</option>
-                                <option value="2" selected>2 per FA</option>
-                                <option value="3">3 per FA</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label style="font-size:0.85em; color:#64748B; display:block; margin-bottom:4px;">Include flashcards?</label>
-                            <select id="ilIncludeFC" style="padding:8px 12px; border:2px solid #E2E8F0; border-radius:8px; font-size:0.95em;">
-                                <option value="yes" selected>Yes — interleaved between entries</option>
-                                <option value="no">No — entries only</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button class="btn btn-primary" onclick="generateInterleavedSession()" style="background: linear-gradient(135deg,#7C3AED,#4F46E5); font-size:1em; padding:12px 28px;">
-                        &#128256; Generate Interleaved Session
-                    </button>
-                </div>
-
-                <!-- Session Output -->
-                <div id="ilSession"></div>
             </div>
         </div>
 
@@ -1960,13 +1842,13 @@
         <div class="tab-content" id="studyplan">
             <div class="sp-header-bar">
                 <div>
-                    <h2>&#128197; 34-Day Study Plan</h2>
-                    <p style="color:#64748B;font-size:.9rem;margin-top:4px;">Mar 23 &rarr; May 7 &middot; Exam May 8, 2026 &middot; Weekdays only</p>
+                    <h2>&#128197; 30-Day Study Plan</h2>
+                    <p style="color:#64748B;font-size:.9rem;margin-top:4px;">Mar 23 &rarr; May 1 &middot; Exam May 3, 2026 &middot; Weekdays only</p>
                 </div>
                 <div class="sp-stats-row">
                     <div class="sp-stat-box"><div class="sp-stat-num" id="sp-days-left">--</div><div class="sp-stat-lbl">Days to Exam</div></div>
                     <div class="sp-stat-box"><div class="sp-stat-num" id="sp-days-done" style="color:#10B981">0</div><div class="sp-stat-lbl">Days Done</div></div>
-                    <div class="sp-stat-box"><div class="sp-stat-num" id="sp-days-remain" style="color:#F59E0B">34</div><div class="sp-stat-lbl">Study Days Left</div></div>
+                    <div class="sp-stat-box"><div class="sp-stat-num" id="sp-days-remain" style="color:#F59E0B">30</div><div class="sp-stat-lbl">Study Days Left</div></div>
                 </div>
             </div>
             <div class="sp-progress-wrap">
@@ -1974,11 +1856,10 @@
                 <div class="sp-progress-track"><div class="sp-progress-fill" id="sp-prog-fill" style="width:0%"></div></div>
             </div>
             <div class="sp-legend">
-                <div class="sp-legend-item"><div class="sp-legend-dot" style="background:#3B82F6"></div>Encode + Retrieve days</div>
-                <div class="sp-legend-item"><div class="sp-legend-dot" style="background:#7C3AED"></div>Interleave days (Wed/Fri — Interleave tab)</div>
-                <div class="sp-legend-item"><div class="sp-legend-dot" style="background:#F59E0B"></div>Flashcard Burn + Deep Interleave (Phase 2)</div>
-                <div class="sp-legend-item"><div class="sp-legend-dot" style="background:#EF4444"></div>Exam Simulation (Phase 3)</div>
-                <div class="sp-legend-item"><div class="sp-legend-dot" style="background:#7C3AED; border:2px solid white; box-shadow:0 0 0 2px #7C3AED;"></div>Today</div>
+                <div class="sp-legend-item"><div class="sp-legend-dot" style="background:#6D28D9"></div>Phase 1 &mdash; Entry Review (Days 1&ndash;19)</div>
+                <div class="sp-legend-item"><div class="sp-legend-dot" style="background:#B45309"></div>Phase 2 &mdash; Flashcard Intensive (Days 20&ndash;26)</div>
+                <div class="sp-legend-item"><div class="sp-legend-dot" style="background:#B91C1C"></div>Phase 3 &mdash; Integration &amp; Final Prep (Days 27&ndash;30)</div>
+                <div class="sp-legend-item"><div class="sp-legend-dot" style="background:#7C3AED"></div>Today</div>
             </div>
             <div class="sp-filters">
                 <button class="sp-filter-btn sp-active" onclick="spFilter('all',this)">All Days</button>
@@ -2073,16 +1954,6 @@
 
         function escapeHtml(text) {
             if (!text) return '';
-            // Fix common UTF-8 mojibake before escaping
-            text = text
-                .replace(/â†'/g, '→')
-                .replace(/â†"/g, '←')
-                .replace(/â€™/g, "'")
-                .replace(/â€œ/g, '"')
-                .replace(/â€/g, '"')
-                .replace(/â€¦/g, '…')
-                .replace(/â€"/g, '—')
-                .replace(/â€"/g, '–');
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
@@ -2163,7 +2034,6 @@
                     case 'flashcards': renderFlashcards(); break;
                     case 'questions': renderQuestions(); break;
                     case 'practice': updatePracticeDashboard(); break;
-                    case 'interleave': ilUpdateKeyStatus(); break;
                     case 'studyplan': renderStudyPlan(); break;
                 }
             });
@@ -2183,8 +2053,8 @@
                 platformEl.classList.add('deadline-warning');
             }
             
-            // Exam date: May 8, 2026
-            const examDate = new Date('2026-05-08');
+            // Exam date: May 3, 2026
+            const examDate = new Date('2026-05-03');
             const examDays = Math.ceil((examDate - now) / (1000 * 60 * 60 * 24));
             document.getElementById('examCountdown').textContent = `${examDays} days to exam`;
         }
@@ -2278,7 +2148,7 @@
             const practiceLog = getPracticeLog();
             
             // Days to Exam
-            const examDate = new Date('2026-05-08');
+            const examDate = new Date('2026-05-03');
             const now = new Date();
             const daysToExam = Math.ceil((examDate - now) / (1000 * 60 * 60 * 24));
             document.getElementById('daysToExam').textContent = daysToExam;
@@ -3438,193 +3308,123 @@
         });
 
         function generatePracticeSession() {
-            const entries  = getEntries();
+            const entries = getEntries();
             const flashcards = getFlashcards();
-            const activeEntries    = entries.filter(e => e.activatedDate);
+            
+            // Only use activated items
+            const activeEntries = entries.filter(e => e.activatedDate);
             const activeFlashcards = flashcards.filter(f => f.activatedDate);
-
+            
             if (activeEntries.length === 0 && activeFlashcards.length === 0) {
-                const staged = entries.filter(e => !e.activatedDate).length + flashcards.filter(f => !f.activatedDate).length;
-                document.getElementById('practiceSession').innerHTML = staged > 0
-                    ? `<p style="color:#64748B;text-align:center;">No activated items yet. Go to the <strong>Staging tab</strong> to activate ${staged} staged items!</p>`
-                    : `<p style="color:#64748B;text-align:center;">Add some entries or flashcards first!</p>`;
+                const stagedCount = entries.filter(e => !e.activatedDate).length + flashcards.filter(f => !f.activatedDate).length;
+                if (stagedCount > 0) {
+                    document.getElementById('practiceSession').innerHTML = `<p style="color: #64748B; text-align: center;">No activated items yet. Go to the <strong>Staging tab</strong> to activate ${stagedCount} staged items!</p>`;
+                } else {
+                    document.getElementById('practiceSession').innerHTML = '<p style="color: #64748B; text-align: center;">Add some entries or flashcards first!</p>';
+                }
                 return;
             }
 
             const activeTierFilter = document.querySelector('.tier-filter.active')?.dataset.tier || 'all';
-            const now = new Date();
-
-            // ── Due logic ────────────────────────────────────────────────────
-            // Returns hours since last practice (or since activation if never practiced)
-            function hoursSince(item) {
-                const ref = item.lastPracticed || item.activatedDate;
-                return ref ? (now - new Date(ref)) / 3600000 : 9999;
-            }
-
-            function isDue(item) {
-                const tier  = getTier(item.activatedDate, item.lastPracticed);
-                const hours = hoursSince(item);
-                if (tier === 1) return hours >= 20;      // Tier 1: due every ~24 hrs
-                if (tier === 2) return hours >= 48;      // Tier 2: due every 2-3 days
-                if (tier === 3) return hours >= 144;     // Tier 3: due every ~6 days
-                return false;
-            }
-
-            // Sort by most overdue first
-            function byOverdue(a, b) { return hoursSince(b) - hoursSince(a); }
-
-            // ── Filter by tier tab if selected ────────────────────────────────
-            let poolEntries    = activeEntries;
-            let poolFlashcards = activeFlashcards;
+            
+            // Filter entries by tier
+            let filteredEntries = activeEntries;
             if (activeTierFilter !== 'all') {
-                const t = parseInt(activeTierFilter);
-                poolEntries    = activeEntries.filter(e => getTier(e.activatedDate, e.lastPracticed) === t);
-                poolFlashcards = activeFlashcards.filter(f => getTier(f.activatedDate, f.lastPracticed) === t);
+                filteredEntries = activeEntries.filter(e => getTier(e.activatedDate, e.lastPracticed) === parseInt(activeTierFilter));
             }
 
-            if (poolEntries.length === 0 && poolFlashcards.length === 0) {
-                const tierNames = {'1':'Tier 1 (≤7 days)','2':'Tier 2 (8–21 days)','3':'Tier 3 (22+ days)'};
+            // Filter flashcards by tier (same logic as entries)
+            let filteredFlashcards = activeFlashcards;
+            if (activeTierFilter !== 'all') {
+                filteredFlashcards = activeFlashcards.filter(f => getTier(f.activatedDate, f.lastPracticed) === parseInt(activeTierFilter));
+            }
+
+            // Check if anything matches the filter
+            if (filteredEntries.length === 0 && filteredFlashcards.length === 0) {
+                const tierNames = { '1': 'Tier 1 (New - &le;7 days)', '2': 'Tier 2 (Reinforcement - 8-21 days)', '3': 'Tier 3 (Integration - 22+ days)' };
                 document.getElementById('practiceSession').innerHTML = `
-                    <div style="text-align:center;padding:40px;background:#F8FAFC;border-radius:12px;border:2px dashed #E2E8F0;">
-                        <div style="font-size:3em;margin-bottom:15px;">📋</div>
-                        <h4 style="color:#1E1B4B;margin-bottom:10px;">No items in ${tierNames[activeTierFilter]||'this tier'}</h4>
-                        <p style="color:#64748B;">Try selecting <strong>All Tiers</strong> to let the system pick what's due.</p>
-                    </div>`;
+                    <div style="text-align: center; padding: 40px; background: #F8FAFC; border-radius: 12px; border: 2px dashed #E2E8F0;">
+                        <div style="font-size: 3em; margin-bottom: 15px;">&#128221;</div>
+                        <h4 style="color: #1E1B4B; margin-bottom: 10px;">No items in ${tierNames[activeTierFilter] || 'this tier'}</h4>
+                        <p style="color: #64748B; margin-bottom: 15px;">
+                            ${activeTierFilter === '1' ? 'All your content has aged past 7 days. Great progress!' : ''}
+                            ${activeTierFilter === '2' ? 'Items move to Tier 2 after 8 days. Keep adding content!' : ''}
+                            ${activeTierFilter === '3' ? 'Items move to Tier 3 after 22 days. Your content is still new!' : ''}
+                        </p>
+                        <p style="color: #64748B;">Try selecting <strong>"All Tiers"</strong> or add more content.</p>
+                    </div>
+                `;
                 return;
             }
 
-            // ── Smart entry selection ─────────────────────────────────────────
-            let selectedEntries = [];
-            if (activeTierFilter !== 'all') {
-                // Manual tier filter: shuffle up to 8
-                selectedEntries = [...poolEntries].sort(() => Math.random() - 0.5).slice(0, 8);
-            } else {
-                // Smart mode: pull by what's actually due
-                const t1Due = poolEntries.filter(e => getTier(e.activatedDate,e.lastPracticed)===1 && isDue(e)).sort(byOverdue);
-                const t2Due = poolEntries.filter(e => getTier(e.activatedDate,e.lastPracticed)===2 && isDue(e)).sort(byOverdue);
-                const t3Due = poolEntries.filter(e => getTier(e.activatedDate,e.lastPracticed)===3 && isDue(e)).sort(byOverdue);
+            // Shuffle and select items
+            const shuffledEntries = [...filteredEntries].sort(() => Math.random() - 0.5).slice(0, 3);
+            const shuffledFlashcards = [...filteredFlashcards].sort(() => Math.random() - 0.5).slice(0, 5);
 
-                // Caps: Tier 1 priority first, hard total cap of 5 entries to protect time budget
-                // Most overdue items always surface first — anything not pulled today
-                // will be the first to appear tomorrow as the most overdue
-                const t1Pick = t1Due.slice(0, 5);
-                const remaining = 5 - t1Pick.length;
-                const t2Pick = t2Due.slice(0, Math.min(remaining, 3));
-                const t3Pick = t3Due.slice(0, Math.min(5 - t1Pick.length - t2Pick.length, 2));
-                selectedEntries = [...t1Pick, ...t2Pick, ...t3Pick];
-
-                // If nothing is formally due (e.g. just practiced everything), fall back to most-overdue across all active
-                if (selectedEntries.length === 0) {
-                    selectedEntries = [...poolEntries].sort(byOverdue).slice(0, 5);
-                }
-            }
-
-            // ── Smart flashcard selection ─────────────────────────────────────
-            let selectedFlashcards = [];
-            if (activeTierFilter !== 'all') {
-                selectedFlashcards = [...poolFlashcards].sort(() => Math.random() - 0.5).slice(0, 8);
-            } else {
-                const fc1 = poolFlashcards.filter(f => getTier(f.activatedDate,f.lastPracticed)===1 && isDue(f)).sort(byOverdue).slice(0,8);
-                const fc2 = poolFlashcards.filter(f => getTier(f.activatedDate,f.lastPracticed)===2 && isDue(f)).sort(byOverdue).slice(0,4);
-                const fc3 = poolFlashcards.filter(f => getTier(f.activatedDate,f.lastPracticed)===3 && isDue(f)).sort(byOverdue).slice(0,2);
-                selectedFlashcards = [...fc1, ...fc2, ...fc3];
-                if (selectedFlashcards.length === 0) {
-                    selectedFlashcards = [...poolFlashcards].sort(byOverdue).slice(0, 5);
-                }
-            }
-
-            // ── Tier breakdown for header ─────────────────────────────────────
-            const t1e = selectedEntries.filter(e => getTier(e.activatedDate,e.lastPracticed)===1).length;
-            const t2e = selectedEntries.filter(e => getTier(e.activatedDate,e.lastPracticed)===2).length;
-            const t3e = selectedEntries.filter(e => getTier(e.activatedDate,e.lastPracticed)===3).length;
-
-            const totalDueEntries    = poolEntries.filter(isDue).length;
-            const totalDueFlashcards = poolFlashcards.filter(isDue).length;
-
-            // ── Build session header ──────────────────────────────────────────
-            const modeLabel = activeTierFilter === 'all' ? 'Smart Session — pulling what\'s due' : `Tier ${activeTierFilter} Only`;
-            const estTime = (selectedEntries.length * 3) + (selectedFlashcards.length * 1.5) + 4;
-            let html = `
-            <div style="background:#E0E7FF;padding:12px 16px;border-radius:8px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
-                <strong style="color:#3730A3;">🧠 ${modeLabel}</strong>
-                <span style="color:#5B21B6;font-size:0.9em;">${selectedEntries.length} entries · ${selectedFlashcards.length} flashcards · ~${Math.round(estTime)} min</span>
+            // Build header with tier info
+            const tierLabel = activeTierFilter === 'all' ? 'All Tiers' : `Tier ${activeTierFilter} Only`;
+            let html = `<div style="background: #E0E7FF; padding: 10px 15px; border-radius: 8px; margin-bottom: 15px; display: inline-block;">
+                <strong style="color: #3730A3;">&#127919; Practicing: ${tierLabel}</strong> 
+                <span style="color: #5B21B6;">(${filteredEntries.length} entries, ${filteredFlashcards.length} flashcards available)</span>
             </div>`;
+            
+            html += '<div style="background: #FEF3C7; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #F59E0B;">';
+            html += '<strong style="color: #92400E;">Instructions:</strong> <span style="color: #92400E;">For each item below, try to recall the answer OUT LOUD before revealing. Struggle for 2-3 minutes before checking.</span>';
+            html += '</div>';
 
-            if (activeTierFilter === 'all') {
-                html += `
-                <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;font-size:0.82em;">
-                    ${t1e>0?`<span style="background:#DBEAFE;color:#1E40AF;padding:3px 10px;border-radius:12px;font-weight:600;">T1: ${t1e} entries (daily)</span>`:''}
-                    ${t2e>0?`<span style="background:#FEF3C7;color:#92400E;padding:3px 10px;border-radius:12px;font-weight:600;">T2: ${t2e} entries (2-3 day)</span>`:''}
-                    ${t3e>0?`<span style="background:#E9D5FF;color:#6B21A8;padding:3px 10px;border-radius:12px;font-weight:600;">T3: ${t3e} entries (weekly)</span>`:''}
-                    ${totalDueEntries>selectedEntries.length?`<span style="background:#F1F5F9;color:#475569;padding:3px 10px;border-radius:12px;">${totalDueEntries-selectedEntries.length} more due — regenerate for next batch</span>`:''}
-                </div>`;
-            }
-
-            html += `
-            <div style="background:#FEF3C7;padding:13px 16px;border-radius:8px;margin-bottom:18px;border-left:4px solid #F59E0B;">
-                <strong style="color:#92400E;">Instructions:</strong>
-                <span style="color:#92400E;"> Recall OUT LOUD before revealing. State the concept, when it appears on the exam, and the key failure patterns. Struggle for at least 10 seconds before checking.</span>
-            </div>`;
-
-            // ── Entry cards ───────────────────────────────────────────────────
-            if (selectedEntries.length > 0) {
-                html += `<h4 style="color:#1E1B4B;margin-bottom:14px;">📖 Entry Retrieval (${selectedEntries.length} items)</h4>`;
-                selectedEntries.forEach((entry, i) => {
-                    const tier = getTier(entry.activatedDate, entry.lastPracticed);
-                    const tBg  = tier===1?'#DBEAFE':tier===2?'#FEF3C7':'#E9D5FF';
-                    const tClr = tier===1?'#1E40AF':tier===2?'#92400E':'#6B21A8';
-                    const hrs  = Math.round(hoursSince(entry));
-                    const dueLabel = hrs >= 9990 ? 'never practiced' : hrs < 24 ? `${hrs}h ago` : `${Math.round(hrs/24)}d ago`;
+            // Practice entries
+            if (shuffledEntries.length > 0) {
+                html += `<h4 style="color: #1E1B4B; margin-bottom: 15px;">&#128214; Entry Retrieval (${shuffledEntries.length} items)</h4>`;
+                shuffledEntries.forEach((entry, i) => {
+                    const entryTier = getTier(entry.activatedDate, entry.lastPracticed);
                     html += `
-                    <div class="entry-card" style="margin-bottom:14px;">
-                        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
-                            <div class="entry-title" style="flex:1;">${i+1}. ${escapeHtml(entry.title)}</div>
-                            <div style="display:flex;gap:6px;align-items:center;flex-shrink:0;">
-                                <span style="background:${tBg};color:${tClr};padding:3px 9px;border-radius:6px;font-size:0.78em;font-weight:700;">Tier ${tier}</span>
-                                <span style="background:#F1F5F9;color:#64748B;padding:3px 9px;border-radius:6px;font-size:0.75em;">${dueLabel}</span>
+                        <div class="entry-card" style="margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <div class="entry-title">${i + 1}. ${escapeHtml(entry.title)}</div>
+                                <span style="background: ${entryTier === 1 ? '#DBEAFE' : entryTier === 2 ? '#FEF3C7' : '#E9D5FF'}; color: ${entryTier === 1 ? '#1E40AF' : entryTier === 2 ? '#92400E' : '#6B21A8'}; padding: 4px 10px; border-radius: 6px; font-size: 0.8em; font-weight: 600;">Tier ${entryTier}</span>
                             </div>
-                        </div>
-                        <div style="color:#64748B;margin:0 0 10px 0;font-size:0.9em;">
-                            <strong>Recall:</strong> Core concept · When it appears on the exam · Key failure patterns · Decision Criteria
-                        </div>
-                        <button class="btn btn-small btn-secondary" onclick="this.nextElementSibling.style.display='block';this.style.display='none';">Reveal Answer</button>
-                        <div style="display:none;margin-top:13px;">
-                            <div style="padding:14px;background:#F0FDF4;border-left:4px solid #10B981;border-radius:4px;margin-bottom:${entry.failurePatterns?'8px':'0'};">
+                            <div style="color: #64748B; margin: 10px 0;">
+                                <strong>Recall prompts:</strong>
+                                <ul style="margin: 8px 0 0 20px;">
+                                    <li>What is this concept?</li>
+                                    <li>When would it appear on the exam?</li>
+                                    <li>What are the failure patterns?</li>
+                                </ul>
+                            </div>
+                            <button class="btn btn-small btn-secondary" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Reveal Answer</button>
+                            <div style="display: none; margin-top: 15px; padding: 15px; background: #F0FDF4; border-left: 4px solid #10B981; border-radius: 4px;">
                                 <strong>Summary:</strong> ${escapeHtml(entry.summary)}<br><br>
-                                ${entry.examPoints?`<strong>Exam Points:</strong> ${escapeHtml(entry.examPoints)}`:''}
-                                ${entry.decisionCriteria?`<br><br><strong>Decision Criteria:</strong> ${escapeHtml(entry.decisionCriteria)}`:''}
+                                ${entry.examPoints ? `<strong>Exam Points:</strong> ${escapeHtml(entry.examPoints)}` : ''}
                             </div>
-                            ${entry.failurePatterns?`<div style="padding:12px 14px;background:#FEF2F2;border-left:4px solid #EF4444;border-radius:4px;"><strong style="color:#991B1B;">⚠ Key Failure Patterns:</strong><div style="color:#7F1D1D;margin-top:5px;">${escapeHtml(entry.failurePatterns)}</div></div>`:''}
+                            <button class="btn btn-small btn-primary" onclick="markEntryPracticed('${entry.id}')" style="margin-top: 10px;">&#9200; Mark Practiced</button>
                         </div>
-                        <button class="btn btn-small btn-primary" onclick="markEntryPracticed('${entry.id}')" style="margin-top:10px;">⏱ Mark Practiced</button>
-                    </div>`;
+                    `;
                 });
+            } else if (activeTierFilter === 'all') {
+                html += '<p style="color: #64748B; margin-bottom: 20px;">No entries available. Add some in the "Add Content" tab!</p>';
             }
 
-            // ── Flashcard cards ───────────────────────────────────────────────
-            if (selectedFlashcards.length > 0) {
-                html += `<h4 style="color:#1E1B4B;margin:22px 0 14px;">🃏 Flashcard Drill (${selectedFlashcards.length} cards)</h4>`;
-                selectedFlashcards.forEach((card, i) => {
-                    const tier = getTier(card.activatedDate, card.lastPracticed);
-                    const tBg  = tier===1?'#DBEAFE':tier===2?'#FEF3C7':'#E9D5FF';
-                    const tClr = tier===1?'#1E40AF':tier===2?'#92400E':'#6B21A8';
+            // Practice flashcards
+            if (shuffledFlashcards.length > 0) {
+                html += `<h4 style="color: #1E1B4B; margin: 25px 0 15px;">&#127183; Flashcard Drill (${shuffledFlashcards.length} cards)</h4>`;
+                shuffledFlashcards.forEach((card, i) => {
+                    const cardTier = getTier(card.activatedDate, card.lastPracticed);
                     html += `
-                    <div class="flashcard" style="margin-bottom:13px;">
-                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
-                            <div class="flashcard-question" style="flex:1;">${i+1}. ${escapeHtml(card.question)}</div>
-                            <span style="background:${tBg};color:${tClr};padding:3px 9px;border-radius:6px;font-size:0.78em;font-weight:700;flex-shrink:0;">Tier ${tier}</span>
+                        <div class="flashcard" style="margin-bottom: 15px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                                <div class="flashcard-question">${i + 1}. ${escapeHtml(card.question)}</div>
+                                <span style="background: ${cardTier === 1 ? '#DBEAFE' : cardTier === 2 ? '#FEF3C7' : '#E9D5FF'}; color: ${cardTier === 1 ? '#1E40AF' : cardTier === 2 ? '#92400E' : '#6B21A8'}; padding: 4px 10px; border-radius: 6px; font-size: 0.8em; font-weight: 600;">Tier ${cardTier}</span>
+                            </div>
+                            <button class="btn btn-small btn-secondary" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Reveal Answer</button>
+                            <div style="display: none; margin-top: 15px; padding: 15px; background: #F0FDF4; border-left: 4px solid #10B981; border-radius: 4px;">
+                                <strong>A:</strong> ${escapeHtml(card.answer)}
+                            </div>
+                            <button class="btn btn-small btn-primary" onclick="markFlashcardPracticed('${card.id}')" style="margin-top: 10px;">&#9200; Mark Practiced</button>
                         </div>
-                        <button class="btn btn-small btn-secondary" onclick="this.nextElementSibling.style.display='block';this.style.display='none';">Reveal Answer</button>
-                        <div style="display:none;margin-top:12px;padding:12px;background:#F0FDF4;border-left:4px solid #10B981;border-radius:4px;">
-                            <strong>A:</strong> ${escapeHtml(card.answer)}
-                        </div>
-                        <button class="btn btn-small btn-primary" onclick="markFlashcardPracticed('${card.id}')" style="margin-top:10px;">⏱ Mark Practiced</button>
-                    </div>`;
+                    `;
                 });
-            }
-
-            if (selectedEntries.length === 0 && activeTierFilter === 'all') {
-                html += `<p style="color:#64748B;">No entries available yet. Add some in the Add Content tab!</p>`;
+            } else if (activeTierFilter === 'all') {
+                html += '<p style="color: #64748B;">No flashcards available. Add some in the "Add Content" tab!</p>';
             }
 
             document.getElementById('practiceSession').innerHTML = html;
@@ -3879,40 +3679,36 @@
         var SP_STORAGE_KEY = 'sphr_study_plan_v1';
 
         var SP_DAYS = [
-          {day:1,date:'2026-03-23',phase:'phase1',fa:'FA1',pkaType:'encode-retrieve',focus:'FA1 Leadership & Strategy - Part 1',tasks:["Activate: Porter's Five Forces, SWOT, PEST entries + flashcards (Staging tab)","MORNING (~21 min) — Read entries: Porter's Five Forces → SWOT → PEST (focus on Exam Points + Decision Criteria)","— 12-HOUR GAP (minimum) —","EVENING (~15 min) — Flashcard drill: today's flashcards out loud before revealing each answer.","EVENING — Practice tab → Smart Session (All Tiers) — ~32 min. System pulls what is due by tier automatically."],entries:3,flashcards:'~4',questions:0},
-          {day:2,date:'2026-03-24',phase:'phase1',fa:'FA1',pkaType:'encode-retrieve',focus:'FA1 Leadership & Strategy - Part 2',tasks:["Activate: Hofstede, Strategic Planning, MVV entries + flashcards","MORNING (~21 min) — Read entries: Hofstede's Cultural Dimensions → Strategic Planning 4-Step → Mission/Vision/Values","— 12-HOUR GAP —","EVENING (~15 min) — Flashcard drill: today's flashcards out loud before revealing each answer.","EVENING — Practice tab → Smart Session (All Tiers) — ~32 min. System pulls what is due by tier automatically."],entries:3,flashcards:'~4',questions:0},
-          {day:3,date:'2026-03-25',phase:'phase1',fa:'FA1',pkaType:'encode-interleave',focus:'FA1 Leadership & Strategy - Part 3 + First Interleave Session',tasks:["Activate: Org Structures, Types of Analytics, Change Management entries + flashcards","MORNING (~21 min) — Read entries: Org Structures → Types of Analytics → Change Management (Decision Criteria focus)","— 12-HOUR GAP —","EVENING (~15 min) — Flashcard drill: today's flashcards out loud before revealing each answer. out loud","[INTERLEAVE] EVENING (~35 min, replaces Practice tab) — Interleave tab: Set 2 per FA. Answer ALL bridge prompts out loud — state the connection, not just the concept. Use AI Bridge on at least 1 entry.","Log: What connections surprised you? What felt hardest to bridge?"],entries:3,flashcards:'~4',questions:0},
-          {day:4,date:'2026-03-26',phase:'phase1',fa:'FA1',pkaType:'encode-retrieve',focus:'FA1 Leadership & Strategy - Part 4',tasks:["Activate: Corp Governance, Business Structures, Types of Business Risk, HR Metrics entries + flashcards","MORNING (~21 min) — Read entries: Corporate Governance → Business Structures → Types of Business Risk → HR Metrics","— 12-HOUR GAP —","EVENING (~15 min) — Flashcard drill: today's flashcards out loud before revealing each answer.","EVENING — Practice tab → Smart Session (All Tiers) — ~32 min. System pulls what is due by tier automatically."],entries:4,flashcards:'~4',questions:0},
-          {day:5,date:'2026-03-27',phase:'phase1',fa:'FA1',pkaType:'encode-interleave',focus:'FA1 Leadership & Strategy - Part 5 + Interleave Session',tasks:["Activate: Vendor Selection, Financial Statements, Inclusivity Initiatives entries + flashcards","MORNING (~21 min) — Read entries: Vendor Selection → Financial Statements → Inclusivity Initiatives (Decision Criteria focus)","— 12-HOUR GAP —","EVENING (~15 min) — Flashcard drill: today's flashcards out loud before revealing each answer.","[INTERLEAVE] EVENING (~35 min, replaces Practice tab) — Interleave tab: Set 2 per FA. Bridge target: connect Financial Statements to HR strategic role. AI Bridge on Financial Statements or Governance.","Log: Which Decision Criteria distinctions are still fuzzy?"],entries:3,flashcards:'~4',questions:0},
-          {day:6,date:'2026-03-30',phase:'phase1',fa:'FA1',pkaType:'encode-retrieve',focus:'FA1 Leadership & Strategy - Wrap-Up + Full FA1 Pass',tasks:["Activate: Business Continuity, Schein's Culture, Project Management, M&A entries + flashcards","MORNING (~21 min) — Read entries: Business Continuity → Edgar Schein → Project Management → M&A HR Role","— 12-HOUR GAP —","EVENING — Full pass: all 25 FA1 flashcards (target 80%+) — flag any below confidence","EVENING — Practice tab → Smart Session (All Tiers) — ~32 min. System pulls what is due by tier automatically. — system now has full FA1 active"],entries:4,flashcards:25,questions:20},
-          {day:7,date:'2026-03-31',phase:'phase1',fa:'FA5',pkaType:'encode-retrieve',focus:'FA5 HR Info Mgmt, Safety & Security - Part 1',tasks:["Activate: Safety Strategies, Injury Prevention, Workplace Safety Risks, Emergency Response entries + flashcards","MORNING (~21 min) — Read entries: Safety Strategies (OSHA/HIPAA) → Injury Prevention 14 Techniques → Safety Risks → Emergency Response","— 12-HOUR GAP —","EVENING (~15 min) — Flashcard drill: today's flashcards out loud before revealing each answer.","EVENING — Practice tab → Smart Session (All Tiers) — ~32 min. FA1 + FA5 mixing."],entries:4,flashcards:'~7',questions:0},
-          {day:8,date:'2026-04-01',phase:'phase1',fa:'FA5',pkaType:'encode-interleave',focus:'FA5 HR Info Mgmt - Wrap-Up + FA1×FA5 Interleave Session',tasks:["Activate: Data Security, Internal Investigations, HR Digitization, Data Privacy entries + flashcards","MORNING (~21 min) — Read entries: Data Security → Internal Investigations → HR Digitization → Data Privacy","— 12-HOUR GAP —","EVENING — Quick pass: all 15 FA5 flashcards (target 80%+)","[INTERLEAVE] EVENING (~35 min, replaces Practice tab) — Interleave tab: Set 2 per FA. FA1 × FA5 bridge — connect Risk Management (FA1) to OSHA/Safety (FA5). Use AI Bridge.","Log: FA1×FA5 = 60% of exam — how are these FAs connected in practice?"],entries:4,flashcards:15,questions:15},
-          {day:9,date:'2026-04-02',phase:'phase1',fa:'FA2',pkaType:'encode-retrieve',focus:'FA2 Workforce Planning & Talent Acquisition - Part 1',tasks:["Activate: Strategic WFP, Talent Attraction, WFP Techniques, Succession Planning 9-Box entries + flashcards","MORNING (~21 min) — Read entries: Data-Driven WFP → Talent Attraction/Employer Branding → WFP Techniques → Succession 9-Box","— 12-HOUR GAP —","EVENING (~15 min) — Flashcard drill: today's flashcards out loud before revealing each answer.","EVENING — Practice tab → Smart Session (All Tiers) — ~32 min. FA1 + FA5 + FA2 mixing."],entries:4,flashcards:'~8',questions:0},
-          {day:10,date:'2026-04-03',phase:'phase1',fa:'FA2',pkaType:'encode-interleave',focus:'FA2 Workforce Planning - Part 2 + 3-FA Interleave Session',tasks:["Activate: Market Forecasting, Employer Branding EVP, Total Rewards on Recruitment, Alternative Staffing, Recruitment ROI entries + flashcards","MORNING (~21 min) — Read entries: Market Forecasting → Employer Branding/EVP → Total Rewards Impact on Recruitment → Alternative Staffing","— 12-HOUR GAP —","EVENING (~15 min) — Flashcard drill: today's flashcards out loud before revealing each answer.","[INTERLEAVE] EVENING (~35 min, replaces Practice tab) — Interleave tab: Set 2 per FA. FA1 × FA5 × FA2 bridge — connect Strategic Planning (FA1) to Workforce Planning (FA2). Use AI Bridge.","Log: Use Decision Criteria — 'when would I use scenario planning vs regression forecasting?'"],entries:5,flashcards:'~8',questions:0},
-          {day:11,date:'2026-04-06',phase:'phase1',fa:'FA2',pkaType:'encode-retrieve',focus:'FA2 Workforce Planning - Part 3',tasks:["Activate: Interviewing/Selection, Onboarding ADDIE, Negotiation Techniques, Corporate Transitions entries + flashcards","MORNING (~21 min) — Read entries: Interviewing Structures → Onboarding (ADDIE/M&A) → Negotiation 5 Approaches → Corporate Transitions","— 12-HOUR GAP —","EVENING (~15 min) — Flashcard drill: today's flashcards out loud before revealing each answer.","EVENING — Practice tab → Smart Session (All Tiers) — ~32 min. System pulls what is due by tier automatically."],entries:4,flashcards:'~8',questions:0},
-          {day:12,date:'2026-04-07',phase:'phase1',fa:'FA2',pkaType:'encode-retrieve',focus:'FA2 Workforce Planning - Wrap-Up + Full FA2 Pass',tasks:["Activate: Due Diligence M&A, RIF/WARN Act/OWBPA, Staffing Metrics/Four-Fifths, Feedback Methods entries + flashcards","MORNING (~21 min) — Read entries: Due Diligence → RIF/WARN Act/OWBPA → Staffing Effectiveness (Four-Fifths Rule) → Feedback Methods","— 12-HOUR GAP —","EVENING — Full pass: all 32 FA2 flashcards (target 80%+) — flag weak cards","EVENING — Practice tab → Smart Session (All Tiers) — ~32 min. System pulls what is due by tier automatically."],entries:4,flashcards:32,questions:20},
-          {day:13,date:'2026-04-08',phase:'phase1',fa:'FA3',pkaType:'encode-interleave',focus:'FA3 Talent Management - Part 1 + 4-FA Interleave Session',tasks:["Activate: Integrated TM Philosophy, Training Needs Assessment, ADDIE/SAM/Kemp/ARCS, Training Delivery, Kirkpatrick entries + flashcards","MORNING (~21 min) — Read entries: Integrated TM Philosophy → TNA 4-Pronged → Instructional Design Models → Training Delivery → Kirkpatrick","— 12-HOUR GAP —","EVENING (~15 min) — Flashcard drill: today's flashcards out loud before revealing each answer.","[INTERLEAVE] EVENING (~35 min, replaces Practice tab) — Interleave tab: Set 2 per FA. FA1 × FA5 × FA2 × FA3 bridge. Target: ADDIE (FA3) → Onboarding (FA2). Kirkpatrick → HR Metrics (FA1). AI Bridge on ADDIE or Kirkpatrick.","Log: Decision Criteria check — ADDIE vs SAM: which does the exam test and under what scenario?"],entries:5,flashcards:'~9',questions:0},
-          {day:14,date:'2026-04-09',phase:'phase1',fa:'FA3',pkaType:'encode-retrieve',focus:'FA3 Talent Management - Part 2',tasks:["Activate: 70-20-10, Performance Management/Goal Cascading, Employee Engagement, Talent Analytics, Inclusivity in TM entries + flashcards","MORNING (~21 min) — Read entries: 70-20-10 → Performance Management → Employee Engagement/Retention → Talent Analytics → Inclusivity in TM","— 12-HOUR GAP —","EVENING (~15 min) — Flashcard drill: today's flashcards out loud before revealing each answer.","EVENING — Practice tab → Smart Session (All Tiers) — ~32 min. System pulls what is due by tier automatically."],entries:5,flashcards:'~9',questions:0},
-          {day:15,date:'2026-04-10',phase:'phase1',fa:'FA3',pkaType:'encode-interleave',focus:'FA3 Talent Management - Part 3 + Interleave Session',tasks:["Activate: IDP, Leadership Development, Succession Planning, Offboarding, Return-to-Work entries + flashcards","MORNING (~21 min) — Read entries: IDP & Career Growth → Leadership Development → Succession Planning → Offboarding → Return-to-Work","— 12-HOUR GAP —","EVENING (~15 min) — Flashcard drill: today's flashcards out loud before revealing each answer.","[INTERLEAVE] EVENING (~35 min, replaces Practice tab) — Interleave tab: Set 2 per FA. FA3 × FA2 × FA1 bridge. Target: Succession Planning → Workforce Planning → Strategic Planning. AI Bridge on Succession or Leadership Dev.","Log: How many crossRef links did you actively connect vs just read?"],entries:5,flashcards:'~9',questions:0},
-          {day:16,date:'2026-04-13',phase:'phase1',fa:'FA3',pkaType:'encode-retrieve',focus:'FA3 Talent Management - Wrap-Up + Full FA3 Pass',tasks:["Activate: Ethical Decision-Making, Labor Relations, Collective Bargaining, Kirkpatrick for Performance entries + flashcards","MORNING (~21 min) — Read entries: Ethical Decision-Making → Labor Relations → Collective Bargaining → Kirkpatrick for Performance","— 12-HOUR GAP —","EVENING — Full pass: all 35 FA3 flashcards (target 80%+) — flag weak cards","EVENING — Practice tab → Smart Session (All Tiers) — ~32 min. System pulls what is due by tier automatically."],entries:4,flashcards:35,questions:20},
-          {day:17,date:'2026-04-14',phase:'phase1',fa:'FA4',pkaType:'encode-retrieve',focus:'FA4 Total Rewards - Part 1',tasks:["Activate: Motivation Theories, Total Rewards Philosophy, Job Analysis, Job Evaluation, Pay Structures entries + flashcards","MORNING (~21 min) — Read entries: Motivation Theories → Total Rewards Philosophy → Job Analysis → Job Evaluation → Pay Structures","— 12-HOUR GAP —","EVENING (~15 min) — Flashcard drill: today's flashcards out loud before revealing each answer.","EVENING — Practice tab → Smart Session (All Tiers) — ~32 min. FA4 now joins FA1/FA5/FA2/FA3 in the mix."],entries:5,flashcards:'~11',questions:0},
-          {day:18,date:'2026-04-15',phase:'phase1',fa:'FA4',pkaType:'encode-interleave',focus:'FA4 Total Rewards - Part 2 + Full 5-FA Interleave Session',tasks:["Activate: Benchmarking, External Labor Markets/SWOT-PEST, Executive Comp, FLSA, ERISA entries + flashcards","MORNING (~21 min) — Read entries: Benchmarking → External Labor Markets → Executive Comp → FLSA Compliance → ERISA","— 12-HOUR GAP —","EVENING (~15 min) — Flashcard drill: today's flashcards out loud before revealing each answer.","[INTERLEAVE] EVENING (~35 min, replaces Practice tab) — Interleave tab: Set 2 per FA. FIRST SESSION WITH ALL 5 FAs. Bridge: FLSA (FA4) → Risk Mgmt (FA1). ERISA → Corporate Governance (FA1). AI Bridge on FLSA or ERISA.","Log: All 5 FAs now live — which FA-to-FA bridge felt weakest?"],entries:5,flashcards:'~11',questions:0},
-          {day:19,date:'2026-04-16',phase:'phase1',fa:'FA4',pkaType:'encode-retrieve',focus:'FA4 Total Rewards - Wrap-Up + Full FA4 Pass',tasks:["Activate: IRA/SEP/SIMPLE, Health Insurance/ACA, Benefit Strategy, Total Rewards Communication, TR Program Design entries + flashcards","MORNING (~21 min) — Read entries: IRA/SEP/SIMPLE → Health Insurance/ACA → Benefit Strategy → TR Communication → TR Program Design","— 12-HOUR GAP —","EVENING — Full pass: all 34 FA4 flashcards (target 80%+) — flag weak cards","EVENING — Practice tab → Smart Session (All Tiers) — ~32 min. All 79 entries now active."],entries:5,flashcards:34,questions:20},
-          {day:20,date:'2026-04-17',phase:'phase1',fa:'mixed',pkaType:'full-interleave',focus:'Full Interleave Day — All 5 FAs Active — No New Content',tasks:["NO NEW CONTENT — This is a pure PKA synthesis day","Complete any outstanding entries from Phase 1 first (if any remain)","[INTERLEAVE] SESSION 1 (30 min): Interleave tab, 3 per FA, answer ALL bridge prompts out loud — do not skip any","[INTERLEAVE] SESSION 2 (30 min): Interleave tab again — set to 2 per FA, use AI Bridge on at least 3 entries from different FAs","After Session 2: Write down the 3 most surprising connections you discovered","Check Dashboard: Tier distribution, FA Accuracy, flag any FA below 70% for Phase 2 priority","Light mixed flashcard pass: 20 cards max from Practice tab"],entries:0,flashcards:0,questions:0},
-          {day:21,date:'2026-04-20',phase:'phase2',fa:'FA1',pkaType:'flashburn',focus:'Phase 2: FA1 + FA5 Flashcard Burn (60% of Exam)',tasks:["SINGLE BLOCK (no split required in Phase 2)","Full pass: all 25 FA1 flashcards — out loud, timed, target 80%+","Full pass: all 15 FA5 flashcards — out loud, timed, target 80%+","FA1+FA5 practice questions — timed (40 questions)","Flag ALL weak cards across FA1 and FA5 — these are priority for Day 22","Note: FA1 (40%) + FA5 (20%) = 60% of your exam score — protect this ground"],entries:0,flashcards:40,questions:40},
-          {day:22,date:'2026-04-21',phase:'phase2',fa:'mixed',pkaType:'deep-interleave',focus:'Phase 2: Deep Interleave — FA1 × FA5 × FA2 Synthesis',tasks:["SINGLE BLOCK — DEDICATED DEEP INTERLEAVE (no flashcard drill today — that is tomorrow)","[INTERLEAVE] SESSION 1: Interleave tab, 3 per FA, focus on FA1 × FA5 × FA2 crossRef chains","For each reveal: answer the Decision Criteria question first — 'under what conditions would the exam test this vs a related concept?'","[INTERLEAVE] SESSION 2: Use 'Ask AI to Bridge' on every entry flagged weak in Day 21","Log: Which bridge connections are still shaky? Build your Phase 3 weak-list now.","20 mixed questions from Questions tab on FA1/FA5/FA2 weak spots"],entries:0,flashcards:0,questions:20},
-          {day:23,date:'2026-04-22',phase:'phase2',fa:'FA2',pkaType:'flashburn-interleave',focus:'Phase 2: FA2 + FA3 Flashcard Burn + Interleave',tasks:["Full pass: all 32 FA2 flashcards — out loud, target 80%+ (WARN Act, Four-Fifths Rule, OWBPA are high-frequency)","Full pass: all 35 FA3 flashcards — out loud, target 80%+","FA2+FA3 practice questions — timed (40 questions)","[INTERLEAVE] Interleave tab: 1 per FA session (quick 15-min pass) — bridge FA2 staffing metrics to FA3 talent analytics","Flag weak cards across FA2 and FA3"],entries:0,flashcards:67,questions:40},
-          {day:24,date:'2026-04-23',phase:'phase2',fa:'mixed',pkaType:'deep-interleave',focus:'Phase 2: Deep Interleave — FA3 × FA4 + Weak Area Bridges',tasks:["SINGLE BLOCK — DEDICATED DEEP INTERLEAVE","[INTERLEAVE] SESSION 1: Interleave tab, 3 per FA, focus on FA3 × FA4 connections (Training/Comp is a high-exam bridge — how do rewards reinforce learning?)","For each FA4 entry: use Decision Criteria to answer 'when does this comp concept appear in an employee engagement or performance scenario?'","[INTERLEAVE] SESSION 2: AI Bridge on all entries you flagged weak across Days 21-23","30 targeted questions on FA3 and FA4 weak areas","Log: Build final remediation list for Day 28"],entries:0,flashcards:0,questions:30},
-          {day:25,date:'2026-04-24',phase:'phase2',fa:'FA4',pkaType:'flashburn',focus:'Phase 2: FA4 Flashcard Burn + Full Mixed Pass',tasks:["Full pass: all 34 FA4 flashcards — out loud, target 80%+ (FLSA, ERISA, 401k tests are high-frequency)","Full mixed pass: all 141 flashcards shuffled — Practice tab, All Tiers — this is your first full integrated pass","Score yourself on mixed pass: target 75%+ overall. Note FA accuracy breakdown.","Flag any FA where accuracy is below 70% — priority for Day 26 and Day 28"],entries:0,flashcards:141,questions:0},
-          {day:26,date:'2026-04-27',phase:'phase2',fa:'mixed',pkaType:'deep-interleave',focus:'Phase 2: Final Deep Interleave + Mixed Practice Questions',tasks:["[INTERLEAVE] SESSION: Interleave tab, 2 per FA, use AI Bridge on your 5 most consistently weak entries","50 mixed practice questions from Questions tab — all 5 FAs, timed","Score and categorize errors by FA — this is your diagnostic for the Day 27 simulation","Confirm your top 3 weak sub-topics: these drive Day 28 remediation","Rest well tonight — Day 27 is full exam simulation"],entries:0,flashcards:0,questions:50},
-          {day:27,date:'2026-04-28',phase:'phase3',fa:'mixed',pkaType:'simulate',focus:'Phase 3: Exam Simulation #1 — 165 Questions / 3 Hours',tasks:["EXAM MODE — same setup and mindset as the real thing. No checking mid-session.","165 questions from Questions tab — mixed all FAs — start the 3-hour timer.","DO NOT check answers mid-session. Commit fully. Flag uncertain questions and move on.","After completing: score every answer, categorize every error by FA.","Write down your top 3 weak sub-topics — these drive Days 28 and 29.","Pace: 165 questions / 180 min = ~1 min 5 sec per question."],entries:0,flashcards:0,questions:165},
-          {day:28,date:'2026-04-29',phase:'phase3',fa:'mixed',pkaType:'remediate',focus:'Phase 3: Targeted Remediation + Weak-FA Interleave',tasks:["Return ONLY to entries for weak sub-topics from Day 27 — Exam Points + Decision Criteria only.","Re-drill weak flashcards only — not the full deck.","[INTERLEAVE] Interleave tab: 3 per FA, focused on your weakest 2–3 FAs. Use AI Bridge on every weak entry.","30 targeted questions on weak areas from Questions tab.","Log: Which Decision Criteria distinctions are still causing errors? Carry the list to Day 29."],entries:0,flashcards:0,questions:30},
-          {day:29,date:'2026-04-30',phase:'phase3',fa:'mixed',pkaType:'deep-interleave',focus:'Phase 3: Cross-FA Synthesis — Final Deep Interleave',tasks:["[INTERLEAVE] SESSION 1 (30 min): Interleave tab, 3 per FA, all 5 FAs. Bridge prompts — full answers out loud. AI Bridge on at least 3 entries.","[INTERLEAVE] SESSION 2 (20 min): 2 per FA — focus on the FA pairs where Day 27 errors clustered.","20 mixed practice questions on remaining weak areas.","Log: What bridges are now solid? What is still fuzzy? Carry fuzzy list to Day 30."],entries:0,flashcards:0,questions:20},
-          {day:30,date:'2026-05-01',phase:'phase3',fa:'mixed',pkaType:'simulate',focus:'Phase 3: Exam Simulation #2 — 80 Questions Targeted',tasks:["80 questions from Questions tab, weighted toward your weak FAs. 90-minute timer.","Score and categorize. Compare accuracy to Day 27 — measure the improvement.","Identify any remaining gaps for a 15-minute targeted entry re-read on Day 31.","Rest well tonight. No cramming after this point."],entries:0,flashcards:0,questions:80},
-          {day:31,date:'2026-05-04',phase:'phase3',fa:'FA1',pkaType:'encode-retrieve',focus:'Phase 3: FA1 + FA5 Deep Pass — 60% of the Exam',tasks:["Full re-read: all 20 FA1 entries — Exam Points and Decision Criteria only (no full summaries).","Full re-read: all 8 FA5 entries — Exam Points and Decision Criteria only.","All 25 FA1 flashcards + all 15 FA5 flashcards — out loud, full timed pass.","30 FA1+FA5 practice questions — timed.","FA1 is 40% of your score. FA5 is 20%. These two FAs are more than half the exam."],entries:28,flashcards:40,questions:30},
-          {day:32,date:'2026-05-05',phase:'phase3',fa:'mixed',pkaType:'flashburn',focus:'Phase 3: FA2 + FA3 + FA4 Targeted Review',tasks:["Re-read Exam Points + Decision Criteria for any FA2/FA3/FA4 entries still causing errors.","FA2 weak flashcards + FA3 weak flashcards + FA4 weak flashcards — targeted pass, not full decks.","30 mixed questions across FA2, FA3, FA4 from Questions tab.","No new material. Reinforce only."],entries:0,flashcards:0,questions:30},
-          {day:33,date:'2026-05-06',phase:'phase3',fa:'mixed',pkaType:'deep-interleave',focus:'Phase 3: Final Interleave Session + Quick Reference Lock',tasks:["[INTERLEAVE] Final Interleave session: 2 per FA, all 5 FAs. Last cross-FA synthesis pass — full bridge prompts out loud.","After the session: review the Quick Reference table in the PKA guide — formulas, thresholds, sequences. Say them out loud.","20 mixed flashcards from Practice tab — your strongest material only.","Stop studying by early evening. Rest is preparation."],entries:0,flashcards:20,questions:0},
-          {day:34,date:'2026-05-07',phase:'phase3',fa:'buffer',pkaType:'light',focus:'Exam Eve — Light Review Only (Exam Tomorrow May 8)',tasks:["Quick Reference notes and Decision Criteria distinctions ONLY — no full entries, no new content.","10 mixed flashcards maximum — your absolute strongest material — then stop completely.","Confirm exam environment: location or login, government ID, tech setup.","Prepare everything you need tonight — packed, login tested, ID ready.","Sleep 8 hours. You ran the full PKA system. The knowledge is there."],entries:0,flashcards:10,questions:0}
+          {day:1,date:'2026-03-23',phase:'phase1',fa:'FA1',focus:'FA1 Leadership & Strategy - Part 1',tasks:["Porter's Five Forces Model (entry + flashcards)","SWOT Analysis Framework (entry + flashcards)","PEST Analysis Framework (entry + flashcards)"],entries:3,flashcards:'~4',questions:15},
+          {day:2,date:'2026-03-24',phase:'phase1',fa:'FA1',focus:'FA1 Leadership & Strategy - Part 2',tasks:["Hofstede's Cultural Dimensions (entry + flashcards)","Strategic Planning Four-Step Process (entry + flashcards)","Mission, Vision, and Values (entry + flashcards)"],entries:3,flashcards:'~4',questions:15},
+          {day:3,date:'2026-03-25',phase:'phase1',fa:'FA1',focus:'FA1 Leadership & Strategy - Part 3',tasks:["Organizational Structures: Traditional & Non-Traditional","Types of Analytics: Descriptive, Diagnostic, Predictive, Prescriptive","Change Management Models and OD"],entries:3,flashcards:'~4',questions:15},
+          {day:4,date:'2026-03-26',phase:'phase1',fa:'FA1',focus:'FA1 Leadership & Strategy - Part 4',tasks:["Corporate Governance and Fiduciary Responsibility","Business Structures and HR Implications","Types of Business Risk","HR Metrics and Key Performance Indicators"],entries:4,flashcards:'~4',questions:15},
+          {day:5,date:'2026-03-27',phase:'phase1',fa:'FA1',focus:'FA1 Leadership & Strategy - Part 5',tasks:["Vendor Selection and Management Process","Financial Statements: Balance Sheet, Income Statement, Cash Flow","Inclusivity Initiatives Development"],entries:3,flashcards:'~4',questions:12},
+          {day:6,date:'2026-03-30',phase:'phase1',fa:'FA1',focus:'FA1 Leadership & Strategy - Wrap-Up',tasks:["Business Continuity and Response Planning","Edgar Schein's Three Levels of Culture","Project Management Process","Mergers and Acquisitions: HR's Role","Quick pass: all 25 FA1 flashcards"],entries:4,flashcards:25,questions:20},
+          {day:7,date:'2026-03-31',phase:'phase1',fa:'FA3',focus:'FA3 Talent Management & L&D - Part 1 (23% of exam)',tasks:["Integrated Talent Management Philosophy & Core Components","Comprehensive Training Needs Assessment: Four-Pronged Approach","Instructional Design Models: ADDIE, SAM, Dick & Carey, Kemp, ARCS","Training Delivery Modalities and Audience Adaptation","Kirkpatrick's 4-Level Training Evaluation Framework"],entries:5,flashcards:'~9',questions:15},
+          {day:8,date:'2026-04-01',phase:'phase1',fa:'FA3',focus:'FA3 Talent Management & L&D - Part 2',tasks:["70-20-10 Model for Learning and Development","Performance Management: Goal Cascading & Feedback Systems","Employee Engagement, Retention & Experience Enhancement","Talent Analytics: Strategic Metrics, Advanced Techniques & Ethics","Inclusivity Initiatives: Holistic Integration into Talent Management"],entries:5,flashcards:'~9',questions:15},
+          {day:9,date:'2026-04-02',phase:'phase1',fa:'FA3',focus:'FA3 Talent Management & L&D - Part 3',tasks:["Individualized Development Planning (IDP) & Career Growth","Leadership Development: Inclusive Strategies at All Levels","Succession Planning: Proactive Talent Continuity Process","Offboarding Strategies: Exit Conversations, Layoffs & Alumni Programs","Return-to-Work Policies & Employee Reintegration"],entries:5,flashcards:'~9',questions:15},
+          {day:10,date:'2026-04-03',phase:'phase1',fa:'FA3',focus:'FA3 Talent Management & L&D - Wrap-Up',tasks:["Ethical Decision-Making Frameworks in Talent Management","Labor Relations Landscape: Stakeholders, Legal Context & Strategic Factors","Collective Bargaining: Interest-Based Bargaining & Negotiation","Kirkpatrick's Model Applied to Performance Enablement Programs","Quick pass: all 35 FA3 flashcards"],entries:4,flashcards:35,questions:20},
+          {day:11,date:'2026-04-06',phase:'phase1',fa:'FA2',focus:'FA2 Workforce Planning & Talent Acquisition - Part 1 (17% of exam)',tasks:["Data-Driven Strategic Workforce Planning Process","Talent Attraction, Employer Branding & Candidate Experience","Workforce Planning Techniques: Forecasting Methods & Stakeholder Roles","Succession Planning: 9-Box, Replacement Charting, Dual Career Ladders"],entries:4,flashcards:'~8',questions:15},
+          {day:12,date:'2026-04-07',phase:'phase1',fa:'FA2',focus:'FA2 Workforce Planning & Talent Acquisition - Part 2',tasks:["Market Forecasting: Labor Market Analysis, Talent Pool & PESTLE","Employer Branding, EVP & Brand Protection Strategies","Total Rewards Impact on Recruitment, Retention & Market Positioning","Alternative Staffing: Outsourcing, Job Sharing, Phased Retirement, Offshoring","Recruitment Sources, Strategies & ROI Evaluation"],entries:5,flashcards:'~8',questions:15},
+          {day:13,date:'2026-04-08',phase:'phase1',fa:'FA2',focus:'FA2 Workforce Planning & Talent Acquisition - Part 3',tasks:["Interviewing Structures, Selection Methods, Reliability/Validity","Onboarding Strategies Using ADDIE & Cultural Integration for M&A","Negotiation Techniques: Five Approaches & Situational Application","Corporate Transition: Restructuring, M&A, Offshoring & Divestitures"],entries:4,flashcards:'~8',questions:15},
+          {day:14,date:'2026-04-09',phase:'phase1',fa:'FA2',focus:'FA2 Workforce Planning & Talent Acquisition - Wrap-Up',tasks:["Due Diligence Process for M&A and Divestitures","RIF Techniques, Transition Support, WARN Act & OWBPA Compliance","Staffing Effectiveness Metrics: Efficiency vs. Effectiveness, Four-Fifths Rule","Feedback Methods for Staffing Effectiveness: Four Evaluation Sources","Quick pass: all 32 FA2 flashcards"],entries:4,flashcards:32,questions:20},
+          {day:15,date:'2026-04-10',phase:'phase1',fa:'FA4',focus:'FA4 Total Rewards - Part 1 (17% of exam)',tasks:["Motivation Theories Applied to Total Rewards Design","Total Rewards Philosophy, Strategy Design & Communication","Job Analysis Methods and Job Design Concepts","Job Evaluation Methods: Nonquantitative & Quantitative Techniques","Pay Structures: Traditional, Broadband & Market-Based"],entries:5,flashcards:'~11',questions:15},
+          {day:16,date:'2026-04-13',phase:'phase1',fa:'FA4',focus:'FA4 Total Rewards - Part 2',tasks:["Compensation Benchmarking Techniques & Salary Surveys","External Labor Markets, Economic Factors & SWOT/PEST for Total Rewards","Executive Compensation: Base Pay, Incentives, Equity & Perquisites","FLSA Compliance: Wage, Overtime, On-Call & Portal-to-Portal Rules","ERISA, Retirement Plan Types & 401(k) Compliance Tests"],entries:5,flashcards:'~11',questions:15},
+          {day:17,date:'2026-04-14',phase:'phase1',fa:'FA4',focus:'FA4 Total Rewards - Wrap-Up',tasks:["IRA, SEP & SIMPLE Retirement Plans","Health Insurance Plans, ACA & Non-Cash Compensation","Benefit Strategy Design, Evaluation & Open Enrollment Negotiation","Total Rewards Communication Strategy & Employee Recognition Programs","Total Rewards Program Design & Recognition Alignment | Quick pass: all 34 FA4 flashcards"],entries:5,flashcards:34,questions:20},
+          {day:18,date:'2026-04-15',phase:'phase1',fa:'FA5',focus:'FA5 HR Info Mgmt, Safety & Security - Part 1 (10% of exam)',tasks:["Employee Safety & Security Strategies: OSHA, HIPAA, Emergency Response","Occupational Injury & Illness Prevention: 14 Techniques","Workplace Safety & Security Risks: Four Risk Categories","Emergency Response, Business Continuity & Disaster Recovery"],entries:4,flashcards:'~7',questions:15},
+          {day:19,date:'2026-04-16',phase:'phase1',fa:'FA5',focus:'FA5 HR Info Mgmt, Safety & Security - Wrap-Up',tasks:["Data Security Essentials: Sensitive Info, Document Retention, Policy","Internal Investigation, Monitoring & Surveillance Techniques","HR Digitization Initiatives: HRIS, Workflows & 8-Component Tech Stack","HR Data Privacy & Cybersecurity: Social Engineering & Monitoring","Quick pass: all 15 FA5 flashcards"],entries:4,flashcards:15,questions:15},
+          {day:20,date:'2026-04-17',phase:'phase2',fa:'buffer',focus:'Buffer / Catch-Up Day',tasks:["Complete any outstanding entries from Phase 1","Re-review any FA where you felt weak","Light mixed flashcard pass across all FAs","Rest and reset mentally for Phase 2"],entries:0,flashcards:0,questions:0},
+          {day:21,date:'2026-04-20',phase:'phase2',fa:'FA1',focus:'FA1 Flashcard Burn + Practice Questions',tasks:["Full pass: all 25 FA1 flashcards (target 80%+)","FA1 practice questions - timed","Flag any FA1 cards below confidence level","Note weak sub-topics for Day 28 remediation"],entries:0,flashcards:25,questions:40},
+          {day:22,date:'2026-04-21',phase:'phase2',fa:'FA3',focus:'FA3 Flashcard Burn + Practice Questions (23% of exam)',tasks:["Repeat pass: FA1 flagged/weak flashcards first (15 min)","Full pass: all 35 FA3 flashcards (target 80%+)","FA3 practice questions - timed (ADDIE, Kirkpatrick, 70-20-10)","Flag weak FA3 cards — note sub-topics for Day 28 remediation"],entries:0,flashcards:35,questions:40},
+          {day:23,date:'2026-04-22',phase:'phase2',fa:'FA2',focus:'FA2 Flashcard Burn + Practice Questions',tasks:["Full pass: all 32 FA2 flashcards (target 80%+)","FA2 practice questions - timed (WARN Act, Four-Fifths Rule, OWBPA)","Flag weak FA2 cards","Note weak sub-topics for Day 28 remediation"],entries:0,flashcards:32,questions:40},
+          {day:24,date:'2026-04-23',phase:'phase2',fa:'FA4',focus:'FA4 Flashcard Burn + Practice Questions',tasks:["Full pass: all 34 FA4 flashcards (target 80%+)","FA4 practice questions - timed (FLSA, ERISA, comp formulas)","Flag weak FA4 cards","Note weak sub-topics for Day 28 remediation"],entries:0,flashcards:34,questions:40},
+          {day:25,date:'2026-04-24',phase:'phase2',fa:'FA5',focus:'FA5 Flashcard Burn + Practice Questions',tasks:["Full pass: all 15 FA5 flashcards (target 80%+)","FA5 practice questions - timed (OSHA, HRIS, data security)","Flag weak FA5 cards","Note weak sub-topics for Day 28 remediation"],entries:0,flashcards:15,questions:30},
+          {day:26,date:'2026-04-27',phase:'phase2',fa:'mixed',focus:'Full Mixed Flashcard Pass + Mixed Questions',tasks:["Complete mixed pass: all 141 flashcards (shuffled)","Mixed practice questions across all 5 FAs","Score yourself - target 80%+ across all sections","Build your Phase 3 weak-list"],entries:0,flashcards:141,questions:50},
+          {day:27,date:'2026-04-28',phase:'phase3',fa:'mixed',focus:'Timed Exam Simulation',tasks:["Simulate full timed exam block: 165 questions / 3 hours","Do NOT check answers mid-session - commit fully","Score and categorize errors by FA","Identify top 3 weak sub-topics for final 3 days"],entries:0,flashcards:0,questions:165},
+          {day:28,date:'2026-04-29',phase:'phase3',fa:'mixed',focus:'Targeted Remediation',tasks:["Return to entries for all weak sub-topics from Day 27","Re-drill weak flashcards only - not the full deck","Run targeted practice questions on weak areas","No new material - reinforce what you know"],entries:0,flashcards:0,questions:30},
+          {day:29,date:'2026-04-30',phase:'phase3',fa:'FA1',focus:'FA1 + FA3 Final Deep Pass (56% of exam)',tasks:["Full entry re-read: all 20 FA1 entries (exam points only)","Full entry re-read: all 19 FA3 entries (exam points only)","All 25 FA1 flashcards + all 35 FA3 flashcards","Quick pass: FA1+FA3 practice questions","Sleep 8 hours tonight - non-negotiable"],entries:39,flashcards:60,questions:30},
+          {day:30,date:'2026-05-01',phase:'phase3',fa:'buffer',focus:'Light Review - Exam Eve (Exam is Sunday May 3)',tasks:["Review quick-ref and decision criteria notes only","20 mixed flashcards maximum - then stop","Confirm exam location, login, ID requirements","Pack everything the night before","Relax - you are ready"],entries:0,flashcards:20,questions:0}
         ];
 
         function spGetState() {
@@ -3925,23 +3721,6 @@
             return m[fa] || 'sp-mixed';
         }
 
-        function spPkaModeBar(type) {
-            var modes = {
-                'encode-retrieve':    { cls:'pka-encode',          icon:'📖', label:'PKA Mode: ENCODE + RETRIEVE — Morning: read entries. Evening: flashcards + Practice tab.' },
-                'encode-interleave':  { cls:'pka-interleave',      icon:'🔀', label:'PKA Mode: ENCODE + INTERLEAVE — Morning: read entries. Evening: flashcards + Interleave tab (replaces Practice tab).' },
-                'full-interleave':    { cls:'pka-deep-interleave',  icon:'🔀', label:'PKA Mode: FULL INTERLEAVE DAY — All 5 FAs active. Run 2+ Interleave sessions. Use AI Bridge. No new content.' },
-                'deep-interleave':    { cls:'pka-deep-interleave',  icon:'🔀', label:'PKA Mode: DEEP INTERLEAVE — Dedicated synthesis session. Interleave tab, 2–3 per FA, AI Bridge on weak entries.' },
-                'flashburn-interleave':{ cls:'pka-flashburn',       icon:'⚡', label:'PKA Mode: FLASHCARD BURN + INTERLEAVE — First: targeted flashcard pass. Then: Interleave tab cross-FA session.' },
-                'flashburn':          { cls:'pka-flashburn',        icon:'⚡', label:'PKA Mode: FLASHCARD BURN — Targeted flashcard pass by FA. Then Practice tab.' },
-                'simulate':           { cls:'pka-simulate',         icon:'🎯', label:'PKA Mode: EXAM SIMULATION — Timed, no answer-checking mid-session. Score and categorize errors by FA.' },
-                'remediate':          { cls:'pka-interleave',       icon:'🔧', label:'PKA Mode: REMEDIATION + INTERLEAVE — Target weak FAs from simulation. Use Interleave tab focused on gap areas.' },
-                'buffer':             { cls:'pka-buffer',           icon:'⏸', label:'PKA Mode: BUFFER — Catch-up or rest. No new material required.' },
-                'light':              { cls:'pka-buffer',           icon:'🌙', label:'PKA Mode: EXAM EVE — Light review only. Maximum 20 flashcards. Stop early. Sleep.' }
-            };
-            var m = modes[type] || modes['encode-retrieve'];
-            return '<div class="pka-mode-bar ' + m.cls + '">' + m.icon + '&nbsp;' + m.label + '</div>';
-        }
-
         function spBuildCard(d) {
             var s = spGetState();
             var dk = 'day_' + d.day;
@@ -3952,14 +3731,12 @@
             var isToday = cardDate.getTime() === today.getTime();
             var isDone = ds.done || false;
 
-            // Build tasks — highlight interleave tasks with special class
+            // Build tasks using simple clean HTML - same pattern as standalone tracker
             var taskHTML = d.tasks.map(function(t, i) {
                 var chk = (ds.tasks || {})[i] || false;
-                var isIL = t.indexOf('[INTERLEAVE]') === 0 || t.indexOf('INTERLEAVE SESSION') !== -1;
-                var displayT = t.replace('[INTERLEAVE] ', '');
                 return '<li class="sp-task-item ' + (chk ? 'sp-checked' : '') + '" id="sptask_' + d.day + '_' + i + '">' +
                     '<input type="checkbox" class="sp-task-cb" ' + (chk ? 'checked' : '') + ' onchange="spToggleTask(' + d.day + ',' + i + ',this.checked)" />' +
-                    '<span class="sp-task-text' + (isIL ? ' pka-il-task' : '') + '">' + escapeHtml(displayT) + '</span>' +
+                    '<span class="sp-task-text">' + escapeHtml(t) + '</span>' +
                     '</li>';
             }).join('');
 
@@ -3979,7 +3756,6 @@
 
             return '<div class="sp-card' + (isDone ? ' sp-done' : '') + (isToday ? ' sp-today' : '') + '" id="spcard_' + d.day + '" data-phase="' + d.phase + '" data-done="' + isDone + '">' +
                 (isToday ? '<div class="sp-today-badge">Today</div>' : '') +
-                spPkaModeBar(d.pkaType) +
                 '<div class="sp-card-top">' +
                   '<div><div class="sp-day-num">Day ' + d.day + ' &middot; ' + wday + '</div>' +
                   '<div class="sp-date">' + mday + '</div></div>' +
@@ -4061,7 +3837,7 @@
             if (doneEl) doneEl.textContent = done;
             if (remEl) remEl.textContent = SP_DAYS.length - done;
             if (leftEl) {
-                var diff = Math.ceil((new Date('2026-05-08') - new Date()) / (1000*60*60*24));
+                var diff = Math.ceil((new Date('2026-05-03') - new Date()) / (1000*60*60*24));
                 leftEl.textContent = diff > 0 ? diff : 'EXAM!';
             }
         }
@@ -4085,434 +3861,12 @@
             });
         }
 
-        // ==================== INTERLEAVED PRACTICE ====================
-
-        function generateInterleavedSession() {
-            const entries = getEntries().filter(e => e.activatedDate);
-            const flashcards = getFlashcards().filter(f => f.activatedDate);
-            const container = document.getElementById('ilSession');
-
-            if (entries.length < 3) {
-                container.innerHTML = `<div style="text-align:center;padding:40px;background:#F8FAFC;border-radius:12px;border:2px dashed #E2E8F0;">
-                    <div style="font-size:3em;margin-bottom:12px;">&#128214;</div>
-                    <p style="color:#64748B;">You need at least 3 activated entries across different FAs to generate an interleaved session.</p>
-                </div>`;
-                return;
-            }
-
-            const perFA = parseInt(document.getElementById('ilItemsPerFA').value);
-            const includeFC = document.getElementById('ilIncludeFC').value === 'yes';
-
-            // Group entries by FA
-            const byFA = {};
-            entries.forEach(e => {
-                if (!byFA[e.functionalArea]) byFA[e.functionalArea] = [];
-                byFA[e.functionalArea].push(e);
-            });
-
-            // Shuffle within each FA and take up to perFA
-            const faKeys = Object.keys(byFA).sort();
-            faKeys.forEach(fa => { byFA[fa] = [...byFA[fa]].sort(() => Math.random() - 0.5).slice(0, perFA); });
-
-            // Interleave: round-robin across FAs
-            const interleaved = [];
-            const maxRounds = Math.max(...faKeys.map(k => byFA[k].length));
-            for (let r = 0; r < maxRounds; r++) {
-                faKeys.forEach(fa => { if (byFA[fa][r]) interleaved.push({ type: 'entry', data: byFA[fa][r] }); });
-            }
-
-            // Weave in flashcards between entries if requested
-            if (includeFC && flashcards.length > 0) {
-                const shuffledFC = [...flashcards].sort(() => Math.random() - 0.5).slice(0, Math.min(flashcards.length, interleaved.length));
-                const final = [];
-                interleaved.forEach((item, i) => {
-                    final.push(item);
-                    if (shuffledFC[i]) final.push({ type: 'flashcard', data: shuffledFC[i] });
-                });
-                buildILSession(final, container);
-            } else {
-                buildILSession(interleaved, container);
-            }
-        }
-
-        function buildILSession(items, container) {
-            const faColors = {
-                FA1: { bg: '#EDE9FE', border: '#7C3AED', text: '#4C1D95', label: 'FA1 · Leadership & Strategy' },
-                FA2: { bg: '#DBEAFE', border: '#3B82F6', text: '#1E40AF', label: 'FA2 · Workforce Planning' },
-                FA3: { bg: '#D1FAE5', border: '#10B981', text: '#065F46', label: 'FA3 · Talent Management' },
-                FA4: { bg: '#FEF3C7', border: '#F59E0B', text: '#92400E', label: 'FA4 · Total Rewards' },
-                FA5: { bg: '#FCE7F3', border: '#EC4899', text: '#9D174D', label: 'FA5 · HR Info / Safety' },
-            };
-
-            let html = `<div style="background:#E0E7FF;padding:12px 18px;border-radius:8px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;">
-                <strong style="color:#3730A3;">&#128256; Interleaved Session</strong>
-                <span style="color:#5B21B6;font-size:0.9em;">${items.length} items across ${[...new Set(items.filter(i=>i.type==='entry').map(i=>i.data.functionalArea))].length} Functional Areas</span>
-            </div>`;
-
-            html += `<div style="background:#FEF3C7;padding:14px 18px;border-radius:8px;margin-bottom:22px;border-left:4px solid #F59E0B;">
-                <strong style="color:#92400E;">&#127775; How to use this session:</strong>
-                <ol style="color:#92400E;margin:8px 0 0 18px;font-size:0.9em;line-height:1.7;">
-                    <li>Recall the concept out loud <strong>before</strong> revealing.</li>
-                    <li>After revealing, read the Bridge Prompts and answer at least one <strong>out loud</strong> — connecting this entry to its linked topic.</li>
-                    <li>Use "Ask AI to Bridge" when you want a deeper synthesis challenge.</li>
-                </ol>
-            </div>`;
-
-            items.forEach((item, idx) => {
-                if (item.type === 'entry') {
-                    const e = item.data;
-                    const c = faColors[e.functionalArea] || { bg:'#F8FAFC', border:'#94A3B8', text:'#1E293B', label: e.functionalArea };
-                    const tier = getTier(e.activatedDate, e.lastPracticed);
-                    const tierLabel = tier === 1 ? 'Tier 1' : tier === 2 ? 'Tier 2' : 'Tier 3';
-                    const tierColor = tier === 1 ? '#1E40AF' : tier === 2 ? '#92400E' : '#6B21A8';
-                    const tierBg = tier === 1 ? '#DBEAFE' : tier === 2 ? '#FEF3C7' : '#E9D5FF';
-
-                    // Parse crossRef into array
-                    const crossRefRaw = e.crossRef || '';
-                    const crossLinks = crossRefRaw ? crossRefRaw.replace('Links to:', '').split(',').map(s => s.trim()).filter(Boolean) : [];
-
-                    const bridgePromptsHTML = crossLinks.length > 0 ? `
-                        <div style="margin-top:18px;padding:14px;background:#EFF6FF;border-left:4px solid #3B82F6;border-radius:6px;">
-                            <strong style="color:#1E40AF;">&#128279; Bridge Prompts — connect this to:</strong>
-                            <ul style="margin:10px 0 0 18px;color:#1D4ED8;font-size:0.9em;line-height:2;">
-                                ${crossLinks.map(link => `<li>How does <strong>${escapeHtml(link)}</strong> relate to what you just recalled? What would change if you combined both?</li>`).join('')}
-                            </ul>
-                        </div>` : '';
-
-                    html += `
-                    <div class="entry-card" style="margin-bottom:18px;border-left:5px solid ${c.border};" id="il-card-${idx}">
-                        <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
-                            <div>
-                                <span style="background:${c.bg};color:${c.text};padding:3px 10px;border-radius:6px;font-size:0.78em;font-weight:700;margin-right:8px;">${c.label}</span>
-                                <span style="background:${tierBg};color:${tierColor};padding:3px 10px;border-radius:6px;font-size:0.78em;font-weight:700;">${tierLabel}</span>
-                            </div>
-                            <span style="color:#94A3B8;font-size:0.85em;">Item ${idx+1} of ${items.length}</span>
-                        </div>
-                        <div class="entry-title" style="margin-bottom:10px;">${escapeHtml(e.title)}</div>
-                        <div style="color:#64748B;font-size:0.9em;margin-bottom:12px;">
-                            <strong>Before revealing — recall:</strong> Core concept · When it appears on the exam · Key failure patterns
-                        </div>
-                        <button class="btn btn-small btn-secondary" onclick="ilReveal(${idx})">&#128065; Reveal Answer</button>
-                        <div id="il-reveal-${idx}" style="display:none;margin-top:14px;">
-                            <div style="padding:15px;background:#F0FDF4;border-left:4px solid #10B981;border-radius:6px;">
-                                <strong>Summary:</strong> ${escapeHtml(e.summary)}<br><br>
-                                ${e.examPoints ? `<strong>Exam Points:</strong> ${escapeHtml(e.examPoints)}` : ''}
-                                ${e.quickRef ? `<br><br><strong>Quick Ref:</strong> ${escapeHtml(e.quickRef)}` : ''}
-                            </div>
-                            ${e.failurePatterns ? `
-                            <div style="margin-top:10px;padding:13px 15px;background:#FEF2F2;border-left:4px solid #EF4444;border-radius:6px;">
-                                <strong style="color:#991B1B;">⚠ Key Failure Patterns:</strong>
-                                <div style="color:#7F1D1D;margin-top:6px;">${escapeHtml(e.failurePatterns)}</div>
-                            </div>` : ''}
-                            ${bridgePromptsHTML}
-                            <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
-                                <button class="btn btn-small btn-primary" onclick="markEntryPracticed('${e.id}')">&#9200; Mark Practiced</button>
-                                <button class="btn btn-small btn-secondary" onclick="ilAskAI('${e.id}', ${idx})" style="background:#F3E8FF;border-color:#7C3AED;color:#6D28D9;">&#129302; Ask AI to Bridge</button>
-                            </div>
-                            <div id="il-ai-${idx}" style="margin-top:12px;"></div>
-                        </div>
-                    </div>`;
-
-                } else if (item.type === 'flashcard') {
-                    const fc = item.data;
-                    const fcFAColors = faColors[fc.functionalArea] || { bg:'#F8FAFC', border:'#94A3B8', text:'#1E293B', label: fc.functionalArea };
-                    html += `
-                    <div class="flashcard" style="margin-bottom:18px;border-left:5px solid ${fcFAColors.border};background:#FAFAFA;" id="il-card-${idx}">
-                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-                            <span style="background:${fcFAColors.bg};color:${fcFAColors.text};padding:3px 10px;border-radius:6px;font-size:0.78em;font-weight:700;">${fcFAColors.label}</span>
-                            <span style="background:#F1F5F9;color:#64748B;padding:3px 10px;border-radius:6px;font-size:0.78em;">&#127183; Flashcard</span>
-                        </div>
-                        <div class="flashcard-question" style="margin-bottom:10px;">${escapeHtml(fc.question)}</div>
-                        <button class="btn btn-small btn-secondary" onclick="this.nextElementSibling.style.display='block';this.style.display='none';">&#128065; Reveal Answer</button>
-                        <div style="display:none;margin-top:12px;padding:12px;background:#F0FDF4;border-left:4px solid #10B981;border-radius:6px;">
-                            <strong>A:</strong> ${escapeHtml(fc.answer)}
-                        </div>
-                        <button class="btn btn-small btn-primary" onclick="markFlashcardPracticed('${fc.id}')" style="margin-top:10px;">&#9200; Mark Practiced</button>
-                    </div>`;
-                }
-            });
-
-            // Session complete footer
-            html += `<div style="text-align:center;padding:30px;background:linear-gradient(135deg,#EDE9FE,#E0E7FF);border-radius:12px;margin-top:10px;">
-                <div style="font-size:2.5em;margin-bottom:10px;">&#127881;</div>
-                <h4 style="color:#4C1D95;margin-bottom:8px;">Session Complete!</h4>
-                <p style="color:#6B21A8;font-size:0.9em;margin-bottom:16px;">Take 5 minutes to note: What unexpected connections did you discover? Which bridge felt hardest?</p>
-                <button class="btn btn-primary" onclick="generateInterleavedSession()" style="background:linear-gradient(135deg,#7C3AED,#4F46E5);">&#128256; Generate New Session</button>
-            </div>`;
-
-            container.innerHTML = html;
-        }
-
-        function ilReveal(idx) {
-            const btn = document.querySelector(`#il-card-${idx} .btn-secondary`);
-            const reveal = document.getElementById(`il-reveal-${idx}`);
-            if (btn) btn.style.display = 'none';
-            if (reveal) reveal.style.display = 'block';
-        }
-
-        function ilSaveApiKey() {
-            const key = document.getElementById('ilApiKeyInput').value.trim();
-            if (!key.startsWith('sk-ant-')) {
-                document.getElementById('ilApiKeyStatus').innerHTML = '<span style="color:#DC2626;">&#9888; Key should start with <code>sk-ant-</code> — please check and try again.</span>';
-                return;
-            }
-            localStorage.setItem('sphr_anthropic_key', key);
-            document.getElementById('ilApiKeyInput').value = '';
-            ilUpdateKeyStatus();
-            showToast('&#128273; API key saved!');
-        }
-
-        function ilClearApiKey() {
-            localStorage.removeItem('sphr_anthropic_key');
-            document.getElementById('ilApiKeyInput').value = '';
-            ilUpdateKeyStatus();
-            showToast('&#128465; API key cleared.');
-        }
-
-        function ilUpdateKeyStatus() {
-            const key = localStorage.getItem('sphr_anthropic_key');
-            const statusEl = document.getElementById('ilApiKeyStatus');
-            if (!statusEl) return;
-            if (key) {
-                const masked = key.substring(0, 14) + '••••••••••••••••' + key.slice(-4);
-                statusEl.innerHTML = `<span style="color:#059669;">&#9989; Key saved: <code>${masked}</code> — "Ask AI to Bridge" is ready.</span>`;
-            } else {
-                statusEl.innerHTML = '<span style="color:#DC2626;">&#9888; No key saved — "Ask AI to Bridge" will not work until you add one.</span>';
-            }
-        }
-
-        async function ilAskAI(entryId, idx) {
-            const entries = getEntries();
-            const entry = entries.find(e => e.id === entryId);
-            if (!entry) return;
-
-            const apiKey = localStorage.getItem('sphr_anthropic_key');
-            const aiDiv = document.getElementById(`il-ai-${idx}`);
-
-            if (!apiKey) {
-                aiDiv.innerHTML = `<div style="padding:14px;background:#FEF3C7;border-left:4px solid #F59E0B;border-radius:8px;color:#92400E;">
-                    <strong>&#128273; API key required.</strong> Scroll up and enter your Anthropic API key in the yellow box above to enable this feature.
-                </div>`;
-                return;
-            }
-
-            aiDiv.innerHTML = `<div style="padding:14px;background:#F3E8FF;border-radius:8px;text-align:center;color:#6D28D9;">
-                <span style="font-size:1.2em;">&#129302;</span> Generating cross-FA bridge questions...
-            </div>`;
-
-            const crossRefRaw = entry.crossRef || '';
-            const prompt = `You are an SPHR exam coach helping a candidate build integrated HR knowledge.
-
-The learner just reviewed this entry:
-
-ENTRY: "${entry.title}" (${entry.functionalArea})
-SUMMARY: ${entry.summary}
-EXAM POINTS: ${entry.examPoints || 'N/A'}
-CROSS-REFERENCES: ${crossRefRaw || 'None listed'}
-
-Generate exactly 3 high-quality interleaving synthesis questions. Each question must:
-1. Force the learner to connect THIS entry to a DIFFERENT functional area or crossRef topic listed above
-2. Be framed as a realistic SPHR exam scenario or strategic HR decision
-3. Require integration of TWO concepts — not just recall of one
-
-Format your response as JSON only (no markdown, no extra text):
-{
-  "questions": [
-    {"q": "...", "hint": "Key concepts to connect: ... + ..."},
-    {"q": "...", "hint": "Key concepts to connect: ... + ..."},
-    {"q": "...", "hint": "Key concepts to connect: ... + ..."}
-  ]
-}`;
-
-            try {
-                const response = await fetch('https://api.anthropic.com/v1/messages', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-api-key': apiKey,
-                        'anthropic-version': '2023-06-01',
-                        'anthropic-dangerous-direct-browser-access': 'true'
-                    },
-                    body: JSON.stringify({
-                        model: 'claude-haiku-4-5-20251001',
-                        max_tokens: 1000,
-                        messages: [{ role: 'user', content: prompt }]
-                    })
-                });
-
-                if (!response.ok) {
-                    const errData = await response.json().catch(() => ({}));
-                    throw new Error(`API error ${response.status}: ${errData.error?.message || response.statusText}`);
-                }
-
-                const data = await response.json();
-                const text = data.content?.map(c => c.text || '').join('') || '';
-                const clean = text.replace(/```json|```/g, '').trim();
-                const parsed = JSON.parse(clean);
-
-                let qHTML = `<div style="background:#F3E8FF;border-left:4px solid #7C3AED;border-radius:8px;padding:16px;margin-top:4px;">
-                    <strong style="color:#4C1D95;display:block;margin-bottom:12px;">&#129302; AI Bridge Questions — answer at least one out loud:</strong>`;
-                parsed.questions.forEach((item, i) => {
-                    qHTML += `
-                    <div style="background:white;border-radius:8px;padding:14px;margin-bottom:10px;border:1px solid #DDD6FE;">
-                        <p style="color:#1E1B4B;font-weight:600;margin:0 0 8px 0;">${i+1}. ${escapeHtml(item.q)}</p>
-                        <p style="color:#7C3AED;font-size:0.85em;margin:0;font-style:italic;">&#128161; ${escapeHtml(item.hint)}</p>
-                    </div>`;
-                });
-                qHTML += '</div>';
-                aiDiv.innerHTML = qHTML;
-            } catch (err) {
-                let helpText = err.message;
-                if (err.message.includes('401')) helpText = 'Invalid API key. Please check your key and save it again.';
-                else if (err.message.includes('fetch')) helpText = 'Network error. Make sure you\'re connected to the internet.';
-                aiDiv.innerHTML = `<div style="padding:14px;background:#FEE2E2;border-left:4px solid #EF4444;border-radius:8px;color:#991B1B;">
-                    <strong>&#9888; Could not generate questions.</strong><br>
-                    <small style="font-family:monospace;">${escapeHtml(helpText)}</small>
-                </div>`;
-            }
-        }
-
-        // ==================== FLASH BURN MODE ====================
-
-        function generateFlashBurn() {
-            const selected = document.getElementById('flashBurnFA').value;
-            const allCards = getFlashcards().filter(f => f.activatedDate);
-            const statsEl = document.getElementById('flashBurnStats');
-            const container = document.getElementById('flashBurnSession');
-
-            if (allCards.length === 0) {
-                container.innerHTML = '<p style="color:#78350F;text-align:center;padding:20px;">No activated flashcards yet. Activate items in the Staging tab first.</p>';
-                return;
-            }
-
-            let cards = [];
-            if (selected === 'all') {
-                cards = allCards;
-            } else if (selected === 'FA1+FA5') {
-                cards = allCards.filter(f => f.functionalArea === 'FA1' || f.functionalArea === 'FA5');
-            } else if (selected === 'FA2+FA3') {
-                cards = allCards.filter(f => f.functionalArea === 'FA2' || f.functionalArea === 'FA3');
-            } else {
-                cards = allCards.filter(f => f.functionalArea === selected);
-            }
-
-            if (cards.length === 0) {
-                container.innerHTML = `<p style="color:#78350F;text-align:center;padding:20px;">No activated flashcards found for <strong>${selected}</strong>. Activate them in the Staging tab first.</p>`;
-                return;
-            }
-
-            const shuffled = [...cards].sort(() => Math.random() - 0.5);
-            const faColors = {
-                FA1:{bg:'#EDE9FE',border:'#7C3AED',text:'#4C1D95'},
-                FA2:{bg:'#DBEAFE',border:'#3B82F6',text:'#1E40AF'},
-                FA3:{bg:'#D1FAE5',border:'#10B981',text:'#065F46'},
-                FA4:{bg:'#FEF3C7',border:'#F59E0B',text:'#92400E'},
-                FA5:{bg:'#FCE7F3',border:'#EC4899',text:'#9D174D'},
-            };
-
-            statsEl.innerHTML = `&#9889; <strong>${shuffled.length} flashcards</strong> loaded — ${selected === 'all' ? 'Full Mixed Burn' : selected} &nbsp;|&nbsp; Shuffled randomly &nbsp;|&nbsp; Speak your answer before every reveal`;
-
-            window._fbCards = shuffled;
-            window._fbScore = { correct: 0, wrong: 0, total: shuffled.length };
-
-            let html = `
-            <div style="background:#FEF3C7;padding:12px 16px;border-radius:8px;margin-bottom:14px;border-left:4px solid #F59E0B;">
-                <strong style="color:#92400E;">&#128483; Protocol:</strong>
-                <span style="color:#78350F;"> Speak your answer before clicking Reveal. Struggle 10 seconds minimum. Mark every card Got It or Missed It to track your score.</span>
-            </div>
-            <div style="display:flex;gap:12px;background:#FFF7ED;padding:12px 16px;border-radius:8px;margin-bottom:16px;align-items:center;flex-wrap:wrap;">
-                <span style="color:#78350F;font-weight:600;font-size:0.9em;">Score:</span>
-                <span id="fbScore" style="font-size:1.1em;font-weight:700;color:#D97706;">0 / ${shuffled.length}</span>
-                <div style="margin-left:auto;display:flex;gap:8px;">
-                    <button class="btn btn-small" onclick="fbMarkAll(true)" style="background:#D1FAE5;color:#065F46;border-color:#10B981;">&#9989; All Correct</button>
-                    <button class="btn btn-small" onclick="fbMarkAll(false)" style="background:#FEE2E2;color:#991B1B;border-color:#EF4444;">&#10060; All Wrong</button>
-                </div>
-            </div>`;
-
-            shuffled.forEach((card, i) => {
-                const c = faColors[card.functionalArea] || {bg:'#F8FAFC',border:'#94A3B8',text:'#1E293B'};
-                const tier = getTier(card.activatedDate, card.lastPracticed);
-                const tierBg = tier===1?'#DBEAFE':tier===2?'#FEF3C7':'#E9D5FF';
-                const tierColor = tier===1?'#1E40AF':tier===2?'#92400E':'#6B21A8';
-                html += `
-                <div class="flashcard" style="margin-bottom:12px;border-left:4px solid ${c.border};" id="fb-card-${i}">
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:6px;">
-                        <div style="display:flex;gap:6px;">
-                            <span style="background:${c.bg};color:${c.text};padding:2px 9px;border-radius:5px;font-size:0.75em;font-weight:700;">${card.functionalArea}</span>
-                            <span style="background:${tierBg};color:${tierColor};padding:2px 9px;border-radius:5px;font-size:0.75em;font-weight:700;">T${tier}</span>
-                        </div>
-                        <span style="color:#94A3B8;font-size:0.8em;">${i+1} / ${shuffled.length}</span>
-                    </div>
-                    <div class="flashcard-question" style="margin-bottom:10px;">${escapeHtml(card.question)}</div>
-                    <button class="btn btn-small btn-secondary" id="fb-reveal-btn-${i}" onclick="fbReveal(${i})">&#128065; Reveal Answer</button>
-                    <div id="fb-answer-${i}" style="display:none;margin-top:10px;padding:12px;background:#F0FDF4;border-left:3px solid #10B981;border-radius:4px;">
-                        <strong>A:</strong> ${escapeHtml(card.answer)}
-                    </div>
-                    <div id="fb-actions-${i}" style="display:none;margin-top:10px;gap:8px;flex-wrap:wrap;">
-                        <button class="btn btn-small" onclick="fbMark('${card.id}',${i},true)" style="background:#D1FAE5;border-color:#10B981;color:#065F46;">&#9989; Got it</button>
-                        <button class="btn btn-small" onclick="fbMark('${card.id}',${i},false)" style="background:#FEE2E2;border-color:#EF4444;color:#991B1B;">&#10060; Missed it</button>
-                    </div>
-                </div>`;
-            });
-
-            html += `
-            <div style="text-align:center;padding:24px;background:linear-gradient(135deg,#FEF3C7,#FDE68A);border-radius:12px;margin-top:8px;">
-                <div style="font-size:2em;margin-bottom:8px;">&#9889;</div>
-                <h4 style="color:#92400E;margin-bottom:8px;">Burn Complete!</h4>
-                <p style="color:#78350F;font-size:0.9em;margin-bottom:14px;">Any FA scoring below 70% is a Phase 3 priority.</p>
-                <button class="btn btn-primary" onclick="generateFlashBurn()" style="background:linear-gradient(135deg,#F59E0B,#D97706);border-color:#B45309;">&#9889; Burn Again (New Shuffle)</button>
-            </div>`;
-
-            container.innerHTML = html;
-        }
-
-        function fbReveal(i) {
-            const btn = document.getElementById(`fb-reveal-btn-${i}`);
-            const ans = document.getElementById(`fb-answer-${i}`);
-            const act = document.getElementById(`fb-actions-${i}`);
-            if (btn) btn.style.display = 'none';
-            if (ans) ans.style.display = 'block';
-            if (act) act.style.display = 'flex';
-        }
-
-        function fbMark(cardId, idx, correct) {
-            if (!window._fbScore) return;
-            const card = document.getElementById(`fb-card-${idx}`);
-            if (correct) {
-                window._fbScore.correct++;
-                if (card) card.style.background = '#F0FDF4';
-            } else {
-                window._fbScore.wrong++;
-                if (card) card.style.background = '#FEF2F2';
-            }
-            const done = window._fbScore.correct + window._fbScore.wrong;
-            const pct = Math.round((window._fbScore.correct / window._fbScore.total) * 100);
-            const scoreEl = document.getElementById('fbScore');
-            if (scoreEl) scoreEl.innerHTML = `${window._fbScore.correct} / ${window._fbScore.total} &nbsp;<span style="color:#64748B;font-size:0.85em;">(${pct}% correct, ${done} graded)</span>`;
-            markFlashcardPracticed(cardId);
-        }
-
-        function fbMarkAll(correct) {
-            if (!window._fbCards) return;
-            window._fbCards.forEach((card, i) => {
-                const btn = document.getElementById(`fb-reveal-btn-${i}`);
-                if (btn && btn.style.display !== 'none') {
-                    fbReveal(i);
-                }
-                const act = document.getElementById(`fb-actions-${i}`);
-                if (act && act.style.display !== 'none' || act && act.style.display === 'flex') {
-                    fbMark(card.id, i, correct);
-                }
-            });
-        }
-
         // ==================== INITIALIZATION ====================
 
         document.addEventListener('DOMContentLoaded', function() {
             updateCountdowns();
             updateDashboard();
             showAddForm('entry');
-            ilUpdateKeyStatus();
             
             // Update countdown every hour
             setInterval(updateCountdowns, 3600000);
