@@ -3610,9 +3610,38 @@
                                 </ul>
                             </div>
                             <button class="btn btn-small btn-secondary" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Reveal Answer</button>
-                            <div style="display: none; margin-top: 15px; padding: 15px; background: #F0FDF4; border-left: 4px solid #10B981; border-radius: 4px;">
-                                <strong>Summary:</strong> ${escapeHtml(entry.summary)}<br><br>
-                                ${entry.examPoints ? `<strong>Exam Points:</strong> ${escapeHtml(entry.examPoints)}` : ''}
+                            <div style="display: none; margin-top: 15px; border-radius: 8px; overflow: hidden; border: 1px solid #E2E8F0;">
+
+                                ${entry.summary ? `
+                                <div style="padding: 14px 16px; background: #F0FDF4; border-left: 4px solid #10B981;">
+                                    <div style="font-size: 0.75em; font-weight: 700; color: #065F46; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Summary</div>
+                                    <div style="color: #1F2937; font-size: 0.9em; line-height: 1.5;">${escapeHtml(entry.summary)}</div>
+                                </div>` : ''}
+
+                                ${entry.examPoints ? `
+                                <div style="padding: 14px 16px; background: #FEF2F2; border-left: 4px solid #EF4444;">
+                                    <div style="font-size: 0.75em; font-weight: 700; color: #991B1B; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">▶ Exam Points</div>
+                                    <div style="color: #1F2937; font-size: 0.9em; line-height: 1.5; white-space: pre-line;">${escapeHtml(entry.examPoints)}</div>
+                                </div>` : ''}
+
+                                ${entry.quickRef ? `
+                                <div style="padding: 14px 16px; background: #EFF6FF; border-left: 4px solid #3B82F6;">
+                                    <div style="font-size: 0.75em; font-weight: 700; color: #1D4ED8; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Quick Reference</div>
+                                    <div style="color: #1F2937; font-size: 0.9em; line-height: 1.5; font-style: italic; white-space: pre-line;">${escapeHtml(entry.quickRef)}</div>
+                                </div>` : ''}
+
+                                ${entry.decisionCriteria ? `
+                                <div style="padding: 14px 16px; background: #F0FDF4; border-left: 4px solid #059669;">
+                                    <div style="font-size: 0.75em; font-weight: 700; color: #065F46; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">Decision Criteria — When to Use</div>
+                                    <div style="color: #1F2937; font-size: 0.9em; line-height: 1.5; white-space: pre-line;">${escapeHtml(entry.decisionCriteria)}</div>
+                                </div>` : ''}
+
+                                ${entry.failurePatterns ? `
+                                <div style="padding: 14px 16px; background: #FFFBEB; border-left: 4px solid #F59E0B;">
+                                    <div style="font-size: 0.75em; font-weight: 700; color: #92400E; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px;">⚠ Failure Patterns — What Goes Wrong</div>
+                                    <div style="color: #1F2937; font-size: 0.9em; line-height: 1.5; white-space: pre-line;">${escapeHtml(entry.failurePatterns)}</div>
+                                </div>` : ''}
+
                             </div>
                             <button class="btn btn-small btn-primary" onclick="markEntryPracticed('${entry.id}')" style="margin-top: 10px;">&#9200; Mark Practiced</button>
                         </div>
