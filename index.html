@@ -1074,6 +1074,7 @@
             <button class="nav-tab" data-tab="flashcards">&#127183; Flashcards</button>
             <button class="nav-tab" data-tab="questions">&#10067; Questions</button>
             <button class="nav-tab" data-tab="practice">&#129504; Practice</button>
+            <button class="nav-tab" data-tab="interleave">&#9854; Interleave</button>
             <button class="nav-tab" data-tab="exammode">&#127981; Exam Mode</button>
             <button class="nav-tab" data-tab="add">&#10133; Add Content</button>
             <button class="nav-tab" data-tab="manage">&#9881; Manage Data</button>
@@ -1546,6 +1547,92 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Interleave Tab -->
+        <div class="tab-content" id="interleave">
+            <div style="max-width: 960px; margin: 0 auto;">
+
+                <h2 style="margin-bottom:6px; color:#1E3A8A;">&#9854; Interleave Session</h2>
+                <p style="color:#64748B; margin-bottom:24px;">Cross-FA retrieval — forces your brain to switch context between functional areas, strengthening encoding. Select which FAs to mix, then generate a session.</p>
+
+                <!-- Controls -->
+                <div style="background:#F8FAFF; border:1px solid #DBEAFE; border-radius:12px; padding:20px; margin-bottom:24px;">
+                    <div style="font-weight:700; color:#1E3A8A; margin-bottom:14px;">&#9881; Session Settings</div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;">
+                        <div>
+                            <label style="font-size:0.85em; font-weight:600; color:#374151; display:block; margin-bottom:6px;">Functional Areas to Mix</label>
+                            <div style="display:flex; flex-wrap:wrap; gap:8px;" id="ilFACheckboxes">
+                                <label style="display:flex; align-items:center; gap:5px; cursor:pointer; font-size:0.85em; background:#DBEAFE; padding:5px 10px; border-radius:6px;">
+                                    <input type="checkbox" value="FA1" checked onchange="ilUpdateBridgeOptions()"> FA1 Leadership
+                                </label>
+                                <label style="display:flex; align-items:center; gap:5px; cursor:pointer; font-size:0.85em; background:#FEF3C7; padding:5px 10px; border-radius:6px;">
+                                    <input type="checkbox" value="FA3" checked onchange="ilUpdateBridgeOptions()"> FA3 Talent Mgmt
+                                </label>
+                                <label style="display:flex; align-items:center; gap:5px; cursor:pointer; font-size:0.85em; background:#D1FAE5; padding:5px 10px; border-radius:6px;">
+                                    <input type="checkbox" value="FA2" onchange="ilUpdateBridgeOptions()"> FA2 Workforce
+                                </label>
+                                <label style="display:flex; align-items:center; gap:5px; cursor:pointer; font-size:0.85em; background:#FCE7F3; padding:5px 10px; border-radius:6px;">
+                                    <input type="checkbox" value="FA4" onchange="ilUpdateBridgeOptions()"> FA4 Total Rewards
+                                </label>
+                                <label style="display:flex; align-items:center; gap:5px; cursor:pointer; font-size:0.85em; background:#E0E7FF; padding:5px 10px; border-radius:6px;">
+                                    <input type="checkbox" value="FA5" onchange="ilUpdateBridgeOptions()"> FA5 HR Info/Safety
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <label style="font-size:0.85em; font-weight:600; color:#374151; display:block; margin-bottom:6px;">Items per FA</label>
+                            <select id="ilItemsPerFA" style="padding:8px 12px; border-radius:8px; border:1px solid #CBD5E1; font-size:0.9em; width:100%;">
+                                <option value="2">2 per FA (quick — ~10 min)</option>
+                                <option value="3" selected>3 per FA (standard — ~20 min)</option>
+                                <option value="5">5 per FA (deep — ~35 min)</option>
+                            </select>
+                            <label style="font-size:0.85em; font-weight:600; color:#374151; display:block; margin-bottom:6px; margin-top:12px;">Content Type</label>
+                            <select id="ilContentType" style="padding:8px 12px; border-radius:8px; border:1px solid #CBD5E1; font-size:0.9em; width:100%;">
+                                <option value="mixed" selected>Mixed (entries + flashcards)</option>
+                                <option value="entries">Entries only</option>
+                                <option value="flashcards">Flashcards only</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:12px; flex-wrap:wrap;">
+                        <button class="btn btn-primary" onclick="generateILSession()">&#9854; Generate Interleaved Session</button>
+                        <button class="btn btn-secondary" onclick="generateCrossRefSession()">&#128279; CrossRef-Driven Session</button>
+                        <button class="btn btn-secondary" style="background:#7C3AED; color:white; border-color:#7C3AED;" onclick="ilAskAI()">&#129504; AI Bridge Question</button>
+                    </div>
+                    <div style="font-size:0.8em; color:#64748B; margin-top:10px;">
+                        <strong>CrossRef-Driven</strong> picks entries that explicitly link to each other across FAs — highest interleaving value. <strong>AI Bridge</strong> generates a live synthesis question connecting your active FAs.
+                    </div>
+                </div>
+
+                <!-- AI Bridge panel -->
+                <div id="ilAIPanel" style="display:none; background:#F5F3FF; border:1px solid #C4B5FD; border-radius:12px; padding:20px; margin-bottom:24px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                        <div style="font-weight:700; color:#6D28D9;">&#129504; AI Bridge Question</div>
+                        <button onclick="document.getElementById('ilAIPanel').style.display='none'" style="background:none; border:none; color:#9CA3AF; cursor:pointer; font-size:1.2em;">&#10005;</button>
+                    </div>
+                    <div id="ilAIContent" style="color:#374151; line-height:1.6; font-size:0.95em;">Generating synthesis question...</div>
+                    <div id="ilAIAnswer" style="display:none; margin-top:16px; padding:14px; background:#EDE9FE; border-left:4px solid #7C3AED; border-radius:6px; font-size:0.9em; color:#374151;"></div>
+                    <div style="margin-top:14px; display:flex; gap:10px;">
+                        <button class="btn btn-small btn-secondary" onclick="ilRevealAIAnswer()">Reveal Model Answer</button>
+                        <button class="btn btn-small btn-secondary" onclick="ilAskAI()">&#8635; New Question</button>
+                    </div>
+                </div>
+
+                <!-- API key setup (shown only if no key stored) -->
+                <div id="ilAPIKeyPanel" style="display:none; background:#FEF3C7; border:1px solid #FCD34D; border-radius:10px; padding:16px; margin-bottom:20px;">
+                    <div style="font-weight:600; color:#92400E; margin-bottom:8px;">&#128273; Anthropic API Key Required for AI Bridge</div>
+                    <div style="font-size:0.85em; color:#78350F; margin-bottom:10px;">Your key is stored locally in your browser only and never sent anywhere except directly to Anthropic's API.</div>
+                    <div style="display:flex; gap:8px;">
+                        <input type="password" id="ilAPIKeyInput" placeholder="sk-ant-..." style="flex:1; padding:8px 12px; border-radius:6px; border:1px solid #FCD34D; font-size:0.9em;">
+                        <button class="btn btn-primary" style="background:#92400E; border-color:#92400E;" onclick="ilSaveAPIKey()">Save Key</button>
+                    </div>
+                </div>
+
+                <!-- Session output -->
+                <div id="ilSessionContainer"></div>
+
             </div>
         </div>
 
@@ -2158,6 +2245,7 @@
                     case 'flashcards': renderFlashcards(); break;
                     case 'questions': renderQuestions(); break;
                     case 'practice': updatePracticeDashboard(); break;
+                    case 'interleave': initInterleaveTab(); break;
                     case 'exammode': initExamModeTab(); break;
                     case 'studyplan': renderStudyPlan(); break;
                 }
@@ -4122,6 +4210,346 @@
         // Console welcome message
         console.log('%cSPHR Knowledge Repository', 'font-size: 20px; font-weight: bold; color: #7C3AED;');
         console.log('%cPKA Learning System v4.0 | Phase 4: Staging System', 'font-size: 12px; color: #64748B;');
+        // ==================== INTERLEAVE TAB ====================
+
+        function initInterleaveTab() {
+            ilUpdateBridgeOptions();
+            const key = localStorage.getItem('sphr_anthropic_key');
+            document.getElementById('ilAPIKeyPanel').style.display = key ? 'none' : 'block';
+        }
+
+        function ilGetSelectedFAs() {
+            return [...document.querySelectorAll('#ilFACheckboxes input:checked')].map(cb => cb.value);
+        }
+
+        function ilUpdateBridgeOptions() {
+            // nothing needed currently — placeholder for future FA-specific bridge prompts
+        }
+
+        function ilSaveAPIKey() {
+            const key = document.getElementById('ilAPIKeyInput').value.trim();
+            if (!key.startsWith('sk-ant-')) { alert('Key should start with sk-ant-'); return; }
+            localStorage.setItem('sphr_anthropic_key', key);
+            document.getElementById('ilAPIKeyPanel').style.display = 'none';
+            showToast('API key saved.');
+        }
+
+        // ── STANDARD INTERLEAVED SESSION ──────────────────────────────
+        function generateILSession() {
+            const fas = ilGetSelectedFAs();
+            if (fas.length < 2) { alert('Select at least 2 functional areas to interleave.'); return; }
+            const perFA = parseInt(document.getElementById('ilItemsPerFA').value);
+            const contentType = document.getElementById('ilContentType').value;
+            const allEntries = getEntries().filter(e => e.activatedDate);
+            const allCards = getFlashcards().filter(f => f.activatedDate);
+
+            // Build interleaved sequence: round-robin across FAs
+            const poolByFA = {};
+            fas.forEach(fa => {
+                const entries = allEntries.filter(e => e.functionalArea === fa);
+                const cards = allCards.filter(c => c.functionalArea === fa);
+                const entryItems = shuffleArray([...entries]).slice(0, contentType === 'flashcards' ? 0 : perFA)
+                    .map(e => ({ type: 'entry', fa, data: e }));
+                const cardItems = shuffleArray([...cards]).slice(0, contentType === 'entries' ? 0 : perFA)
+                    .map(c => ({ type: 'flashcard', fa, data: c }));
+                poolByFA[fa] = shuffleArray([...entryItems, ...cardItems]).slice(0, perFA);
+            });
+
+            // Interleave: pick one from each FA in rotation
+            const sequence = [];
+            const maxRounds = perFA;
+            for (let r = 0; r < maxRounds; r++) {
+                fas.forEach(fa => {
+                    if (poolByFA[fa][r]) sequence.push(poolByFA[fa][r]);
+                });
+            }
+
+            renderILSession(sequence, `Cross-FA Interleaved Session (${fas.join(' + ')})`);
+        }
+
+        // ── CROSSREF-DRIVEN SESSION ───────────────────────────────────
+        function generateCrossRefSession() {
+            const fas = ilGetSelectedFAs();
+            if (fas.length < 2) { alert('Select at least 2 functional areas to interleave.'); return; }
+            const allEntries = getEntries().filter(e => e.activatedDate && e.crossRef);
+
+            // Find entries whose crossRef mentions at least one other selected FA
+            const linked = [];
+            fas.forEach(fa => {
+                const faEntries = allEntries.filter(e => e.functionalArea === fa);
+                faEntries.forEach(e => {
+                    const referencedFAs = (e.crossRef.match(/FA[1-5]/g) || []);
+                    const crossFAHits = referencedFAs.filter(ref => ref !== fa && fas.includes(ref));
+                    if (crossFAHits.length > 0) {
+                        linked.push({ type: 'entry', fa, data: e, linkedFAs: [...new Set(crossFAHits)] });
+                    }
+                });
+            });
+
+            if (linked.length === 0) {
+                alert('No CrossRef connections found between the selected FAs. Try activating more entries or selecting different FAs.');
+                return;
+            }
+
+            const perFA = parseInt(document.getElementById('ilItemsPerFA').value);
+            const byFA = {};
+            fas.forEach(fa => { byFA[fa] = linked.filter(i => i.fa === fa); });
+            const sequence = [];
+            for (let r = 0; r < perFA; r++) {
+                fas.forEach(fa => {
+                    if (byFA[fa][r]) sequence.push(byFA[fa][r]);
+                });
+            }
+
+            renderILSession(sequence, `CrossRef-Driven Session (${fas.join(' + ')})`, true);
+        }
+
+        // ── RENDER SESSION ────────────────────────────────────────────
+        function renderILSession(sequence, title, showBridgePrompts = false) {
+            if (sequence.length === 0) {
+                document.getElementById('ilSessionContainer').innerHTML =
+                    '<div style="padding:30px; text-align:center; color:#64748B;">No activated items found for the selected FAs. Activate entries in the Staging tab first.</div>';
+                return;
+            }
+
+            const FA_COLORS = {
+                FA1: { h: '1E3A8A', lt: 'DBEAFE', med: '3B82F6' },
+                FA2: { h: '065F46', lt: 'D1FAE5', med: '10B981' },
+                FA3: { h: '92400E', lt: 'FEF3C7', med: 'F59E0B' },
+                FA4: { h: '9D174D', lt: 'FCE7F3', med: 'EC4899' },
+                FA5: { h: '3730A3', lt: 'E0E7FF', med: '6366F1' },
+            };
+
+            let html = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:8px;">
+                    <div>
+                        <div style="font-weight:700; font-size:1.05em; color:#1E3A8A;">${title}</div>
+                        <div style="font-size:0.85em; color:#64748B; margin-top:2px;">${sequence.length} items · Switch context at each item — that friction is the mechanism</div>
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn btn-small btn-secondary" onclick="ilMarkAllPracticed()">&#9200; Mark All Practiced</button>
+                        <button class="btn btn-small btn-primary" style="background:#7C3AED; border-color:#7C3AED;" onclick="ilAskAI()">&#129504; AI Bridge</button>
+                    </div>
+                </div>
+                <div style="background:#FEF3C7; border-left:4px solid #F59E0B; padding:12px 16px; border-radius:6px; margin-bottom:20px; font-size:0.88em; color:#92400E;">
+                    <strong>Instructions:</strong> For each item, say the answer out loud before revealing. The context switch between FAs is intentional — that cognitive effort is what creates durable cross-FA memory.
+                </div>`;
+
+            sequence.forEach((item, idx) => {
+                const c = FA_COLORS[item.fa] || FA_COLORS.FA1;
+                const isEntry = item.type === 'entry';
+                const d = item.data;
+                const tier = getTier(d.activatedDate, d.lastPracticed);
+                const tierLabel = tier === 1 ? 'Tier 1' : tier === 2 ? 'Tier 2' : 'Tier 3';
+                const tierColor = tier === 1 ? '#1E40AF' : tier === 2 ? '#92400E' : '#6B21A8';
+                const tierBg = tier === 1 ? '#DBEAFE' : tier === 2 ? '#FEF3C7' : '#E9D5FF';
+
+                // Bridge prompt shown between items from different FAs
+                let bridgeHtml = '';
+                if (showBridgePrompts && idx > 0 && item.fa !== sequence[idx-1].fa) {
+                    const prevFA = sequence[idx-1].fa;
+                    const bridgeText = ilGetBridgePrompt(sequence[idx-1].data, d, prevFA, item.fa);
+                    bridgeHtml = `
+                        <div style="margin:8px 0 8px 0; padding:10px 16px; background:#F5F3FF; border-left:3px solid #7C3AED; border-radius:6px; font-size:0.85em; color:#5B21B6;">
+                            &#128279; <strong>Bridge:</strong> ${bridgeText}
+                        </div>`;
+                } else if (idx > 0 && item.fa !== sequence[idx-1].fa) {
+                    bridgeHtml = `<div style="margin:8px 0; border-top:2px dashed #E2E8F0; position:relative;">
+                        <span style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:white; padding:0 8px; font-size:0.75em; color:#94A3B8;">FA switch → ${item.fa}</span>
+                    </div>`;
+                }
+
+                const linkedBadges = item.linkedFAs
+                    ? item.linkedFAs.map(lfa => `<span style="font-size:0.75em; background:#EDE9FE; color:#6D28D9; padding:2px 7px; border-radius:4px; margin-left:4px;">${lfa}</span>`).join('')
+                    : '';
+
+                if (isEntry) {
+                    html += `${bridgeHtml}
+                    <div class="entry-card" id="ilitem-${d.id}" style="margin-bottom:12px; border-left:4px solid #${c.med};">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
+                            <div>
+                                <span style="font-size:0.75em; font-weight:700; background:#${c.lt}; color:#${c.h}; padding:3px 8px; border-radius:4px;">${item.fa}</span>
+                                ${linkedBadges}
+                                <span style="font-size:0.75em; background:${tierBg}; color:${tierColor}; padding:3px 8px; border-radius:4px; margin-left:4px;">${tierLabel}</span>
+                            </div>
+                            <span style="font-size:0.8em; color:#94A3B8;">Item ${idx+1} of ${sequence.length}</span>
+                        </div>
+                        <div style="font-weight:600; color:#1F2937; margin-bottom:10px;">${escapeHtml(d.title)}</div>
+                        <div style="font-size:0.85em; color:#64748B; margin-bottom:10px;">
+                            Recall out loud: What is this? When does it apply? What are the failure patterns?
+                            ${item.linkedFAs ? `<br><em>Then connect it to: ${item.linkedFAs.join(', ')}</em>` : ''}
+                        </div>
+                        <button class="btn btn-small btn-secondary" onclick="ilRevealEntry(this, '${d.id}')">Reveal Answer</button>
+                        <div id="ilrev-${d.id}" style="display:none; margin-top:12px; border-radius:8px; overflow:hidden; border:1px solid #E2E8F0;">
+                            ${d.summary ? `<div style="padding:12px 14px; background:#F0FDF4; border-left:4px solid #10B981;"><div style="font-size:0.72em; font-weight:700; color:#065F46; text-transform:uppercase; letter-spacing:.05em; margin-bottom:5px;">Summary</div><div style="font-size:0.88em; color:#1F2937; line-height:1.5;">${escapeHtml(d.summary)}</div></div>` : ''}
+                            ${d.examPoints ? `<div style="padding:12px 14px; background:#FEF2F2; border-left:4px solid #EF4444;"><div style="font-size:0.72em; font-weight:700; color:#991B1B; text-transform:uppercase; letter-spacing:.05em; margin-bottom:5px;">▶ Exam Points</div><div style="font-size:0.88em; color:#1F2937; line-height:1.5; white-space:pre-line;">${escapeHtml(d.examPoints)}</div></div>` : ''}
+                            ${d.quickRef ? `<div style="padding:12px 14px; background:#EFF6FF; border-left:4px solid #3B82F6;"><div style="font-size:0.72em; font-weight:700; color:#1D4ED8; text-transform:uppercase; letter-spacing:.05em; margin-bottom:5px;">Quick Reference</div><div style="font-size:0.88em; color:#1F2937; line-height:1.5; font-style:italic; white-space:pre-line;">${escapeHtml(d.quickRef)}</div></div>` : ''}
+                            ${d.decisionCriteria ? `<div style="padding:12px 14px; background:#F0FDF4; border-left:4px solid #059669;"><div style="font-size:0.72em; font-weight:700; color:#065F46; text-transform:uppercase; letter-spacing:.05em; margin-bottom:5px;">Decision Criteria</div><div style="font-size:0.88em; color:#1F2937; line-height:1.5; white-space:pre-line;">${escapeHtml(d.decisionCriteria)}</div></div>` : ''}
+                            ${d.failurePatterns ? `<div style="padding:12px 14px; background:#FFFBEB; border-left:4px solid #F59E0B;"><div style="font-size:0.72em; font-weight:700; color:#92400E; text-transform:uppercase; letter-spacing:.05em; margin-bottom:5px;">⚠ Failure Patterns</div><div style="font-size:0.88em; color:#1F2937; line-height:1.5; white-space:pre-line;">${escapeHtml(d.failurePatterns)}</div></div>` : ''}
+                        </div>
+                        <button class="btn btn-small btn-primary" onclick="ilMarkPracticed('entry','${d.id}', this)" style="margin-top:10px;">&#9200; Mark Practiced</button>
+                    </div>`;
+                } else {
+                    // Flashcard
+                    html += `${bridgeHtml}
+                    <div class="flashcard" id="ilitem-${d.id}" style="margin-bottom:12px; border-left:4px solid #${c.med};">
+                        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px; flex-wrap:wrap; gap:6px;">
+                            <div>
+                                <span style="font-size:0.75em; font-weight:700; background:#${c.lt}; color:#${c.h}; padding:3px 8px; border-radius:4px;">${item.fa}</span>
+                                <span style="font-size:0.75em; background:${tierBg}; color:${tierColor}; padding:3px 8px; border-radius:4px; margin-left:4px;">${tierLabel}</span>
+                                <span style="font-size:0.75em; background:#F1F5F9; color:#475569; padding:3px 8px; border-radius:4px; margin-left:4px;">Flashcard</span>
+                            </div>
+                            <span style="font-size:0.8em; color:#94A3B8;">Item ${idx+1} of ${sequence.length}</span>
+                        </div>
+                        <div style="font-weight:600; color:#1F2937; margin-bottom:10px;">${escapeHtml(d.question)}</div>
+                        <button class="btn btn-small btn-secondary" onclick="this.nextElementSibling.style.display='block'; this.style.display='none';">Reveal Answer</button>
+                        <div style="display:none; margin-top:12px; padding:14px; background:#F0FDF4; border-left:4px solid #10B981; border-radius:6px; font-size:0.88em; color:#1F2937; line-height:1.5; white-space:pre-line;">${escapeHtml(d.answer)}</div>
+                        <button class="btn btn-small btn-primary" onclick="ilMarkPracticed('flashcard','${d.id}', this)" style="margin-top:10px;">&#9200; Mark Practiced</button>
+                    </div>`;
+                }
+            });
+
+            // Store IDs for mark-all
+            window._ilCurrentIDs = sequence.map(i => ({ type: i.type, id: i.data.id }));
+            document.getElementById('ilSessionContainer').innerHTML = html;
+        }
+
+        function ilRevealEntry(btn, entryId) {
+            document.getElementById('ilrev-' + entryId).style.display = 'block';
+            btn.style.display = 'none';
+        }
+
+        function ilGetBridgePrompt(prevEntry, currEntry, prevFA, currFA) {
+            const prevTitle = prevEntry.title ? prevEntry.title.split(':')[0] : prevFA;
+            const currTitle = currEntry.title ? currEntry.title.split(':')[0] : currFA;
+            return `How does <em>${escapeHtml(prevTitle)}</em> (${prevFA}) influence or connect to <em>${escapeHtml(currTitle)}</em> (${currFA})? Think through the strategic relationship before revealing.`;
+        }
+
+        function ilMarkPracticed(type, id, btn) {
+            if (type === 'entry') {
+                const entries = getEntries();
+                const e = entries.find(x => x.id === id);
+                if (e) { e.lastPracticed = new Date().toISOString(); e.timesReviewed = (e.timesReviewed||0)+1; saveEntries(entries); }
+            } else {
+                const cards = getFlashcards();
+                const c = cards.find(x => x.id === id);
+                if (c) { c.lastPracticed = new Date().toISOString(); c.timesPracticed = (c.timesPracticed||0)+1; saveFlashcards(cards); }
+            }
+            btn.textContent = '✓ Practiced';
+            btn.disabled = true;
+            btn.style.background = '#10B981';
+            btn.style.borderColor = '#10B981';
+            updateDashboard();
+        }
+
+        function ilMarkAllPracticed() {
+            if (!window._ilCurrentIDs || window._ilCurrentIDs.length === 0) return;
+            const entries = getEntries();
+            const cards = getFlashcards();
+            window._ilCurrentIDs.forEach(({ type, id }) => {
+                if (type === 'entry') {
+                    const e = entries.find(x => x.id === id);
+                    if (e) { e.lastPracticed = new Date().toISOString(); e.timesReviewed = (e.timesReviewed||0)+1; }
+                } else {
+                    const c = cards.find(x => x.id === id);
+                    if (c) { c.lastPracticed = new Date().toISOString(); c.timesPracticed = (c.timesPracticed||0)+1; }
+                }
+            });
+            saveEntries(entries);
+            saveFlashcards(cards);
+            document.querySelectorAll('#ilSessionContainer .btn-primary').forEach(btn => {
+                if (btn.textContent.includes('Mark')) { btn.textContent = '✓ Practiced'; btn.disabled = true; btn.style.background='#10B981'; btn.style.borderColor='#10B981'; }
+            });
+            showToast('&#9200; All items marked as practiced!');
+            updateDashboard();
+        }
+
+        // ── AI BRIDGE ─────────────────────────────────────────────────
+        async function ilAskAI() {
+            const key = localStorage.getItem('sphr_anthropic_key');
+            if (!key) {
+                document.getElementById('ilAPIKeyPanel').style.display = 'block';
+                document.getElementById('ilAPIKeyPanel').scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+
+            const fas = ilGetSelectedFAs();
+            if (fas.length < 2) { alert('Select at least 2 FAs for an AI Bridge question.'); return; }
+
+            const FA_NAMES = { FA1:'Leadership & Strategy', FA2:'Workforce Planning', FA3:'Talent Management', FA4:'Total Rewards', FA5:'HR Info Mgmt & Safety' };
+            const faNames = fas.map(f => `${f} (${FA_NAMES[f]||f})`).join(', ');
+
+            // Get a sample of activated entries from selected FAs for context
+            const entries = getEntries().filter(e => e.activatedDate && fas.includes(e.functionalArea));
+            const sample = shuffleArray([...entries]).slice(0, 6);
+            const entryContext = sample.map(e => `- ${e.title} (${e.functionalArea}): ${(e.examPoints||'').substring(0,120)}`).join('\n');
+
+            const panel = document.getElementById('ilAIPanel');
+            const content = document.getElementById('ilAIContent');
+            const answerDiv = document.getElementById('ilAIAnswer');
+            panel.style.display = 'block';
+            answerDiv.style.display = 'none';
+            content.innerHTML = '<em style="color:#7C3AED;">Generating synthesis question...</em>';
+            panel.scrollIntoView({ behavior: 'smooth' });
+
+            const prompt = `You are an SPHR exam preparation coach. Generate ONE high-quality synthesis question that requires the student to connect concepts across these SPHR functional areas: ${faNames}.
+
+The question should:
+- Present a realistic workplace scenario requiring the student to apply knowledge from at least 2 of the FAs listed
+- Test strategic thinking, not just recall
+- Be answerable in 2-4 sentences
+- Match SPHR exam difficulty (senior HR practitioner level)
+
+Some activated entries for context:
+${entryContext}
+
+Format your response as:
+QUESTION: [the scenario question]
+---
+MODEL ANSWER: [a complete 2-4 sentence answer that integrates the relevant concepts]`;
+
+            try {
+                const response = await fetch('https://api.anthropic.com/v1/messages', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-api-key': key,
+                        'anthropic-version': '2023-06-01',
+                        'anthropic-dangerous-direct-browser-access': 'true'
+                    },
+                    body: JSON.stringify({
+                        model: 'claude-haiku-4-5-20251001',
+                        max_tokens: 600,
+                        messages: [{ role: 'user', content: prompt }]
+                    })
+                });
+
+                if (!response.ok) {
+                    const err = await response.json();
+                    content.innerHTML = `<span style="color:#EF4444;">API error: ${err.error?.message || response.status}</span>`;
+                    return;
+                }
+
+                const data = await response.json();
+                const text = data.content?.[0]?.text || '';
+                const parts = text.split('---');
+                const questionPart = (parts[0] || text).replace('QUESTION:', '').trim();
+                const answerPart = parts[1] ? parts[1].replace('MODEL ANSWER:', '').trim() : '';
+
+                content.innerHTML = `<div style="font-size:0.95em; font-weight:600; color:#1F2937; line-height:1.6;">${escapeHtml(questionPart)}</div>
+                    <div style="margin-top:8px; font-size:0.8em; color:#7C3AED;">Connects: ${fas.join(' + ')}</div>`;
+                answerDiv.innerHTML = `<strong>Model Answer:</strong><br>${escapeHtml(answerPart)}`;
+                window._ilLastAIAnswer = answerPart;
+
+            } catch (e) {
+                content.innerHTML = `<span style="color:#EF4444;">Error: ${e.message}. Check your API key and try again.</span>`;
+            }
+        }
+
+        function ilRevealAIAnswer() {
+            document.getElementById('ilAIAnswer').style.display = 'block';
+        }
+
         // ==================== EXAM MODE ====================
 
         let examState = null; // current session state
